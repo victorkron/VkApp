@@ -115,10 +115,10 @@
             </objects>
             <point key="canvasLocation" x="961" y="389"/>
         </scene>
-        <!--Friends CollectionVC-->
+        <!--Photos-->
         <scene sceneID="wHL-a5-KWi">
             <objects>
-                <collectionViewController id="XjA-OM-Gur" customClass="FriendsCollectionVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="XjA-OM-Gur" customClass="PhotosCollectionVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="pcB-8o-O8i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -144,7 +144,7 @@
                             <outlet property="delegate" destination="XjA-OM-Gur" id="U2s-pd-B2a"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" id="yBp-Gd-QgP"/>
+                    <navigationItem key="navigationItem" title="Photos" id="yBp-Gd-QgP"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u57-3U-CdW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -182,7 +182,7 @@
             </objects>
             <point key="canvasLocation" x="3707.2463768115945" y="34.821428571428569"/>
         </scene>
-        <!--Groups-->
+        <!--My Groups-->
         <scene sceneID="fLu-6D-6iF">
             <objects>
                 <tableViewController id="jwE-AO-KWU" customClass="GroupsTableVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -205,8 +205,8 @@
                             <outlet property="delegate" destination="jwE-AO-KWU" id="yzs-0h-kMm"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Groups" id="3qP-aY-pSg">
-                        <barButtonItem key="rightBarButtonItem" title="next" image="arrow.right.circle" catalog="system" id="uY9-Kg-ssk">
+                    <navigationItem key="navigationItem" title="My Groups" id="3qP-aY-pSg">
+                        <barButtonItem key="rightBarButtonItem" title="add" image="plus" catalog="system" id="uY9-Kg-ssk">
                             <connections>
                                 <segue destination="Gid-Ga-PxL" kind="show" id="mqo-ET-aM9"/>
                             </connections>
@@ -217,10 +217,10 @@
             </objects>
             <point key="canvasLocation" x="3707.2463768115945" y="743.97321428571422"/>
         </scene>
-        <!--Group TableVC-->
+        <!--Search Group-->
         <scene sceneID="NxT-zE-nWY">
             <objects>
-                <tableViewController id="Gid-Ga-PxL" customClass="GroupTableVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Gid-Ga-PxL" customClass="GroupSearcherTableVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="vPu-gp-BaE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -240,7 +240,7 @@
                             <outlet property="delegate" destination="Gid-Ga-PxL" id="2b1-9H-KBf"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="fsy-8T-Yxm"/>
+                    <navigationItem key="navigationItem" title="Search Group" id="fsy-8T-Yxm"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="piD-du-c09" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -291,6 +291,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="hjZ-Aa-gkh"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="v5s-Oh-lPg">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
@@ -305,9 +306,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.right.circle" catalog="system" width="128" height="121"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

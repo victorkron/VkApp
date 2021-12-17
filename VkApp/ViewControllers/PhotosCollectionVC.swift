@@ -9,7 +9,7 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class FriendsCollectionVC: UICollectionViewController {
+class PhotosCollectionVC: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
