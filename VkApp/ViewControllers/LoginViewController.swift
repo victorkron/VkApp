@@ -18,6 +18,11 @@ class LoginViewController: UIViewController {
         print(userPasswordTextField.text)
     }
     
+    @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView
@@ -49,6 +54,7 @@ class LoginViewController: UIViewController {
             selector: #selector(self.keyboardWillBeHidden(notification:)),
             name: UIResponder.keyboardWillHideNotification,
             object: nil)
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -61,9 +67,11 @@ class LoginViewController: UIViewController {
             self,
             name: UIResponder.keyboardWillHideNotification,
             object: nil)
+        navigationController?.navigationBar.isHidden = false
     }
     
     
+    // MARK: Actions
     @objc func keyboardWasShown(notification: Notification) {
         let info = notification.userInfo! as NSDictionary
         let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue)
@@ -101,6 +109,42 @@ class LoginViewController: UIViewController {
     @objc func hideKeyboard() {
         self.scrollView?.endEditing(true)
     }
-
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch identifier {
+        case "goToMain":
+            if !checkUser() {
+                presentAlert()
+                return false
+            } else {
+                 clearData()
+                return true
+            }
+        default:
+            return false
+        }
+        
+    }
+    
+    // MARK: Private methods
+    private func checkUser() -> Bool {
+        userNameTextField.text == "admin" && userPasswordTextField.text == "789"
+    }
+    
+    private func presentAlert() {
+        let alertController = UIAlertController(
+            title: "Error",
+            message: "Uncorrect username or password",
+            preferredStyle: .alert)
+        let action = UIAlertAction(title: "Close", style: .cancel)
+        alertController.addAction(action)
+        present(alertController, animated: true)
+    }
+    
+    private func clearData() {
+        userNameTextField.text = nil
+        userPasswordTextField.text = nil
+    }
 }
+
 
