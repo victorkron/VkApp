@@ -8,9 +8,7 @@
 import UIKit
 
 final class GroupCell: UITableViewCell {
-
-    
-    @IBOutlet var groupEmblem: UIImageView!
+    @IBOutlet var groupEmblem: AvatarImage!
     @IBOutlet var groupName: UILabel!
     
         func configure(

@@ -7,10 +7,17 @@
 
 import UIKit
 
+
 final class FriendCell: UITableViewCell {
-    
     @IBOutlet var friendName: UILabel!
-    @IBOutlet var friendEmblem: UIImageView!
+    @IBOutlet var friendEmblem: AvatarImage!
+//    @IBInspectable var cornerRadius: CGFloat = 12.0 {
+//        didSet {
+//            setNeedsLayout()
+//            layoutIfNeeded()
+//        }
+//    }
+    
     
     func configure(
         emblem: UIImage,

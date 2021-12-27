@@ -9,45 +9,80 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendCell" rowHeight="53" id="U0K-rw-M3a" customClass="FriendCell" customModule="VkApp" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="53"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendCell" rowHeight="133" id="U0K-rw-M3a" customClass="FriendCell" customModule="VkApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="521" height="133"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="U0K-rw-M3a" id="wxp-uj-Fq7">
-                <rect key="frame" x="0.0" y="0.0" width="414" height="53"/>
+                <rect key="frame" x="0.0" y="0.0" width="521" height="133"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xD7-JU-NpY">
-                        <rect key="frame" x="61" y="16.5" width="321" height="20.5"/>
+                        <rect key="frame" x="133" y="56.5" width="356" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="scribble.variable" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0ei-TC-QEP">
-                        <rect key="frame" x="4" y="3.5" width="45" height="44.5"/>
-                        <color key="tintColor" systemColor="systemOrangeColor"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Pm-vM-3c6" customClass="AvatarBackShadow" customModule="VkApp" customModuleProvider="target">
+                        <rect key="frame" x="20" y="20" width="93" height="93"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0ei-TC-QEP" customClass="AvatarImage" customModule="VkApp" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="93" height="93"/>
+                                <color key="tintColor" systemColor="systemOrangeColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="0ei-TC-QEP" secondAttribute="height" id="LK2-Jp-CsC"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" systemColor="systemGreenColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="0ei-TC-QEP" secondAttribute="height" id="LK2-Jp-CsC"/>
+                            <constraint firstItem="0ei-TC-QEP" firstAttribute="top" secondItem="9Pm-vM-3c6" secondAttribute="top" id="9jz-Fs-mbe"/>
+                            <constraint firstAttribute="bottom" secondItem="0ei-TC-QEP" secondAttribute="bottom" id="QOM-Tl-cnE"/>
+                            <constraint firstAttribute="trailing" secondItem="0ei-TC-QEP" secondAttribute="trailing" id="ZMR-dw-xN4"/>
+                            <constraint firstItem="0ei-TC-QEP" firstAttribute="leading" secondItem="9Pm-vM-3c6" secondAttribute="leading" id="hYf-YE-nX5"/>
                         </constraints>
-                    </imageView>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                <real key="value" value="0.0"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                <size key="value" width="-5" height="-5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="xD7-JU-NpY" firstAttribute="leading" secondItem="0ei-TC-QEP" secondAttribute="trailing" constant="12" id="7Kx-Rk-KtF"/>
-                    <constraint firstItem="0ei-TC-QEP" firstAttribute="top" secondItem="wxp-uj-Fq7" secondAttribute="top" constant="4" id="C7a-cE-FHB"/>
-                    <constraint firstAttribute="bottom" secondItem="0ei-TC-QEP" secondAttribute="bottom" constant="4" id="Iik-iA-g5H"/>
+                    <constraint firstItem="xD7-JU-NpY" firstAttribute="leading" secondItem="9Pm-vM-3c6" secondAttribute="trailing" constant="20" id="8Ij-ES-cnc"/>
+                    <constraint firstAttribute="bottom" secondItem="9Pm-vM-3c6" secondAttribute="bottom" constant="20" id="CMv-ix-BDd"/>
                     <constraint firstItem="xD7-JU-NpY" firstAttribute="centerY" secondItem="wxp-uj-Fq7" secondAttribute="centerY" id="LcO-gK-64e"/>
-                    <constraint firstItem="0ei-TC-QEP" firstAttribute="leading" secondItem="wxp-uj-Fq7" secondAttribute="leading" constant="4" id="cqg-ds-DlU"/>
+                    <constraint firstItem="9Pm-vM-3c6" firstAttribute="leading" secondItem="wxp-uj-Fq7" secondAttribute="leading" constant="20" id="Snv-Xt-3Dc"/>
                     <constraint firstAttribute="trailingMargin" secondItem="xD7-JU-NpY" secondAttribute="trailing" constant="12" id="vSB-Fu-z2d"/>
+                    <constraint firstItem="9Pm-vM-3c6" firstAttribute="top" secondItem="wxp-uj-Fq7" secondAttribute="top" constant="20" id="yc6-Pw-GKD"/>
                 </constraints>
             </tableViewCellContentView>
+            <userDefinedRuntimeAttributes>
+                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                    <real key="value" value="0.0"/>
+                </userDefinedRuntimeAttribute>
+            </userDefinedRuntimeAttributes>
             <connections>
                 <outlet property="friendEmblem" destination="0ei-TC-QEP" id="CXU-qD-sqV"/>
                 <outlet property="friendName" destination="xD7-JU-NpY" id="4cL-RG-M4E"/>
             </connections>
-            <point key="canvasLocation" x="133" y="12"/>
+            <point key="canvasLocation" x="119.56521739130436" y="23.772321428571427"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="scribble.variable" catalog="system" width="128" height="118"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemOrangeColor">
             <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
