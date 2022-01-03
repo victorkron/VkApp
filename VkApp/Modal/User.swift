@@ -11,11 +11,17 @@ import Foundation
 class User {
     
     var name: String
-    var age: UInt
+    var age: UInt? = nil
+    var photos: [String]? = nil
     
-    init(name: String, age: UInt) {
+    init(name: String, age: UInt, photosArr: [String]) {
         self.name = name
         self.age = age
+        self.photos = photosArr
+    }
+    
+    init() {
+        self.name = ""
     }
     
     deinit {

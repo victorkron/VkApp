@@ -14,9 +14,10 @@ final class PhotoCollectionCell: UICollectionViewCell {
     @IBOutlet var personAge: UILabel!
     
     func configure(
-        image: UIImage?, name: String, age: Int) {
+        image: UIImage?, name: String, age: UInt) {
             self.photoImage.image = image
             self.personName.text = name
-            self.personAge.text = "\(String(age)) y.o."
+            self.personAge.text = "\(String(age))"
     }
 }
+

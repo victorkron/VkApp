@@ -8,6 +8,11 @@
 import UIKit
 
 class PhotosCollectionVC: UICollectionViewController {
+    
+    var first: Bool = true
+    var personName: String = " "
+    var personAge: UInt? = 10
+    var photos: [String]? = ["caption1"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +23,13 @@ class PhotosCollectionVC: UICollectionViewController {
             UINib(nibName: "PhotoCollectionCell",
                   bundle: nil),
             forCellWithReuseIdentifier: "photoCollectionCell")
+        self.collectionView!.register(
+            PhotoItem.self,
+            forCellWithReuseIdentifier: "photoItem")
+        self.collectionView.register(
+            UINib(nibName: "PhotoItem",
+                  bundle: nil),
+            forCellWithReuseIdentifier: "photoItem")
     }
 
     /*
@@ -34,21 +46,36 @@ class PhotosCollectionVC: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 1
+        return photos!.count + 1
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "photoCollectionCell",
-            for: indexPath)
-                as? PhotoCollectionCell
-        else { return UICollectionViewCell() }
+        if first {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "photoCollectionCell",
+                for: indexPath)
+                    as? PhotoCollectionCell
+            else { return UICollectionViewCell() }
+            
+            cell.configure(image: UIImage(named: "Friends/\(personName)") ?? UIImage(),
+                           name: personName,
+                           age: personAge!)
+            print(indexPath.row)
+            self.first = false
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "photoItem",
+                for: indexPath)
+                    as? PhotoItem
+            else { return UICollectionViewCell() }
+            
+            cell.configure(image: UIImage(named: "Collections/\(personName)/caption\(indexPath.row)") ?? UIImage())
+            
+            return cell
+        }
         
-        cell.configure(image: UIImage(named: "landscape") ?? UIImage(), name: "Name", age: 18)
-        print(indexPath.row)
-        // Configure the cell
-    
-        return cell
+        
     }
 
     // MARK: UICollectionViewDelegate

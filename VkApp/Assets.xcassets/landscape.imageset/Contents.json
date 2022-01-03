@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "premium-icon-duck-928224.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "premium-icon-duck-928224.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

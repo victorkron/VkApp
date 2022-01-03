@@ -15,6 +15,10 @@ class Group {
         self.name = name
     }
     
+    init() {
+        self.name = ""
+    }
+    
     deinit {
         print("Item of Group have deinitialized")
     }

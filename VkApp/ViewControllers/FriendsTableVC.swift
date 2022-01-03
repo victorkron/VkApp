@@ -8,16 +8,32 @@
 import UIKit
 
 final class FriendsTableVC: UITableViewController {
+    
+    var personsDictionary = [String: [String]]()
+    var personSectionTitles = [String]()
 
-    var names = [
-        "John",
-        "Emma",
-        "Robert",
-        "Eli",
-        "Nicole"
+    var persons: [User] = [
+        User(name: "John",
+             age: 27,
+             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
+        User(name: "Emma",
+             age: 22,
+             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
+        User(name: "Robert",
+             age: 35,
+             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
+        User(name: "Eli",
+             age: 23,
+             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
+        User(name: "Nicole",
+             age: 32,
+             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"])
     ]
+//
     
     // MARK: - Lifecycle
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,13 +42,58 @@ final class FriendsTableVC: UITableViewController {
                 nibName: "FriendCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
+        
+        for person in persons {
+            let personKey = String(person.name.prefix(1))
+            if var personsValue = personsDictionary[personKey] {
+                personsValue.append(person.name)
+                personsDictionary[personKey] = personsValue
+            } else {
+                personsDictionary[personKey] = [person.name]
+            }
+        }
+        
+        personSectionTitles = [String](personsDictionary.keys)
+        personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
+        for eachGroupNames in personsDictionary {
+            personsDictionary[eachGroupNames.key] = eachGroupNames.value.sorted(by: { $0 < $1 })
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard
+            segue.identifier == "showPhoto",
+            
+            let indexPath = tableView.indexPathForSelectedRow
+        else { return }
+        
+        guard
+            let destination = segue.destination as? PhotosCollectionVC
+        else { return }
+        
+        let letter = personSectionTitles[indexPath.section]
+        let name = personsDictionary[letter]![indexPath.row]
+        
+        destination.personName = name
+        let person = persons.first(where: { (i) -> Bool in
+            i.name == name
+        })
+        destination.personAge = person?.age
+        destination.photos = person?.photos
     }
     
     // MARK: - Table view data source
 
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return personSectionTitles.count
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        names.count
+        let letter = personSectionTitles[section]
+        guard let names = personsDictionary[letter] else { return 0 }
+        
+        return names.count
     }
 
     
@@ -40,8 +101,9 @@ final class FriendsTableVC: UITableViewController {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendCell
         else { return UITableViewCell() }
-
-        let currentName = names[indexPath.row]
+        
+        let letter = personSectionTitles[indexPath.section]
+        let currentName = personsDictionary[letter]![indexPath.row]
         
         cell.configure(emblem: UIImage(named: "Friends/\(currentName)") ?? UIImage(),
                        name: currentName)
@@ -56,6 +118,14 @@ final class FriendsTableVC: UITableViewController {
         performSegue(
             withIdentifier: "showPhoto",
             sender: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return personSectionTitles[section]
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return personSectionTitles
     }
     
 

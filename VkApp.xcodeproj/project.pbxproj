@@ -21,6 +21,8 @@
 		6C74FED42775A1B3006E1694 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FED32775A1B3006E1694 /* User.swift */; };
 		6C74FEDB2778AD61006E1694 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FEDA2778AD60006E1694 /* TestVC.swift */; };
 		6C74FEDE277A49A8006E1694 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FEDD277A49A8006E1694 /* AvatarView.swift */; };
+		6CA868912781DA8900E23E86 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA8688F2781DA8900E23E86 /* PhotoItem.swift */; };
+		6CA868922781DA8900E23E86 /* PhotoItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CA868902781DA8900E23E86 /* PhotoItem.xib */; };
 		6CC9FC84276A546C00728F63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9FC83276A546C00728F63 /* AppDelegate.swift */; };
 		6CC9FC86276A546C00728F63 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9FC85276A546C00728F63 /* SceneDelegate.swift */; };
 		6CC9FC88276A546C00728F63 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9FC87276A546C00728F63 /* LoginViewController.swift */; };
@@ -44,6 +46,8 @@
 		6C74FED32775A1B3006E1694 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6C74FEDA2778AD60006E1694 /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		6C74FEDD277A49A8006E1694 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		6CA8688F2781DA8900E23E86 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		6CA868902781DA8900E23E86 /* PhotoItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoItem.xib; sourceTree = "<group>"; };
 		6CC9FC80276A546C00728F63 /* VkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CC9FC83276A546C00728F63 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6CC9FC85276A546C00728F63 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -90,6 +94,8 @@
 			children = (
 				6C74FECC27751129006E1694 /* PhotoCollectionCell.swift */,
 				6C74FECD27751129006E1694 /* PhotoCollectionCell.xib */,
+				6CA8688F2781DA8900E23E86 /* PhotoItem.swift */,
+				6CA868902781DA8900E23E86 /* PhotoItem.xib */,
 			);
 			path = CollectionCell;
 			sourceTree = "<group>";
@@ -235,6 +241,7 @@
 				6CC9FC90276A546D00728F63 /* LaunchScreen.storyboard in Resources */,
 				6CC9FC8D276A546D00728F63 /* Assets.xcassets in Resources */,
 				6CC9FC8B276A546C00728F63 /* Main.storyboard in Resources */,
+				6CA868922781DA8900E23E86 /* PhotoItem.xib in Resources */,
 				6C74FECA2774F505006E1694 /* GroupCell.xib in Resources */,
 				6C74FEC52773CAC2006E1694 /* FriendCell.xib in Resources */,
 			);
@@ -258,6 +265,7 @@
 				6C74FEDE277A49A8006E1694 /* AvatarView.swift in Sources */,
 				6C74FEDB2778AD61006E1694 /* TestVC.swift in Sources */,
 				6C74FED42775A1B3006E1694 /* User.swift in Sources */,
+				6CA868912781DA8900E23E86 /* PhotoItem.swift in Sources */,
 				6C473610276D0B4C0074C7B1 /* FriendsTableVC.swift in Sources */,
 				6C473616276D0B9E0074C7B1 /* GroupSearcherTableVC.swift in Sources */,
 				6C473614276D0B890074C7B1 /* GroupsTableVC.swift in Sources */,
