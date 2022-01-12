@@ -9,7 +9,7 @@ import UIKit
 
 final class GroupsTableVC: UITableViewController {
     
-    var names = [String]()
+    var groups: [Group] = []
 //    {
 //        didSet {
 //            tableView.reloadData()
@@ -20,10 +20,17 @@ final class GroupsTableVC: UITableViewController {
         guard
             segue.identifier == "addGroup",
             let allGroupsController = segue.source as? GroupSearcherTableVC,
-            let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow,
-            !self.names.contains(allGroupsController.names[groupIndexPath.row])
+            let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow
+//            !self.groups.contains(allGroupsController.allGroups[groupIndexPath.row])
         else { return }
-        self.names.append(allGroupsController.names[groupIndexPath.row])
+        
+        for item in self.groups {
+            if (item.name == allGroupsController.allGroups[groupIndexPath.row].name) {
+                return
+            }
+        }
+        
+        self.groups.append(allGroupsController.allGroups[groupIndexPath.row])
         tableView.reloadData()
     }
     
@@ -38,11 +45,23 @@ final class GroupsTableVC: UITableViewController {
             forCellReuseIdentifier: "groupCell")
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard
+            segue.identifier == "showAllGroups"
+        else { return }
+
+        guard
+            let destination = segue.destination as? GroupSearcherTableVC
+        else { return }
+        
+        destination.addedGroup = groups
+    }
+    
     // MARK: - Table view data source
 
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        names.count
+        groups.count
     }
 
     
@@ -51,7 +70,7 @@ final class GroupsTableVC: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath) as? GroupCell
         else { return UITableViewCell() }
 
-        let currentName = names[indexPath.row]
+        let currentName = groups[indexPath.row].name
         
         cell.configure(emblem: UIImage(named: "Groups/\(currentName)") ?? UIImage(),
                        name: currentName)
@@ -68,7 +87,7 @@ final class GroupsTableVC: UITableViewController {
         forRowAt indexPath: IndexPath) {
             
         if editingStyle == .delete {
-            names.remove(at: indexPath.row)
+            groups.remove(at: indexPath.row)
             tableView.deleteRows(
                 at: [indexPath],
                 with: .fade)

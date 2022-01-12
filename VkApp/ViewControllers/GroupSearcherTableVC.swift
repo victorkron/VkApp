@@ -9,10 +9,12 @@ import UIKit
 
 class GroupSearcherTableVC: UITableViewController {
 
-    var names = [
-        "Geek",
-        "Carrot",
-        "X-man"
+    var addedGroup: [Group] = []
+    
+    var allGroups = [
+        Group(name: "Geek"),
+        Group(name: "Carrot"),
+        Group(name: "X-man")
     ]
     
     // MARK: - Lifecycle
@@ -24,12 +26,29 @@ class GroupSearcherTableVC: UITableViewController {
                 nibName: "GroupCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupCell")
+        addedGroup.forEach{ (addedGroupItem) in
+            if self.allGroups.contains(where: { allGroupsItem in
+                allGroupsItem.name == addedGroupItem.name
+            }){
+                let index = allGroups.firstIndex{ searchingItem in
+                    searchingItem.name == addedGroupItem.name
+                }
+                
+                let indexForDelete = index ?? -1
+                if (indexForDelete != -1) {
+                    allGroups.remove(at: indexForDelete)
+                }
+                
+                
+            }
+        }
+        
     }
     
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        names.count
+        allGroups.count
     }
 
     
@@ -37,8 +56,9 @@ class GroupSearcherTableVC: UITableViewController {
         guard
             let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath) as? GroupCell
         else { return UITableViewCell() }
-
-        let currentName = names[indexPath.row]
+    
+        
+        let currentName = allGroups[indexPath.row].name
         
         cell.configure(emblem: UIImage(named: "Groups/\(currentName)") ?? UIImage(),
                        name: currentName)

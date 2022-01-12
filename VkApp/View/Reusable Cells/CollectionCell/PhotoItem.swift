@@ -32,12 +32,18 @@ final class PhotoItem: UICollectionViewCell {
                 UIImage(systemName: "heart.fill"),
                 for: .normal)
             likes.text = "\(amountOfLike)"
+            
+            button.tintColor = UIColor.red
+            likes.textColor = UIColor.red
         } else {
             amountOfLike = amountOfLike - 1
             button.setImage(
                 UIImage(systemName: "heart"),
                 for: .normal)
             likes.text = "\(amountOfLike)"
+            
+            button.tintColor = UIColor.tintColor
+            likes.textColor = UIColor.black
         }
     }
     

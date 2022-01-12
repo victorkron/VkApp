@@ -13,6 +13,7 @@ final class PhotoCollectionCell: UICollectionViewCell {
     @IBOutlet var personName: UILabel!
     @IBOutlet var personAge: UILabel!
     
+    
     func configure(
         image: UIImage?, name: String, age: UInt) {
             self.photoImage.image = image
