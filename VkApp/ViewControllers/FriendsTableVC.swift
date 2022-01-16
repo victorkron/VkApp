@@ -14,18 +14,23 @@ final class FriendsTableVC: UITableViewController {
 
     var persons: [User] = [
         User(name: "John",
+             surname: "Black",
              age: 27,
              photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
         User(name: "Emma",
+             surname: "Heisenberg",
              age: 22,
              photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
         User(name: "Robert",
+             surname: "Gray",
              age: 35,
              photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
         User(name: "Eli",
+             surname: "White",
              age: 23,
              photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
         User(name: "Nicole",
+             surname: "Smith",
              age: 32,
              photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"])
     ]
@@ -44,12 +49,12 @@ final class FriendsTableVC: UITableViewController {
             forCellReuseIdentifier: "friendCell")
         
         for person in persons {
-            let personKey = String(person.name.prefix(1))
+            let personKey = String(person.fullname.prefix(1))
             if var personsValue = personsDictionary[personKey] {
-                personsValue.append(person.name)
+                personsValue.append(person.fullname)
                 personsDictionary[personKey] = personsValue
             } else {
-                personsDictionary[personKey] = [person.name]
+                personsDictionary[personKey] = [person.fullname]
             }
         }
         
@@ -77,8 +82,11 @@ final class FriendsTableVC: UITableViewController {
         
         destination.personName = name
         let person = persons.first(where: { (i) -> Bool in
-            i.name == name
+            i.fullname == name
         })
+        
+        destination.firstname = person?.firstname
+        destination.lastname = person?.lastname
         destination.personAge = person?.age
         destination.photos = person?.photos
     }

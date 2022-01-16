@@ -10,18 +10,24 @@ import Foundation
 
 class User {
     
-    var name: String
+    var firstname: String
+    var lastname: String
+    var fullname: String
     var age: UInt? = nil
     var photos: [String]? = nil
     
-    init(name: String, age: UInt, photosArr: [String]) {
-        self.name = name
+    init(name: String, surname: String, age: UInt, photosArr: [String]) {
+        self.firstname = name
+        self.lastname = surname
         self.age = age
         self.photos = photosArr
+        self.fullname = "\(lastname) \(firstname)"
     }
     
     init() {
-        self.name = ""
+        self.firstname = ""
+        self.lastname = ""
+        self.fullname = "\(lastname) \(firstname)"
     }
     
     deinit {

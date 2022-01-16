@@ -22,13 +22,13 @@ class GradientView: UIView {
         }
     }
     
-    @IBInspectable var startLocation: CGFloat = 0 {
+    @IBInspectable var startLocation: CGFloat = 0.0 {
         didSet {
             self.updateLocation()
         }
     }
     
-    @IBInspectable var endLocation: CGFloat = 1 {
+    @IBInspectable var endLocation: CGFloat = 1.0 {
         didSet {
             self.updateLocation()
         }
@@ -40,7 +40,7 @@ class GradientView: UIView {
         }
     }
     
-    @IBInspectable var endPoint: CGPoint = CGPoint(x: 0, y: 1) {
+    @IBInspectable var endPoint: CGPoint = CGPoint(x: 0.0, y: 1.0) {
         didSet {
             self.updateEndPoint()
         }
