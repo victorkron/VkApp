@@ -10,31 +10,31 @@ import UIKit
 
 final class TestVC: UIViewController {
     
-    @IBOutlet var someButton: UIButton!
-    
-    private var count = 0
-    
-    @IBAction func didPressButton() {
-        count = count + 1
-        if (count % 2 == 0) {
-            someButton.setImage(UIImage(systemName: "heart"), for: .normal)
-        } else {
-            someButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-        }
-    }
-    
-    private let someView: UIView = SomeRootView()
-
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-//        view.addSubview(someView)
-        configView()
-    }
-    
-    private func configView() {
-        someButton.setImage(UIImage(systemName: "heart"), for: .normal)
-    }
+//    @IBOutlet var someButton: UIButton!
+//    
+//    private var count = 0
+//    
+//    @IBAction func didPressButton() {
+//        count = count + 1
+//        if (count % 2 == 0) {
+//            someButton.setImage(UIImage(systemName: "heart"), for: .normal)
+//        } else {
+//            someButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//        }
+//    }
+//    
+//    private let someView: UIView = SomeRootView()
+//
+//    
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+////        view.addSubview(someView)
+//        configView()
+//    }
+//    
+//    private func configView() {
+//        someButton.setImage(UIImage(systemName: "heart"), for: .normal)
+//    }
 }
 
 
@@ -50,3 +50,4 @@ final class SomeRootView: UIView {
             height: 100.0))
     }
 }
+

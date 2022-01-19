@@ -48,6 +48,7 @@ class PhotosCollectionVC: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
+        print(photos)
         return photos!.count
     }
 
@@ -60,7 +61,6 @@ class PhotosCollectionVC: UICollectionViewController {
         else { return UICollectionViewCell() }
             
         cell.configure(image: UIImage(named: "Collections/\(personName)/caption\(indexPath.row + 1)") ?? UIImage())
-        
         return cell
         
     }

@@ -16,7 +16,8 @@ final class PhotoItem: UICollectionViewCell {
 //        }
 //    }
     private var pressed: Bool = false
-    private var amountOfLike: Int = 0
+    private var amountOfLike: Int = 1
+    private var duration = 0.5
 
     @IBOutlet var itemImage: UIImageView!
     @IBOutlet var imageView: UIView!
@@ -25,13 +26,36 @@ final class PhotoItem: UICollectionViewCell {
     @IBOutlet var likes: UILabel!
     
     @IBAction func didLikePressed(_ sender: Any) {
+        changeState()
+    }
+    
+    
+    
+    
+    func configure(image: UIImage?) {
+        self.itemImage.image = image
+        likes.text = "\(amountOfLike)"
+    }
+    
+    func changeState() {
         pressed = !pressed
         if pressed {
             amountOfLike = amountOfLike + 1
             button.setImage(
                 UIImage(systemName: "heart.fill"),
                 for: .normal)
-            likes.text = "\(amountOfLike)"
+            UIView.transition(with: likes ?? UIView(),
+                              duration: duration,
+                              options: [
+                                .transitionFlipFromBottom
+                              ],
+                              animations: {
+                self.likes.text = "\(self.amountOfLike)"
+            },
+                              completion: { elem in
+                
+            })
+            
             
             button.tintColor = UIColor.red
             likes.textColor = UIColor.red
@@ -40,16 +64,23 @@ final class PhotoItem: UICollectionViewCell {
             button.setImage(
                 UIImage(systemName: "heart"),
                 for: .normal)
-            likes.text = "\(amountOfLike)"
+            
+            UIView.transition(with: likes ?? UIView(),
+                              duration: duration,
+                              options: [
+                                .transitionFlipFromTop
+                              ],
+                              animations: {
+                self.likes.text = "\(self.amountOfLike)"
+            },
+                              completion: { elem in
+                
+            })
+            
             
             button.tintColor = UIColor.tintColor
             likes.textColor = UIColor.black
         }
-    }
-    
-    func configure(image: UIImage?) {
-        self.itemImage.image = image
-        likes.text = "\(amountOfLike)"
     }
 
 }

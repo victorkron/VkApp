@@ -48,8 +48,11 @@
                                     <action selector="didLikePressed:" destination="gTV-IL-0wX" eventType="touchUpInside" id="s62-gH-DNR"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k4l-eO-Z6I">
-                                <rect key="frame" x="48" y="0.0" width="20" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k4l-eO-Z6I">
+                                <rect key="frame" x="44.5" y="0.0" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="C8o-MA-5uM"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -60,8 +63,8 @@
                             <constraint firstItem="k4l-eO-Z6I" firstAttribute="top" secondItem="ZWf-mo-bZK" secondAttribute="top" id="Dei-26-eh1"/>
                             <constraint firstAttribute="height" constant="20" id="Fgd-vg-I8I"/>
                             <constraint firstItem="CIN-f9-AuH" firstAttribute="top" secondItem="ZWf-mo-bZK" secondAttribute="top" id="LKa-9v-gWK"/>
-                            <constraint firstItem="CIN-f9-AuH" firstAttribute="leading" secondItem="ZWf-mo-bZK" secondAttribute="leading" constant="5" id="ZDe-gl-S78"/>
-                            <constraint firstItem="k4l-eO-Z6I" firstAttribute="leading" secondItem="CIN-f9-AuH" secondAttribute="trailing" constant="5" id="cNL-w2-Jl5"/>
+                            <constraint firstItem="CIN-f9-AuH" firstAttribute="leading" secondItem="ZWf-mo-bZK" secondAttribute="leading" id="ZDe-gl-S78"/>
+                            <constraint firstItem="k4l-eO-Z6I" firstAttribute="leading" secondItem="CIN-f9-AuH" secondAttribute="trailing" id="cNL-w2-Jl5"/>
                             <constraint firstAttribute="bottom" secondItem="CIN-f9-AuH" secondAttribute="bottom" id="fSK-E8-jq6"/>
                             <constraint firstAttribute="bottom" secondItem="k4l-eO-Z6I" secondAttribute="bottom" id="tgI-o4-IEi"/>
                         </constraints>

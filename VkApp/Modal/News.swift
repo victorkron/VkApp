@@ -33,7 +33,7 @@ extension PropertyLoopable
             guard let label = labelMaybe else {
                 continue
             }
-
+            
             result[label] = valueMaybe
         }
 
@@ -81,7 +81,7 @@ class News: PropertyLoopable {
     var contentImage: UIImage?
     var dataOfActions: ActionsData?
     
-    init(_ title: Title, _ description: String?, _ contentImage: UIImage?, _ actionsData: ActionsData) {
+    init(_ title: Title?, _ description: String?, _ contentImage: UIImage?, _ actionsData: ActionsData?) {
         self.title = title
         self.description = description
         self.contentImage = contentImage
