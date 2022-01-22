@@ -29,12 +29,48 @@ final class PhotoItem: UICollectionViewCell {
         changeState()
     }
     
+    var tapGestureRecognize: UIGestureRecognizer = {
+        let recognizer = UITapGestureRecognizer(
+            target: self,
+            action: #selector(onTap))
+        
+        recognizer.numberOfTouchesRequired = 1
+        recognizer.numberOfTapsRequired = 1
+        
+        return recognizer
+    }()
+    
+    @objc func onTap() {
+        print("Tap")
+    }
+//
+//
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesBegan(touches, with: event)
+////        print(2323)
+//        
+//    }
     
     
+//
+//
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        print(tapGestureRecognize)
+//        self.addGestureRecognizer(tapGestureRecognize)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        super.init(coder: coder)
+//    }
     
     func configure(image: UIImage?) {
         self.itemImage.image = image
         likes.text = "\(amountOfLike)"
+//        imageView.backgroundColor = .black
+        
+        //self.itemImage.addGestureRecognizer(tapGestureRecognize)
+        //self.imageView.addGestureRecognizer(tapGestureRecognize)
     }
     
     func changeState() {
@@ -84,3 +120,8 @@ final class PhotoItem: UICollectionViewCell {
     }
 
 }
+
+
+
+
+

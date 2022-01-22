@@ -9,11 +9,13 @@ import UIKit
 
 class PhotosCollectionVC: UICollectionViewController {
     
+    
     var personName: String = " "
     var firstname: String? = nil
     var lastname: String? = nil
     var personAge: UInt? = 10
     var photos: [String]? = ["caption1"]
+    var curretnIndex: Int? = nil
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,23 +34,36 @@ class PhotosCollectionVC: UICollectionViewController {
             withReuseIdentifier: "someCollectionReusableView")
         print(UICollectionView.elementKindSectionHeader)
     }
+    
+    
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
+        guard
+            segue.identifier == "photoFullScreen"
+        else { return }
+        
+        guard
+            let destination = segue.destination as? PhotoFullScrennVC
+        else { return }
+        
+        destination.photos = self.photos!
+        destination.currentIndex = self.curretnIndex
+        destination.personName = self.personName
     }
-    */
-
+    
+    
     // MARK: UICollectionViewDataSource
     
 
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.curretnIndex = indexPath.row
+        onTap()
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        print(photos)
         return photos!.count
     }
 
@@ -61,8 +76,18 @@ class PhotosCollectionVC: UICollectionViewController {
         else { return UICollectionViewCell() }
             
         cell.configure(image: UIImage(named: "Collections/\(personName)/caption\(indexPath.row + 1)") ?? UIImage())
+        
+//        cell.imageView.self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
+        
         return cell
         
+    }
+    
+    
+    
+    @objc
+    func onTap() {
+        performSegue(withIdentifier: "photoFullScreen", sender: nil)
     }
     
     
@@ -88,40 +113,16 @@ class PhotosCollectionVC: UICollectionViewController {
                 return UICollectionReusableView()
         }
     }
-
     
-    
-    
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("began")
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("end")
     }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("move")
     }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
 
 }
 
@@ -135,4 +136,6 @@ extension PhotosCollectionVC: UICollectionViewDelegateFlowLayout {
         
         return CGSize(width: width, height: 150)
     }
+    
+  
 }

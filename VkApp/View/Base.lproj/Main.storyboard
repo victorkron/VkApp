@@ -20,16 +20,16 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="startColor">
-                                <color key="value" systemColor="systemYellowColor"/>
+                                <color key="value" systemColor="tertiarySystemBackgroundColor"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="endColor">
-                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="value" systemColor="systemPurpleColor"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="number" keyPath="startLocation">
                                 <real key="value" value="0.0"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="number" keyPath="endLocation">
-                                <real key="value" value="1"/>
+                                <real key="value" value="2"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="point" keyPath="startPoint">
                                 <point key="value" x="0.0" y="0.0"/>
@@ -143,10 +143,10 @@
                         </constraints>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="startColor">
-                                <color key="value" systemColor="systemYellowColor"/>
+                                <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="color" keyPath="endColor">
-                                <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="value" systemColor="systemPurpleColor"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="point" keyPath="startPoint">
                                 <point key="value" x="0.0" y="0.0"/>
@@ -158,7 +158,7 @@
                                 <real key="value" value="0.0"/>
                             </userDefinedRuntimeAttribute>
                             <userDefinedRuntimeAttribute type="number" keyPath="endLocation">
-                                <real key="value" value="1"/>
+                                <real key="value" value="2"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -195,6 +195,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionViewCellContentView>
+                                <connections>
+                                    <segue destination="ejx-vr-JUX" kind="show" identifier="photoFullScreen" id="f9a-5u-v9p"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -207,6 +210,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u57-3U-CdW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4649.275362318841" y="34.821428571428569"/>
+        </scene>
+        <!--Photo Full ScrennVC-->
+        <scene sceneID="cZe-aG-Ede">
+            <objects>
+                <viewController id="ejx-vr-JUX" customClass="PhotoFullScrennVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4yZ-Mn-gmI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2T4-dg-xYs">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AF6-4Q-ygI">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="AF6-4Q-ygI" secondAttribute="bottom" id="PON-MM-6PH"/>
+                                    <constraint firstItem="AF6-4Q-ygI" firstAttribute="top" secondItem="2T4-dg-xYs" secondAttribute="top" id="mjU-p1-KPU"/>
+                                    <constraint firstAttribute="trailing" secondItem="AF6-4Q-ygI" secondAttribute="trailing" id="tXg-6P-uDu"/>
+                                    <constraint firstItem="AF6-4Q-ygI" firstAttribute="leading" secondItem="2T4-dg-xYs" secondAttribute="leading" id="woJ-xA-LPz"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="iDR-4H-KVt"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="2T4-dg-xYs" firstAttribute="leading" secondItem="iDR-4H-KVt" secondAttribute="leading" id="9YA-Gq-6aU"/>
+                            <constraint firstItem="2T4-dg-xYs" firstAttribute="top" secondItem="iDR-4H-KVt" secondAttribute="top" id="B8K-Ah-YZb"/>
+                            <constraint firstItem="iDR-4H-KVt" firstAttribute="trailing" secondItem="2T4-dg-xYs" secondAttribute="trailing" id="JK3-zN-SYq"/>
+                            <constraint firstItem="iDR-4H-KVt" firstAttribute="bottom" secondItem="2T4-dg-xYs" secondAttribute="bottom" id="gAm-0g-SwU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="INc-kd-1cE"/>
+                    <connections>
+                        <outlet property="Container" destination="2T4-dg-xYs" id="RqQ-FB-VrW"/>
+                        <outlet property="imageView" destination="AF6-4Q-ygI" id="Gw9-0V-fyW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Xce-dr-h96" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5517.3913043478269" y="34.821428571428569"/>
         </scene>
         <!--Test-->
         <scene sceneID="wlR-Uu-M4P">
@@ -441,8 +487,11 @@
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
-        <systemColor name="systemYellowColor">
-            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tertiarySystemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

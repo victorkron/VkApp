@@ -30,7 +30,7 @@ final class FriendCell: UITableViewCell {
     
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let delay = 0.6
+        let delay = 0.5
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                     super.touchesEnded(touches, with: event)
         })

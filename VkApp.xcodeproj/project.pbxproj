@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C16B030279AC2C200333D39 /* PhotoFullScrennVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C16B02F279AC2C200333D39 /* PhotoFullScrennVC.swift */; };
 		6C42AB702798271F0081ED49 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C42AB6F2798271F0081ED49 /* StartVC.swift */; };
 		6C473610276D0B4C0074C7B1 /* FriendsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C47360F276D0B4C0074C7B1 /* FriendsTableVC.swift */; };
 		6C473612276D0B610074C7B1 /* PhotosCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C473611276D0B610074C7B1 /* PhotosCollectionVC.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6C16B02F279AC2C200333D39 /* PhotoFullScrennVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFullScrennVC.swift; sourceTree = "<group>"; };
 		6C42AB6F2798271F0081ED49 /* StartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVC.swift; sourceTree = "<group>"; };
 		6C47360F276D0B4C0074C7B1 /* FriendsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableVC.swift; sourceTree = "<group>"; };
 		6C473611276D0B610074C7B1 /* PhotosCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionVC.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 				6C74FEDA2778AD60006E1694 /* TestVC.swift */,
 				6C952286279343B100B11FF8 /* NewsTableVC.swift */,
 				6C42AB6F2798271F0081ED49 /* StartVC.swift */,
+				6C16B02F279AC2C200333D39 /* PhotoFullScrennVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				6C473612276D0B610074C7B1 /* PhotosCollectionVC.swift in Sources */,
 				6CC9FC88276A546C00728F63 /* LoginViewController.swift in Sources */,
 				6C95228F279350E400B11FF8 /* DescriptionCell.swift in Sources */,
+				6C16B030279AC2C200333D39 /* PhotoFullScrennVC.swift in Sources */,
 				6C42AB702798271F0081ED49 /* StartVC.swift in Sources */,
 				6CC9FC84276A546C00728F63 /* AppDelegate.swift in Sources */,
 				6C5DDA6A2784783F00D831C6 /* GradientView.swift in Sources */,

@@ -10,6 +10,101 @@ import UIKit
 
 final class TestVC: UIViewController {
     
+    var container: UIView! = UIView()
+    
+    let width = 0
+    let height = 0
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setContainerPosition()
+    }
+    
+    func setContainerPosition() {
+        
+        let duration = 5.0
+    
+        container.frame = CGRect(
+            x: Int(self.view.bounds.midX) - width / 2,
+            y: Int(self.view.bounds.midY) - height / 2,
+            width: width,
+            height: height)
+        container.backgroundColor = .clear
+        
+        let shape = CAShapeLayer()
+        let path = configPath()
+        
+        shape.path = path.cgPath
+        shape.lineWidth = 3
+        shape.strokeColor = UIColor.purple.cgColor
+        shape.fillColor = UIColor(displayP3Red: 0.96, green: 0.85, blue: 0.99, alpha: 1).cgColor
+        shape.strokeStart = 0.0
+        shape.strokeEnd = 1.0
+        
+        
+        let strokeStartAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeStart))
+        strokeStartAnimation.fromValue = -0.1
+        strokeStartAnimation.toValue = 0.9
+        
+        let strokeEndAnimation = CABasicAnimation(keyPath: #keyPath(CAShapeLayer.strokeEnd))
+        strokeEndAnimation.fromValue = 0
+        strokeEndAnimation.toValue = 1
+        
+        
+        let animationGroup = CAAnimationGroup()
+        animationGroup.duration = 2
+        animationGroup.repeatCount = .infinity
+        animationGroup.animations = [
+            strokeStartAnimation,
+            strokeEndAnimation
+        ]
+        
+        
+        
+        
+        
+        
+        shape.add(animationGroup, forKey: nil)
+        
+        
+        container.layer.addSublayer(shape)
+        
+        self.view.addSubview(container)
+    }
+    
+    
+    
+    func configPath() -> UIBezierPath {
+        let cloudPath = UIBezierPath()
+        
+        cloudPath.move(to: CGPoint(x: width / 2 - 20, y: height / 2))
+        
+        cloudPath.addCurve(
+            to: CGPoint(x: width / 2 + 10 , y: height / 2  - 15),
+            controlPoint1: CGPoint(x: width / 2 - 20, y: height / 2 - 20),
+            controlPoint2: CGPoint(x: width / 2 + 0, y: height / 2 - 20))
+        cloudPath.addCurve(
+            to: CGPoint(x: width / 2 + 37 , y: height / 2  - 25),
+            controlPoint1: CGPoint(x: width / 2 + 22, y: height / 2 - 40),
+            controlPoint2: CGPoint(x: width / 2 + 35, y: height / 2 - 30))
+        cloudPath.addCurve(
+            to: CGPoint(x: width / 2 + 60 , y: height / 2  - 5),
+            controlPoint1: CGPoint(x: width / 2 + 40, y: height / 2 - 40),
+            controlPoint2: CGPoint(x: width / 2 + 65, y: height / 2 - 30))
+        cloudPath.addCurve(
+            to: CGPoint(x: width / 2 - 20 , y: height / 2),
+            controlPoint1: CGPoint(x: width / 2 + 60, y: height / 2 + 20),
+            controlPoint2: CGPoint(x: width / 2 - 20, y: height / 2 + 20))
+        
+//        cloudPath.move(to: CGPoint(x: width / 2 - 20, y: height / 2))
+        
+        cloudPath.close()
+//        cloudPath.stroke()
+        return cloudPath
+    }
+    
+    
+    
 //    @IBOutlet var someButton: UIButton!
 //    
 //    private var count = 0
@@ -25,12 +120,6 @@ final class TestVC: UIViewController {
 //    
 //    private let someView: UIView = SomeRootView()
 //
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-////        view.addSubview(someView)
-//        configView()
-//    }
 //    
 //    private func configView() {
 //        someButton.setImage(UIImage(systemName: "heart"), for: .normal)
