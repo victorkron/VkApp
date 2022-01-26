@@ -364,7 +364,7 @@
         <!--Friends-->
         <scene sceneID="POi-Wc-h9L">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1za-IT-Ud1" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1za-IT-Ud1" customClass="CustomNavController" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Friends" image="person.fill" catalog="system" id="gZH-sd-JfD"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pCC-IF-n7u">
