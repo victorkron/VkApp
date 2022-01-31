@@ -7,12 +7,13 @@
 
 import UIKit
 
+
 class PhotoFullScrennVC: UIViewController {
     
     var photos: [String] = ["caption1"]
     var currentIndex: Int? = nil
     var personName: String = " "
-    let duration: CGFloat = 1
+    let duration: CGFloat = 0.7
     private var propertyAnimatorToTheRight: UIViewPropertyAnimator!
     private var propertyAnimatorToTheLeft: UIViewPropertyAnimator!
 
@@ -20,6 +21,7 @@ class PhotoFullScrennVC: UIViewController {
     @IBOutlet var imageView: UIImageView!
     var leftImageView: UIImageView!
     var rightImageView: UIImageView!
+    
     
     
     
@@ -46,9 +48,45 @@ class PhotoFullScrennVC: UIViewController {
         }
     }
     
+   
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setImage(currentIndex)
+        
+        let paner = UIPanGestureRecognizer(
+            target: self,
+            action: #selector(didPan(_:)))
+        
+        let swiper = UISwipeGestureRecognizer(
+            target: self,
+            action: #selector(didSwipe(_:))
+        )
+        swiper.direction = .down
+        swiper.delegate = self
+        
+        
+        
+        imageView.addGestureRecognizer(swiper)
+        imageView.addGestureRecognizer(paner)
+        
+    }
+    
+    @objc
+    func didSwipe(_ gesture: UISwipeGestureRecognizer) {
+        switch gesture.direction {
+        case .down:
+            navigationController?.popViewController(animated: false)
+            
+            
+        default:
+            print("Other")
+           
+        }
+    }
+    
     @objc
     func didPan(_ gesture: UIPanGestureRecognizer) {
-        
         let scaleForSideImage = 0.7
         let leftImageViewWidth = Container.bounds.width * scaleForSideImage
         var leftImageViewHeight = 0
@@ -58,11 +96,8 @@ class PhotoFullScrennVC: UIViewController {
         
         switch gesture.state {
         case .began:
-            
             var previousIndex: Int = 0
             var nextIndex: Int = 0
-            
-           
             
             var widthOfImage: CGFloat?
             var heightOfImage: CGFloat?
@@ -150,7 +185,6 @@ class PhotoFullScrennVC: UIViewController {
             propertyAnimatorToTheLeft.fractionComplete = -translation.x / 200
             
         case .ended:
-            
             let progressleft = propertyAnimatorToTheLeft.fractionComplete
             let progressRight = propertyAnimatorToTheRight.fractionComplete
             propertyAnimatorToTheRight.stopAnimation(true)
@@ -230,14 +264,7 @@ class PhotoFullScrennVC: UIViewController {
     
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.setImage(currentIndex)
-        imageView.addGestureRecognizer(UIPanGestureRecognizer(
-            target: self,
-            action: #selector(didPan(_:))))
-        
-    }
+    
     
     func setImage(_ index: Int?) {
         let name: String = photos[self.currentIndex!]
@@ -276,8 +303,7 @@ class PhotoFullScrennVC: UIViewController {
             y: Container.bounds.minY)
         neededImageView.transform = transform
     }
-    
-    
+
     func assignTransformImageForOneWithScale(neededImageView: UIImageView, _ x: CGFloat, _ scaleX: CGFloat, _ scaleY: CGFloat) {
         let transform = CGAffineTransform(
             translationX: x,
@@ -330,22 +356,37 @@ class PhotoFullScrennVC: UIViewController {
 //                self.rightImageView.transform = transform
 //            })
     }
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("began")
-//    }
-//    
-//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        print("move")
-//    }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        if (storyboard?.instantiateViewController(withIdentifier: "personCollection") as? PhotosCollectionVC) != nil {
+            PhotosCollectionVC.fromFullScrenn = true
+            PhotosCollectionVC.curretnIndex = self.currentIndex
+        }
     }
-    */
 
+}
+
+
+extension PhotoFullScrennVC: UIGestureRecognizerDelegate {
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
+//    {
+////        if otherGestureRecognizer.state == .ended {
+////            print(123)
+////        }
+////        print(otherGestureRecognizer)
+////
+//        return true
+//    }
+    
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        print(gestureRecognizer)
+//        print(otherGestureRecognizer)
+//        return true
+//    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {        
+        return true
+    }
 }

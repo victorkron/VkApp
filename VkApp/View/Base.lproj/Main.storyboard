@@ -109,7 +109,7 @@
                                         <buttonConfiguration key="configuration" style="plain" title="Log In"/>
                                         <connections>
                                             <action selector="logInButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LWH-Jx-cNL"/>
-                                            <segue destination="kAf-TQ-lCw" kind="presentation" identifier="goToMain" modalPresentationStyle="fullScreen" id="bG5-Va-oU5"/>
+                                            <segue destination="kAf-TQ-lCw" kind="presentation" identifier="goToMain" customClass="CustomSegue" customModule="VkApp" customModuleProvider="target" modalPresentationStyle="fullScreen" id="bG5-Va-oU5"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -176,7 +176,7 @@
         <!--Photos-->
         <scene sceneID="wHL-a5-KWi">
             <objects>
-                <collectionViewController id="XjA-OM-Gur" customClass="PhotosCollectionVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="personCollection" id="XjA-OM-Gur" customClass="PhotosCollectionVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="pcB-8o-O8i">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -222,7 +222,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2T4-dg-xYs">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AF6-4Q-ygI">
+                                    <imageView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AF6-4Q-ygI">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="725"/>
                                     </imageView>
                                 </subviews>

@@ -16,6 +16,8 @@ final class CustomNavController: UINavigationController, UINavigationControllerD
     
     let pushAnimation = PushAnimation()
     let popAnimation = PopAnimation()
+    let popToCollection = PopToCollection()
+    let pushFullScreen = PushFullScreen()
     
     private let interactiveTransition = CustomInteractiveTransition()
     
@@ -70,14 +72,37 @@ final class CustomNavController: UINavigationController, UINavigationControllerD
         animationControllerFor operation: UINavigationController.Operation,
         from fromVC: UIViewController,
         to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-            switch operation {
-            case .push:
-                return pushAnimation
-            case .pop:
-                return popAnimation
-            default:
-                return nil
+            
+            if fromVC is PhotosCollectionVC {
+                switch operation {
+                case .push:
+                    return pushFullScreen
+                case .pop:
+                    return popAnimation
+                default:
+                    return nil
+                }
+            } else if fromVC is PhotoFullScrennVC {
+                switch operation {
+                case .push:
+                    return pushAnimation
+                case .pop:
+                    return popToCollection
+                default:
+                    return nil
+                }
+            } else {
+                switch operation {
+                case .push:
+                    return pushAnimation
+                case .pop:
+                    return popAnimation
+                default:
+                    return nil
+                }
             }
+            
+            
         }
     
     func navigationController(

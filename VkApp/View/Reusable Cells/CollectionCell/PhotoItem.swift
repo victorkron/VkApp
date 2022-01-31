@@ -40,6 +40,7 @@ final class PhotoItem: UICollectionViewCell {
         return recognizer
     }()
     
+    
     @objc func onTap() {
         print("Tap")
     }
@@ -70,7 +71,7 @@ final class PhotoItem: UICollectionViewCell {
 //        imageView.backgroundColor = .black
         
         //self.itemImage.addGestureRecognizer(tapGestureRecognize)
-        //self.imageView.addGestureRecognizer(tapGestureRecognize)
+//        self.imageView.addGestureRecognizer(tapGestureRecognize)
     }
     
     func changeState() {
