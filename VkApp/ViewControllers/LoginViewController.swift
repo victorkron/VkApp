@@ -14,8 +14,8 @@ final class LoginViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBAction func logInButtonPressed(_ sender: Any) {
-        print(userNameTextField.text)
-        print(userPasswordTextField.text)
+//        print(userNameTextField.text)
+//        print(userPasswordTextField.text)
     }
     
     @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {
