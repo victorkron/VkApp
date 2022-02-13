@@ -13,7 +13,7 @@ class PhotoFullScrennVC: UIViewController {
     var photos: [String] = ["caption1"]
     var currentIndex: Int? = nil
     var personName: String = " "
-    let duration: CGFloat = 0.7
+    let duration: CGFloat = 0.5
     private var propertyAnimatorToTheRight: UIViewPropertyAnimator!
     private var propertyAnimatorToTheLeft: UIViewPropertyAnimator!
 
@@ -21,9 +21,6 @@ class PhotoFullScrennVC: UIViewController {
     @IBOutlet var imageView: UIImageView!
     var leftImageView: UIImageView!
     var rightImageView: UIImageView!
-    
-    
-    
     
     func checkIndex(Index: Int, previous: inout Int, next: inout Int) {
         if ((Index - 1) < 0) {
@@ -48,8 +45,6 @@ class PhotoFullScrennVC: UIViewController {
         }
     }
     
-   
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setImage(currentIndex)
@@ -65,8 +60,6 @@ class PhotoFullScrennVC: UIViewController {
         swiper.direction = .down
         swiper.delegate = self
         
-        
-        
         imageView.addGestureRecognizer(swiper)
         imageView.addGestureRecognizer(paner)
         
@@ -77,11 +70,8 @@ class PhotoFullScrennVC: UIViewController {
         switch gesture.direction {
         case .down:
             navigationController?.popViewController(animated: false)
-            
-            
         default:
             print("Other")
-           
         }
     }
     
@@ -126,7 +116,6 @@ class PhotoFullScrennVC: UIViewController {
                 height: leftImageViewHeight))//leftImage?.size.height ?? Container.bounds.height))
             leftImageView.image = leftImage
             
-            
             rightImageView = UIImageView(frame: CGRect(
                 x: self.Container.bounds.width + (self.Container.bounds.width - rightImageViewWidth) / 2,
                 y: self.Container.bounds.midY - CGFloat(rightImageViewHeight) / 2.0,
@@ -143,7 +132,8 @@ class PhotoFullScrennVC: UIViewController {
                 curve: .linear,
                 animations: {
                     // центральный
-                    self.assignTransformImageForOne(neededImageView: self.imageView, self.Container.bounds.width)
+                    self.scalingMainView(self.imageView, 0.5)
+//                    self.assignTransformImageForOne(neededImageView: self.imageView, self.Container.bounds.width)
 //                    self.assignTransformImageForOneWithScale(
 //                        neededImageView: self.imageView,
 //                        self.Container.bounds.width, //self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
@@ -165,7 +155,8 @@ class PhotoFullScrennVC: UIViewController {
                 curve: .easeInOut,
                 animations: {
                     // центральный
-                    self.assignTransformImageForOne(neededImageView: self.imageView, 0)
+                    self.scalingMainView(self.imageView, 0.25) // 0.25 that's why the previous setting scalingMainView have impact on this item
+//                    self.assignTransformImageForOne(neededImageView: self.imageView, 0)
                     //правый
 //                    self.assignTransformImageForOne(neededImageView: self.rightImageView, -self.Container.bounds.width)
                     self.assignTransformImageForOneWithScale(
@@ -264,7 +255,16 @@ class PhotoFullScrennVC: UIViewController {
     
     
     
-    
+    func scalingMainView(_ imageV: UIImageView, _ scalingParam: Double) {
+//        let transform = CGAffineTransform(
+//            translationX: x,
+//            y: Container.bounds.minY)
+        let scaleTransform = CGAffineTransform(
+            scaleX: scalingParam,
+            y: scalingParam)
+        
+        imageV.transform = scaleTransform//transform.concatenating(scaleTransform)
+    }
     
     func setImage(_ index: Int?) {
         let name: String = photos[self.currentIndex!]
@@ -329,15 +329,47 @@ class PhotoFullScrennVC: UIViewController {
                 myImageView.transform = transform.concatenating(transformScale)
             })
     }
+    
     func animateScrollImage(_ x: CGFloat, _ duration: CGFloat) {
-        UIView.animate(
-            withDuration: duration,
-            animations: {
-                let transform = CGAffineTransform(
-                    translationX: x,
-                    y: self.Container.bounds.minY)
-                self.imageView.transform = transform
-            })
+//        UIView.animate(
+//            withDuration: duration,
+//            animations: {
+//                let transform = CGAffineTransform(
+//                    translationX: x,
+//                    y: self.Container.bounds.minY)
+//                self.imageView.transform = .identity
+//            })
+        if x == 0 {
+            UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: [
+                    
+                ],
+                animations: {
+                    self.imageView.transform = .identity
+                },
+                completion: { _ in
+                    
+                })
+        } else {
+            UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: [
+                    
+                ],
+                animations: {
+                    let transform = CGAffineTransform(
+                        scaleX: 0.5,
+                        y: 0.5)
+                    self.imageView.transform = transform
+                },
+                completion: { _ in
+                    
+                })
+        }
+        
 //        UIView.animate(
 //            withDuration: duration,
 //            animations: {
@@ -386,7 +418,7 @@ extension PhotoFullScrennVC: UIGestureRecognizerDelegate {
 //        return true
 //    }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {        
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
