@@ -10,11 +10,14 @@ import UIKit
 final class GroupsTableVC: UITableViewController {
     
     var groups: [Group] = []
-//    {
-//        didSet {
-//            tableView.reloadData()
-//        }
-//    }
+    {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        
+    }
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
         guard
@@ -43,6 +46,23 @@ final class GroupsTableVC: UITableViewController {
                 nibName: "GroupCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupCell")
+        
+        let request = Request()
+        request.getGroups() { [weak self] result in
+            switch result {
+            case .success(let myGroups):
+                myGroups.items.forEach() { i in
+                    print(i)
+                    self?.groups.append(Group(
+                        name: i.name,
+                        photo: i.photo))
+                }
+
+            case .failure(let error):
+                print(error)
+            }
+
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,8 +91,9 @@ final class GroupsTableVC: UITableViewController {
         else { return UITableViewCell() }
 
         let currentName = groups[indexPath.row].name
+        let currentPhoto = groups[indexPath.row].photo ?? ""
         
-        cell.configure(emblem: UIImage(named: "Groups/\(currentName)") ?? UIImage(),
+        cell.configure(emblem: currentPhoto,
                        name: currentName)
         print(currentName)
         return cell

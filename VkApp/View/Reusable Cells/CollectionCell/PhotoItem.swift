@@ -44,34 +44,12 @@ final class PhotoItem: UICollectionViewCell {
     @objc func onTap() {
         print("Tap")
     }
-//
-//
-//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        super.touchesBegan(touches, with: event)
-////        print(2323)
-//        
-//    }
-    
-    
-//
-//
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        print(tapGestureRecognize)
-//        self.addGestureRecognizer(tapGestureRecognize)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        super.init(coder: coder)
-//    }
-    
-    func configure(image: UIImage?) {
-        self.itemImage.image = image
+
+    func configure(image: String) {
+        let url = URL(string: image)
+        let data = try? Data(contentsOf: url!)
+        self.itemImage.image = UIImage(data: data!)
         likes.text = "\(amountOfLike)"
-//        imageView.backgroundColor = .black
-        
-        //self.itemImage.addGestureRecognizer(tapGestureRecognize)
-//        self.imageView.addGestureRecognizer(tapGestureRecognize)
     }
     
     func changeState() {

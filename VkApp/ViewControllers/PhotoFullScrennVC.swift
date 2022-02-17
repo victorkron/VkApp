@@ -12,7 +12,7 @@ class PhotoFullScrennVC: UIViewController {
     
     var photos: [String] = ["caption1"]
     var currentIndex: Int? = nil
-    var personName: String = " "
+//    var personName: String = " "
     let duration: CGFloat = 0.5
     private var propertyAnimatorToTheRight: UIViewPropertyAnimator!
     private var propertyAnimatorToTheLeft: UIViewPropertyAnimator!
@@ -95,13 +95,23 @@ class PhotoFullScrennVC: UIViewController {
             
             checkIndex(Index: currentIndex!, previous: &previousIndex, next: &nextIndex)
             
-            let leftImage = UIImage(named: "Collections/\(personName)/\(photos[previousIndex])")
+            let leftName: String = photos[previousIndex]
+            let leftUrl = URL(string: leftName)
+            let leftData = try? Data(contentsOf: leftUrl!)
+            
+            let leftImage = UIImage(data: leftData!)
             widthOfImage = leftImage?.size.width
             heightOfImage = leftImage?.size.height
             ratio = heightOfImage! / widthOfImage!
             leftImageViewHeight = Int(leftImageViewWidth) * Int(ratio)
             
-            let rightImage = UIImage(named: "Collections/\(personName)/\(photos[nextIndex])")
+            
+            
+            let rightName: String = photos[nextIndex]
+            let rightUrl = URL(string: rightName)
+            let rightData = try? Data(contentsOf: rightUrl!)
+            
+            let rightImage = UIImage(data: rightData!)
             widthOfImage = rightImage?.size.width
             heightOfImage = rightImage?.size.height
             ratio = heightOfImage! / widthOfImage!
@@ -268,11 +278,16 @@ class PhotoFullScrennVC: UIViewController {
     
     func setImage(_ index: Int?) {
         let name: String = photos[self.currentIndex!]
-        imageView.image = UIImage(named: "Collections/\(personName)/\(name)")
+        let url = URL(string: name)
+        let data = try? Data(contentsOf: url!)
+        imageView.image = UIImage(data: data!)
     }
     
     func setImageForAll(left: UIImageView, center: UIImageView, right: UIImageView, index: Int) {
-        center.image = UIImage(named: "Collections/\(personName)/\(photos[self.currentIndex!])")
+        let name: String = photos[self.currentIndex!]
+        let url = URL(string: name)
+        let data = try? Data(contentsOf: url!)
+        center.image = UIImage(data: data!)
         self.animateScrollImage(0, 0)
 //        self.animateScale(
 //            myImageView: rightImageView,
@@ -290,8 +305,15 @@ class PhotoFullScrennVC: UIViewController {
         checkIndex(Index: currentIndex!, previous: &previous, next: &next)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
-            left.image = UIImage(named: "Collections/\(self.personName)/\(self.photos[previous])r")
-            right.image = UIImage(named: "Collections/\(self.personName)/\(self.photos[next])")
+            let leftName: String = self.photos[previous]
+            let rightName: String = self.photos[next]
+            let leftUrl = URL(string: leftName)
+            let rightUrl = URL(string: rightName)
+            let leftData = try? Data(contentsOf: leftUrl!)
+            let rightData = try? Data(contentsOf: rightUrl!)
+            
+            left.image = UIImage(data: leftData!)
+            right.image = UIImage(data: rightData!)
         })
         
     }

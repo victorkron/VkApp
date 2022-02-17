@@ -9,14 +9,19 @@ import UIKit
 
 class PhotosCollectionVC: UICollectionViewController {
     
-    var personName: String = " "
     var firstname: String? = nil
     var lastname: String? = nil
-    var personAge: UInt? = 10
-    var photos: [String]? = ["caption1"]
+    var id: Int = 0
+    var avatar: String = ""
+    var photos: [String]? = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
     
     static var curretnIndex: Int? = nil
-    
     static var fromFullScrenn: Bool? = false
     
 
@@ -34,7 +39,18 @@ class PhotosCollectionVC: UICollectionViewController {
                   bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "someCollectionReusableView")
-        print(UICollectionView.elementKindSectionHeader)
+        let request = Request()
+        request.getPhotos(id: String(id)) { [weak self] result in
+            switch result {
+            case .success(let photos):
+                photos.items.forEach { i in
+                    self?.photos?.append(i.sizes[0].url)
+                }
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
     }
     
     
@@ -51,8 +67,6 @@ class PhotosCollectionVC: UICollectionViewController {
         
         destination.photos = self.photos!
         destination.currentIndex = PhotosCollectionVC.curretnIndex
-        destination.personName = self.personName
-        
     }
     
     
@@ -118,8 +132,6 @@ class PhotosCollectionVC: UICollectionViewController {
                         animations: {
                             mask.layer.opacity = 0
                         })
-
-                    
                 },
                 completion: { i in
                     
@@ -154,9 +166,7 @@ class PhotosCollectionVC: UICollectionViewController {
                 as? PhotoItem
         else { return UICollectionViewCell() }
             
-        cell.configure(image: UIImage(named: "Collections/\(personName)/caption\(indexPath.row + 1)") ?? UIImage())
-        
-//        cell.imageView.self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(onTap)))
+        cell.configure(image: photos?[indexPath.row] ?? "")
         
         return cell
         
@@ -249,9 +259,9 @@ class PhotosCollectionVC: UICollectionViewController {
                 else { return UICollectionReusableView() }
                 someHeader.configure(personLastname: self.lastname ?? "",
                                  personFirstname: self.firstname ?? "",
-                                 personImage: UIImage(named: "Friends/\(personName)") ?? UIImage())
+                                     personImage: self.avatar)
                 return someHeader
-//          case UICollectionView.elementKindSectionFooter:
+            //          case UICollectionView.elementKindSectionFooter:
 //
             default:
                 return UICollectionReusableView()

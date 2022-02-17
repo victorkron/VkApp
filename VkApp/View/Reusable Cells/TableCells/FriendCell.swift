@@ -38,11 +38,17 @@ final class FriendCell: UITableViewCell {
     }
     
     func configure(
-        emblem: UIImage,
+        emblem: String,
         name: String) {
             self.friendName.text = name
-            self.friendEmblem.image = emblem
+//            self.friendEmblem.image = emblem
+            let url = URL(string: emblem)
+            let data = try? Data(contentsOf: url!)
+            self.friendEmblem.image = UIImage(data: data!)
         }
+
+
+
     
     func animateTapForImage() {
         UIView.animate(

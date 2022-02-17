@@ -11,30 +11,33 @@ final class FriendsTableVC: UITableViewController {
     
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
+    
+    var friends = [User]() {
+        didSet {
+            for friend in friends where friend.firstName != "DELETED" {
+                let personKey = String(friend.lastName.prefix(1))
+                if var personsValue = personsDictionary[personKey] {
+                    if personsValue.contains(friend.lastName) {
 
-    var persons: [User] = [
-        User(name: "John",
-             surname: "Black",
-             age: 27,
-             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
-        User(name: "Emma",
-             surname: "Heisenberg",
-             age: 22,
-             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
-        User(name: "Robert",
-             surname: "Gray",
-             age: 35,
-             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
-        User(name: "Eli",
-             surname: "White",
-             age: 23,
-             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"]),
-        User(name: "Nicole",
-             surname: "Smith",
-             age: 32,
-             photosArr: ["caption1", "caption2", "caption3", "caption4", "caption5"])
-    ]
-//
+                    } else {
+                        personsValue.append(friend.lastName)
+                        personsDictionary[personKey] = personsValue
+                    }
+                } else {
+                    personsDictionary[personKey] = [friend.lastName]
+                }
+            }
+            personSectionTitles = [String](personsDictionary.keys)
+            personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
+            for eachFriendsFirstChar in personsDictionary {
+                personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
     
     // MARK: - Lifecycle
     
@@ -42,26 +45,23 @@ final class FriendsTableVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.register(
             UINib(
                 nibName: "FriendCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
         
-        for person in persons {
-            let personKey = String(person.fullname.prefix(1))
-            if var personsValue = personsDictionary[personKey] {
-                personsValue.append(person.fullname)
-                personsDictionary[personKey] = personsValue
-            } else {
-                personsDictionary[personKey] = [person.fullname]
-            }
-        }
         
-        personSectionTitles = [String](personsDictionary.keys)
-        personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
-        for eachGroupNames in personsDictionary {
-            personsDictionary[eachGroupNames.key] = eachGroupNames.value.sorted(by: { $0 < $1 })
+        let request = Request()
+        request.getFriends() { [weak self] result in
+            switch result {
+            case .success(let responseFriends):
+                self?.friends = responseFriends.items
+            case .failure(let error):
+                print(error)
+            }
+            
         }
         
     }
@@ -69,27 +69,21 @@ final class FriendsTableVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
             segue.identifier == "showPhoto",
-            
-            let indexPath = tableView.indexPathForSelectedRow
-        else { return }
-        
-        guard
+            let indexPath = tableView.indexPathForSelectedRow,
             let destination = segue.destination as? PhotosCollectionVC
         else { return }
-        
+    
         let letter = personSectionTitles[indexPath.section]
         let name = personsDictionary[letter]![indexPath.row]
-        
-        destination.personName = name
-        let person = persons.first(where: { (i) -> Bool in
-            i.fullname == name
+
+        let person = friends.first(where: { (i) -> Bool in
+            i.lastName == name
         })
-        
-        destination.firstname = person?.firstname
-        destination.lastname = person?.lastname
-        destination.personAge = person?.age
-        destination.photos = person?.photos
-        
+
+        destination.firstname = person?.firstName
+        destination.lastname = person?.lastName
+        destination.id = person?.id ?? 0
+        destination.avatar = person?.photo ?? ""
     }
     
     // MARK: - Table view data source
@@ -99,8 +93,10 @@ final class FriendsTableVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let letter = personSectionTitles[section]
-        guard let names = personsDictionary[letter] else { return 0 }
+        guard
+            let letter = Optional(personSectionTitles[Optional(section) ?? 0]) ?? nil,
+            let names = Optional(personsDictionary[letter]) ?? nil
+        else { return 0 }
         
         return names.count
     }
@@ -108,15 +104,17 @@ final class FriendsTableVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendCell,
+            let letter = Optional(personSectionTitles[indexPath.section]) ?? nil,
+            let lastName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil,
+            let firstName = Optional(friends.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
+            let photo = Optional(friends.first(where: {$0.lastName == lastName})?.photo) ?? nil
         else { return UITableViewCell() }
         
-        let letter = personSectionTitles[indexPath.section]
-        let currentName = personsDictionary[letter]![indexPath.row]
         
-        cell.configure(emblem: UIImage(named: "Friends/\(currentName)") ?? UIImage(),
-                       name: currentName)
-        
+        cell.configure(emblem: photo,
+                       name: "\(lastName) \(firstName)")
+//        print(persons)
         return cell
     }
     
@@ -130,7 +128,10 @@ final class FriendsTableVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return personSectionTitles[section]
+        guard
+            let char = Optional(personSectionTitles[section]) ?? nil
+        else { return " " }
+        return char
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {

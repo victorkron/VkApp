@@ -23,10 +23,13 @@ class SomeCollectionReusableView: UICollectionReusableView {
         super.prepareForReuse()
     }
     
-    func configure(personLastname: String, personFirstname: String, personImage: UIImage?) {
+    func configure(personLastname: String, personFirstname: String, personImage: String) {
         self.lastname.text = personLastname
         self.firstname.text = personFirstname
-        self.personImage.image = personImage
+        let url = URL(string: personImage)
+        let data = try? Data(contentsOf: url!)
+        self.personImage.image = UIImage(data: data!)
+        
     }
     
 }

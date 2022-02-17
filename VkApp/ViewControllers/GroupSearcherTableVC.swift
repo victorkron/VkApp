@@ -12,11 +12,28 @@ class GroupSearcherTableVC: UITableViewController {
     var addedGroup: [Group] = []
     var baseGroups: [Group] = []
     
-    var allGroups = [
-        Group(name: "Geek"),
-        Group(name: "Carrot"),
-        Group(name: "X-man")
-    ]
+    var allGroups: [Group] = [] {
+        didSet {
+            addedGroup.forEach{ (addedGroupItem) in
+                if self.allGroups.contains(where: { allGroupsItem in
+                    allGroupsItem.name == addedGroupItem.name
+                }){
+                    let index = allGroups.firstIndex{ searchingItem in
+                        searchingItem.name == addedGroupItem.name
+                    }
+                    
+                    let indexForDelete = index ?? -1
+                    if (indexForDelete != -1) {
+                        allGroups.remove(at: indexForDelete)
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     
     
     
@@ -29,22 +46,27 @@ class GroupSearcherTableVC: UITableViewController {
                 nibName: "GroupCell",
                 bundle: nil),
             forCellReuseIdentifier: "groupCell")
-        addedGroup.forEach{ (addedGroupItem) in
-            if self.allGroups.contains(where: { allGroupsItem in
-                allGroupsItem.name == addedGroupItem.name
-            }){
-                let index = allGroups.firstIndex{ searchingItem in
-                    searchingItem.name == addedGroupItem.name
-                }
-                
-                let indexForDelete = index ?? -1
-                if (indexForDelete != -1) {
-                    allGroups.remove(at: indexForDelete)
-                }
-            }
-        }
+        
         
         baseGroups = allGroups
+        
+        let request = Request()
+        request.searchGroups(str: "n", count: 10) { [weak self] result in
+            switch result {
+            case .success(let myGroups):
+                myGroups.items.forEach() { i in
+                    print(i)
+                    self?.allGroups.append(Group(
+                        name: i.name,
+                        photo: i.photo))
+                }
+
+            case .failure(let error):
+                print(error)
+            }
+
+        }
+
         
     }
     
@@ -61,10 +83,11 @@ class GroupSearcherTableVC: UITableViewController {
         else { return UITableViewCell() }
     
         guard
-            let currentName = allGroups[indexPath.row].name as? String
+            let currentName = allGroups[indexPath.row].name as? String,
+            let currentPhoto = allGroups[indexPath.row].photo as? String
         else { return UITableViewCell() }
         
-        cell.configure(emblem: UIImage(named: "Groups/\(currentName)") ?? UIImage(),
+        cell.configure(emblem: currentPhoto,
                        name: currentName)
 
         return cell
@@ -89,19 +112,27 @@ class GroupSearcherTableVC: UITableViewController {
 extension GroupSearcherTableVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        allGroups = baseGroups
-        
+//        
+//        allGroups = baseGroups
+//
         if (searchText != "") {
-            var arr: [Group] = []
-            allGroups.forEach{ item in
-                if item.name.lowercased().contains(searchText.lowercased()) {
-                    arr.append(item)
-                } else {
-                    
+            let request = Request()
+            
+            request.searchGroups(str: searchText, count: 10) { [weak self] result in
+                switch result {
+                case .success(let myGroups):
+                    self?.allGroups = []
+                    myGroups.items.forEach() { i in
+                        print(i)
+                        self?.allGroups.append(Group(
+                            name: i.name,
+                            photo: i.photo))
+                    }
+                case .failure(let error):
+                    print(error)
                 }
+
             }
-            allGroups = arr
         }
         tableView.reloadData()
     }

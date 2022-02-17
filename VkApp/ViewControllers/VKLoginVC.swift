@@ -96,11 +96,11 @@ extension VKLoginVC: WKNavigationDelegate {
             SessionData.data.userId = userID
             
             print("Hello\\!\n", token, userID)
-            
-            Request.getFriends()
-            Request.getPhotos()
-            Request.getGroups()
-            Request.searchGroups(str: "minimalism", count: 3)
+            let request = Request()
+//            request.getFriends()
+//            request.getPhotos()
+//            request.getGroups()
+//            request.searchGroups(str: "minimalism", count: 3)
             
             goToNextPage()
             

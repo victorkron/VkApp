@@ -10,13 +10,18 @@ import Foundation
 class Group {
     
     var name: String
+    var photo: String? = nil
+//    var id: Int = 0
     
-    init(name: String) {
+    init(name: String, photo: String) {
         self.name = name
+        self.photo = photo
+//        self.id = id
     }
     
     init() {
         self.name = ""
+        self.photo = ""
     }
     
     deinit {
