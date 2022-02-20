@@ -7,11 +7,14 @@
 
 import UIKit
 import WebKit
+import KeychainSwift
 //import Alamofire
 
 
 final class VKLoginVC: UIViewController {
     
+    private let keychainSwift = KeychainSwift()
+    private let appDelegate = UIApplication.shared.delegate as? AppDelegate
     @IBOutlet var webView: WKWebView! {
         didSet {
             webView.navigationDelegate = self
@@ -46,6 +49,18 @@ final class VKLoginVC: UIViewController {
             let url = urlComponent.url
         else { return }
         webView.load(URLRequest(url: url))
+//        self.saveToUserDefaults()
+//        self.loadFromUserDefaults()
+//        self.deleteFromUserDefaults()
+//
+//        saveToKeychain()
+//        loadFromKeychain()
+//        removeFromKeychain()
+//
+//        saveFile()
+//        loadFromDisk()
+//        saveToCoreData()
+//        loadFromCoreData()
     }
     
     private var urlComponent: URLComponents = {
@@ -95,7 +110,7 @@ extension VKLoginVC: WKNavigationDelegate {
             SessionData.data.token = token
             SessionData.data.userId = userID
             
-            print("Hello\\!\n", token, userID)
+//            print("Hello\\!\n", token, userID)
             let request = Request()
 //            request.getFriends()
 //            request.getPhotos()
@@ -111,10 +126,116 @@ extension VKLoginVC: WKNavigationDelegate {
     
     private func goToNextPage() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "mainTabBarController") as? UIViewController
         nextViewController?.modalPresentationStyle = .fullScreen
         self.present(nextViewController ?? UIViewController(), animated: true, completion: nil)
     }
+    
+    
+    
 }
 
+
+extension VKLoginVC {
+    private func saveToUserDefaults() {
+        UserDefaults.standard.set("black", forKey: UserDefaults.Keys.backgroundColor.rawValue)
+    }
+    
+    private func loadFromUserDefaults() {
+        UserDefaults.standard.string(forKey: UserDefaults.Keys.backgroundColor.rawValue)
+    }
+    
+    private func removeFromUserDefaults() {
+        UserDefaults.Keys.allCases.forEach() { i in
+            UserDefaults.standard.removeObject(forKey: i.rawValue)
+        }
+        
+    }
+    
+    // MARK: Keychain
+    
+    private func saveToKeychain() {
+        keychainSwift.set(
+            SessionData.data.token,
+            forKey: UserDefaults.Keys.token.rawValue,
+            withAccess: nil)
+        
+        
+    }
+    
+    private func loadFromKeychain() {
+        let password = keychainSwift.get(UserDefaults.Keys.token.rawValue)
+        print(password)
+    }
+    
+    private func removeFromKeychain() {
+        keychainSwift.delete(UserDefaults.Keys.token.rawValue)
+        keychainSwift.clear()
+    }
+    
+    // MARK: File manager
+    
+    private func saveFile() {
+        guard
+            let url = FileManager.default
+                .urls(
+                    for: .documentDirectory,
+                       in: .userDomainMask)
+                .first,
+            let someImage = UIImage(named: "diagram")?.pngData()
+        else { return }
+        print(url)
+        let someFileURL = url.appendingPathComponent("someImage")
+        do {
+            try someImage.write(to: someFileURL)
+        } catch {
+            print(error)
+        }
+    }
+    
+    @discardableResult
+    private func loadFromDisk() -> UIImage? {
+        guard
+            let url = FileManager.default
+                .urls(
+                    for: .documentDirectory,
+                       in: .userDomainMask)
+                .first
+        else { return nil }
+        let someFileURL = url.appendingPathComponent("someImage.png")
+        guard
+            let imageData = try? Data(contentsOf: someFileURL),
+            let image = UIImage(data: imageData)
+        else { return nil }
+        
+        return image
+    }
+    
+    // MARK: CoreData
+    
+    private func saveToCoreData() {
+        guard
+            let currentContext = appDelegate?.persistentContainer.viewContext
+        else { return }
+        let user = UserData(context: currentContext)
+        user.id = UUID()
+        do {
+            try currentContext.save()
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func loadFromCoreData() {
+        guard
+            let currentContext = appDelegate?.persistentContainer.viewContext
+        else { return }
+        do {
+            let usersData = try currentContext.fetch(UserData.fetchRequest())
+            print(usersData)
+        } catch {
+            let nsError = error as NSError
+            print(nsError.userInfo)
+        }
+    }
+}
