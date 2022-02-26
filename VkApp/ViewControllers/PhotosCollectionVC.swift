@@ -20,6 +20,8 @@ class PhotosCollectionVC: UICollectionViewController {
             }
         }
     }
+    var photosBigSize: [String]? = []
+    
     
     static var curretnIndex: Int? = nil
     static var fromFullScrenn: Bool? = false
@@ -44,13 +46,16 @@ class PhotosCollectionVC: UICollectionViewController {
             switch result {
             case .success(let photos):
                 photos.items.forEach { i in
-                    self?.photos?.append(i.sizes[0].url)
+                    self?.photos?.append(i.sizes.first?.url ?? "")
+                    self?.photosBigSize?.append(i.sizes.last?.url ?? "")
                 }
             case .failure(let error):
                 print(error)
             }
             
         }
+        
+        
     }
     
     
@@ -65,17 +70,18 @@ class PhotosCollectionVC: UICollectionViewController {
             let destination = segue.destination as? PhotoFullScrennVC
         else { return }
         
-        destination.photos = self.photos!
+        destination.photos = self.photosBigSize ?? []
         destination.currentIndex = PhotosCollectionVC.curretnIndex
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
         if PhotosCollectionVC.fromFullScrenn ?? false {
-            
+            print(self.collectionView.scrollIndicatorInsets.bottom)
             let fullDuration = 0.7
-            
-            let a = collectionView.visibleCells[PhotosCollectionVC.curretnIndex ?? 0] as? PhotoItem
+            let a = collectionView.cellForItem(at: [0, PhotosCollectionVC.curretnIndex ?? 0]) as? PhotoItem
+//            let a = collectionView.visibleCells[PhotosCollectionVC.curretnIndex ?? 0]
             let k = self.view.frame.width / (a?.frame.width ?? self.view.frame.width)
             
             let mask = UIView()
@@ -116,7 +122,7 @@ class PhotosCollectionVC: UICollectionViewController {
                         relativeDuration: 1.0,
                         animations: {
                             prob.layer.position.x = a?.frame.midX ?? 0
-                            prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0)  + CGFloat(a?.frame.height ?? 0) - CGFloat(a?.itemImage.frame.height ?? 0) + prob.frame.size.height / 6.4 // magic constant
+                            prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0)  + CGFloat(a?.frame.height ?? 0) - CGFloat(a?.itemImage.frame.height ?? 0) + prob.frame.size.height / 6.4  - self.collectionView.contentOffset.y// magic constant
                         })
                     
                     UIView.addKeyframe(
@@ -142,6 +148,9 @@ class PhotosCollectionVC: UICollectionViewController {
         }
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        
+    }
     
     
     // MARK: UICollectionViewDataSource
@@ -167,7 +176,6 @@ class PhotosCollectionVC: UICollectionViewController {
         else { return UICollectionViewCell() }
             
         cell.configure(image: photos?[indexPath.row] ?? "")
-        
         return cell
         
     }

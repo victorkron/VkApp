@@ -83,7 +83,7 @@ final class FriendsTableVC: UITableViewController {
         destination.firstname = person?.firstName
         destination.lastname = person?.lastName
         destination.id = person?.id ?? 0
-        destination.avatar = person?.photo ?? ""
+        destination.avatar = person?.photo200 ?? ""
     }
     
     // MARK: - Table view data source

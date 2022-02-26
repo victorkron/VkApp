@@ -40,11 +40,13 @@ final class FriendCell: UITableViewCell {
     func configure(
         emblem: String,
         name: String) {
+            self.friendEmblem.downloaded(from: emblem)
             self.friendName.text = name
 //            self.friendEmblem.image = emblem
-            let url = URL(string: emblem)
-            let data = try? Data(contentsOf: url!)
-            self.friendEmblem.image = UIImage(data: data!)
+//            let url = URL(string: emblem)
+//            let data = try? Data(contentsOf: url!)
+//            self.friendEmblem.image = UIImage(data: data!)
+            
         }
 
 

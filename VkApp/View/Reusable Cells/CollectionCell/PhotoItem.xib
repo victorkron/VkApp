@@ -23,17 +23,16 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="gvv-n2-cgO">
                                 <rect key="frame" x="0.0" y="0.0" width="123" height="123"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="gvv-n2-cgO" secondAttribute="height" id="0wl-uD-1CG"/>
+                                    <constraint firstAttribute="width" secondItem="gvv-n2-cgO" secondAttribute="height" multiplier="1:1" id="0wl-uD-1CG"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="123" id="FWm-Qa-w3e"/>
-                            <constraint firstAttribute="trailing" secondItem="gvv-n2-cgO" secondAttribute="trailing" id="Gww-VV-Q2C"/>
-                            <constraint firstAttribute="bottom" secondItem="gvv-n2-cgO" secondAttribute="bottom" id="VJ7-bq-X74"/>
-                            <constraint firstItem="gvv-n2-cgO" firstAttribute="leading" secondItem="hDf-zg-ZbH" secondAttribute="leading" id="v56-UL-Xb9"/>
-                            <constraint firstItem="gvv-n2-cgO" firstAttribute="top" secondItem="hDf-zg-ZbH" secondAttribute="top" id="xh1-Bv-Pna"/>
+                            <constraint firstAttribute="width" priority="999" constant="123" id="FWm-Qa-w3e"/>
+                            <constraint firstItem="gvv-n2-cgO" firstAttribute="centerY" secondItem="hDf-zg-ZbH" secondAttribute="centerY" id="oZd-Ne-yHq"/>
+                            <constraint firstItem="gvv-n2-cgO" firstAttribute="centerX" secondItem="hDf-zg-ZbH" secondAttribute="centerX" id="qZv-GO-74A"/>
+                            <constraint firstItem="gvv-n2-cgO" firstAttribute="width" secondItem="hDf-zg-ZbH" secondAttribute="width" id="sbu-Uv-hfH"/>
                             <constraint firstAttribute="width" secondItem="hDf-zg-ZbH" secondAttribute="height" id="ytG-gu-i5b"/>
                         </constraints>
                     </view>

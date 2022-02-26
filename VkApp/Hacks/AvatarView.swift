@@ -12,7 +12,7 @@ class AvatarImage: UIImageView {
     @IBInspectable var borderWidth: CGFloat = 1.5
     
     override func awakeFromNib() {
-        self.layer.cornerRadius = self.frame.width / 3
+        self.layer.cornerRadius = self.frame.width / 2
         self.layer.masksToBounds = true
         self.layer.borderWidth = borderWidth
         self.layer.borderColor = borderColor.cgColor

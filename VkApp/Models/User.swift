@@ -35,6 +35,8 @@ struct User {
     let firstName: String
     let lastName: String
     let photo: String
+    let photo100: String
+    let photo200: String
     
     
 //    init(id: Int, name: String, surname: String, photo: String) {
@@ -54,6 +56,8 @@ extension User: Codable {
         case id
         case firstName = "first_name"
         case lastName = "last_name"
-        case photo = "photo_100"
+        case photo = "photo_50"
+        case photo100 = "photo_100"
+        case photo200 = "photo_200"
     }
 }

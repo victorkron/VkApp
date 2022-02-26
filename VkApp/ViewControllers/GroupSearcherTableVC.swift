@@ -34,6 +34,8 @@ class GroupSearcherTableVC: UITableViewController {
         }
     }
     
+    private var timer = Timer()
+    
     
     
     
@@ -112,29 +114,31 @@ class GroupSearcherTableVC: UITableViewController {
 extension GroupSearcherTableVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        
-//        allGroups = baseGroups
-//
-        if (searchText != "") {
-            let request = Request()
-            
-            request.searchGroups(str: searchText, count: 10) { [weak self] result in
-                switch result {
-                case .success(let myGroups):
-                    self?.allGroups = []
-                    myGroups.items.forEach() { i in
-                        print(i)
-                        self?.allGroups.append(Group(
-                            name: i.name,
-                            photo: i.photo))
+        
+        timer.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { _ in
+            if (searchText != "") {
+                let request = Request()
+                
+                request.searchGroups(str: searchText, count: 10) { [weak self] result in
+                    switch result {
+                    case .success(let myGroups):
+                        self?.allGroups = []
+                        myGroups.items.forEach() { i in
+                            print(i)
+                            self?.allGroups.append(Group(
+                                name: i.name,
+                                photo: i.photo))
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                case .failure(let error):
-                    print(error)
-                }
 
+                }
             }
-        }
-        tableView.reloadData()
+        })
+        
+        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

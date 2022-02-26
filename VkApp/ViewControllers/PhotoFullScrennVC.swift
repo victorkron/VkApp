@@ -79,62 +79,46 @@ class PhotoFullScrennVC: UIViewController {
     func didPan(_ gesture: UIPanGestureRecognizer) {
         let scaleForSideImage = 0.7
         let leftImageViewWidth = Container.bounds.width * scaleForSideImage
-        var leftImageViewHeight = 0
+        let leftImageViewHeight = 1000
         
         let rightImageViewWidth = Container.bounds.width * scaleForSideImage
-        var rightImageViewHeight = 0
+        let rightImageViewHeight = 1000
+        
+        
+        
+        
         
         switch gesture.state {
         case .began:
+            
+            
+            
             var previousIndex: Int = 0
             var nextIndex: Int = 0
             
-            var widthOfImage: CGFloat?
-            var heightOfImage: CGFloat?
-            var ratio: CGFloat
-            
             checkIndex(Index: currentIndex!, previous: &previousIndex, next: &nextIndex)
             
-            let leftName: String = photos[previousIndex]
-            let leftUrl = URL(string: leftName)
-            let leftData = try? Data(contentsOf: leftUrl!)
-            
-            let leftImage = UIImage(data: leftData!)
-            widthOfImage = leftImage?.size.width
-            heightOfImage = leftImage?.size.height
-            ratio = heightOfImage! / widthOfImage!
-            leftImageViewHeight = Int(leftImageViewWidth) * Int(ratio)
-            
-            
-            
-            let rightName: String = photos[nextIndex]
-            let rightUrl = URL(string: rightName)
-            let rightData = try? Data(contentsOf: rightUrl!)
-            
-            let rightImage = UIImage(data: rightData!)
-            widthOfImage = rightImage?.size.width
-            heightOfImage = rightImage?.size.height
-            ratio = heightOfImage! / widthOfImage!
-            rightImageViewHeight = Int(rightImageViewWidth) * Int(ratio)
-            
-            
+            let leftName: String = Optional(photos[previousIndex]) ?? photos[0]
+            let rightName: String = Optional(photos[nextIndex]) ?? photos[0]// index out of range if photos.count<2
             
             leftImageView = UIImageView(frame: CGRect(
                 x: -Int(self.Container.bounds.width) + Int(self.Container.bounds.width - leftImageViewWidth) / 2,
                 y: Int(self.Container.bounds.midY) - Int(leftImageViewHeight / 2),
                 width: Int(leftImageViewWidth),
                 height: leftImageViewHeight))//leftImage?.size.height ?? Container.bounds.height))
-            leftImageView.image = leftImage
+            leftImageView.downloaded(from: leftName)
             
             rightImageView = UIImageView(frame: CGRect(
                 x: self.Container.bounds.width + (self.Container.bounds.width - rightImageViewWidth) / 2,
                 y: self.Container.bounds.midY - CGFloat(rightImageViewHeight) / 2.0,
                 width: rightImageViewWidth,
                 height: CGFloat(rightImageViewHeight)))
-            rightImageView.image = rightImage
+            rightImageView.downloaded(from: rightName)
             
             Container.addSubview(leftImageView)
             Container.addSubview(rightImageView)
+            
+            
             
             // прокрутка вправо
             propertyAnimatorToTheRight = UIViewPropertyAnimator(
@@ -142,14 +126,7 @@ class PhotoFullScrennVC: UIViewController {
                 curve: .linear,
                 animations: {
                     // центральный
-                    self.scalingMainView(self.imageView, 0.5)
-//                    self.assignTransformImageForOne(neededImageView: self.imageView, self.Container.bounds.width)
-//                    self.assignTransformImageForOneWithScale(
-//                        neededImageView: self.imageView,
-//                        self.Container.bounds.width, //self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
-//                        scaleForSideImage,
-//                        scaleForSideImage)
-                    // левый
+                    self.scalingMainView(self.imageView, 0.3)
                     self.assignTransformImageForOneWithScale(
                         neededImageView: self.leftImageView,
                         self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
@@ -165,10 +142,7 @@ class PhotoFullScrennVC: UIViewController {
                 curve: .easeInOut,
                 animations: {
                     // центральный
-                    self.scalingMainView(self.imageView, 0.25) // 0.25 that's why the previous setting scalingMainView have impact on this item
-//                    self.assignTransformImageForOne(neededImageView: self.imageView, 0)
-                    //правый
-//                    self.assignTransformImageForOne(neededImageView: self.rightImageView, -self.Container.bounds.width)
+                    self.scalingMainView(self.imageView, 0.09) // 0.09 that's why the previous setting scalingMainView have impact on this item (0.3 * 0.3 = 0.09)
                     self.assignTransformImageForOneWithScale(
                         neededImageView: self.rightImageView,
                         -self.Container.bounds.width + (self.Container.bounds.width - rightImageViewWidth),
@@ -182,8 +156,8 @@ class PhotoFullScrennVC: UIViewController {
         case .changed:
             
             let translation = gesture.translation(in: self.imageView)
-            propertyAnimatorToTheRight.fractionComplete = translation.x / 200
-            propertyAnimatorToTheLeft.fractionComplete = -translation.x / 200
+            propertyAnimatorToTheRight.fractionComplete = translation.x / 1000
+            propertyAnimatorToTheLeft.fractionComplete = -translation.x / 1000
             
         case .ended:
             let progressleft = propertyAnimatorToTheLeft.fractionComplete
@@ -192,7 +166,7 @@ class PhotoFullScrennVC: UIViewController {
             propertyAnimatorToTheLeft.stopAnimation(true)
         
             if (progressleft > 0.5) {
-                animateScrollImage(-self.Container.bounds.width, 0.5)
+                animateScrollImage(-self.Container.bounds.width, 0.5, xScale: 0.3, yScale: 0.3)
                 animateScale(
                     myImageView: rightImageView,
                     (-self.Container.bounds.width) + (self.Container.bounds.width - rightImageViewWidth),
@@ -207,12 +181,14 @@ class PhotoFullScrennVC: UIViewController {
                         left: self.leftImageView,
                         center: self.imageView,
                         right: self.rightImageView,
-                        index: self.currentIndex!)
+                        index: self.currentIndex!,
+                        xScale: 0.3,
+                        yScale: 0.3)
                     self.rightImageView.image = nil
                     self.leftImageView.image = nil
                 })
             } else if (progressRight > 0.5) {
-                animateScrollImage(self.Container.bounds.width, 0.5)
+                animateScrollImage(self.Container.bounds.width, 0.5, xScale: 0.3, yScale: 0.3)
                 animateScale(
                     myImageView: leftImageView,
                     self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
@@ -227,13 +203,14 @@ class PhotoFullScrennVC: UIViewController {
                         left: self.leftImageView,
                         center: self.imageView,
                         right: self.rightImageView,
-                        index: self.currentIndex!)
+                        index: self.currentIndex!,
+                        xScale: 0.3,
+                        yScale: 0.3)
                     self.rightImageView.image = nil
                     self.leftImageView.image = nil
-                    
                 })
             } else {
-                animateScrollImage(0, 0.5)
+                animateScrollImage(0, 0.5, xScale: 0.3, yScale: 0.3)
                 animateScale(
                     myImageView: leftImageView,
                     0 - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
@@ -257,6 +234,7 @@ class PhotoFullScrennVC: UIViewController {
             return
             
         }
+        
     }
     
     
@@ -266,9 +244,6 @@ class PhotoFullScrennVC: UIViewController {
     
     
     func scalingMainView(_ imageV: UIImageView, _ scalingParam: Double) {
-//        let transform = CGAffineTransform(
-//            translationX: x,
-//            y: Container.bounds.minY)
         let scaleTransform = CGAffineTransform(
             scaleX: scalingParam,
             y: scalingParam)
@@ -278,23 +253,13 @@ class PhotoFullScrennVC: UIViewController {
     
     func setImage(_ index: Int?) {
         let name: String = photos[self.currentIndex!]
-        let url = URL(string: name)
-        let data = try? Data(contentsOf: url!)
-        imageView.image = UIImage(data: data!)
+        imageView.downloaded(from: name)
     }
     
-    func setImageForAll(left: UIImageView, center: UIImageView, right: UIImageView, index: Int) {
+    func setImageForAll(left: UIImageView, center: UIImageView, right: UIImageView, index: Int, xScale: CGFloat, yScale: CGFloat) {
         let name: String = photos[self.currentIndex!]
-        let url = URL(string: name)
-        let data = try? Data(contentsOf: url!)
-        center.image = UIImage(data: data!)
-        self.animateScrollImage(0, 0)
-//        self.animateScale(
-//            myImageView: rightImageView,
-//            (-self.Container.bounds.width) + (self.Container.bounds.width - rightImageViewWidth),
-//            1,
-//            1,
-//            duration: 0.5)
+        center.downloaded(from: name)
+        self.animateScrollImage(0, 0, xScale: xScale, yScale: yScale)
         assignTransformImageForOne(neededImageView: rightImageView, Container.bounds.width)
         assignTransformImageForOne(neededImageView: leftImageView, -Container.bounds.width)
         
@@ -307,13 +272,8 @@ class PhotoFullScrennVC: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.01, execute: {
             let leftName: String = self.photos[previous]
             let rightName: String = self.photos[next]
-            let leftUrl = URL(string: leftName)
-            let rightUrl = URL(string: rightName)
-            let leftData = try? Data(contentsOf: leftUrl!)
-            let rightData = try? Data(contentsOf: rightUrl!)
-            
-            left.image = UIImage(data: leftData!)
-            right.image = UIImage(data: rightData!)
+            left.downloaded(from: leftName)
+            right.downloaded(from: rightName)
         })
         
     }
@@ -352,15 +312,7 @@ class PhotoFullScrennVC: UIViewController {
             })
     }
     
-    func animateScrollImage(_ x: CGFloat, _ duration: CGFloat) {
-//        UIView.animate(
-//            withDuration: duration,
-//            animations: {
-//                let transform = CGAffineTransform(
-//                    translationX: x,
-//                    y: self.Container.bounds.minY)
-//                self.imageView.transform = .identity
-//            })
+    func animateScrollImage(_ x: CGFloat, _ duration: CGFloat, xScale: CGFloat, yScale: CGFloat) {
         if x == 0 {
             UIView.animate(
                 withDuration: duration,
@@ -383,32 +335,14 @@ class PhotoFullScrennVC: UIViewController {
                 ],
                 animations: {
                     let transform = CGAffineTransform(
-                        scaleX: 0.5,
-                        y: 0.5)
+                        scaleX: xScale,
+                        y: yScale)
                     self.imageView.transform = transform
                 },
                 completion: { _ in
                     
                 })
         }
-        
-//        UIView.animate(
-//            withDuration: duration,
-//            animations: {
-//                let transform = CGAffineTransform(
-//                    translationX: x,
-//                    y: self.Container.bounds.minY)
-//                self.leftImageView.transform = transform
-//            })
-//
-//        UIView.animate(
-//            withDuration: duration,
-//            animations: {
-//                let transform = CGAffineTransform(
-//                    translationX: x,
-//                    y: self.Container.bounds.minY)
-//                self.rightImageView.transform = transform
-//            })
     }
     
     
@@ -424,22 +358,6 @@ class PhotoFullScrennVC: UIViewController {
 
 
 extension PhotoFullScrennVC: UIGestureRecognizerDelegate {
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
-//    {
-////        if otherGestureRecognizer.state == .ended {
-////            print(123)
-////        }
-////        print(otherGestureRecognizer)
-////
-//        return true
-//    }
-    
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        print(gestureRecognizer)
-//        print(otherGestureRecognizer)
-//        return true
-//    }
-    
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }

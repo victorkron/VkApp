@@ -26,10 +26,7 @@ class SomeCollectionReusableView: UICollectionReusableView {
     func configure(personLastname: String, personFirstname: String, personImage: String) {
         self.lastname.text = personLastname
         self.firstname.text = personFirstname
-        let url = URL(string: personImage)
-        let data = try? Data(contentsOf: url!)
-        self.personImage.image = UIImage(data: data!)
-        
+        self.personImage.downloaded(from: personImage)        
     }
     
 }

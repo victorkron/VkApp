@@ -35,12 +35,7 @@ final class GroupCell: UITableViewCell {
         emblem: String,
         name: String) {
             self.groupName.text = name
-//            self.groupEmblem.image = emblem
-            print(emblem)
-            print(emblem)
-            let url = URL(string: emblem)
-            let data = try? Data(contentsOf: url!)
-            self.groupEmblem.image = UIImage(data: data!)
+            self.groupEmblem.downloaded(from: emblem)
         }
     
     func animateTapForImage() {

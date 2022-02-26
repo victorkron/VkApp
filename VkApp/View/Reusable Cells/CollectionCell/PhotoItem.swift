@@ -46,9 +46,8 @@ final class PhotoItem: UICollectionViewCell {
     }
 
     func configure(image: String) {
-        let url = URL(string: image)
-        let data = try? Data(contentsOf: url!)
-        self.itemImage.image = UIImage(data: data!)
+        self.itemImage.downloaded(from: image)
+        self.itemImage.contentMode = .scaleAspectFill
         likes.text = "\(amountOfLike)"
     }
     

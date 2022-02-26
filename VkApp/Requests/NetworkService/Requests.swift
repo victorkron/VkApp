@@ -9,6 +9,7 @@ import Foundation
 
 final class Request {
     func getFriends(complition: @escaping (Result<Friends, Error>) -> Void) {
+        
         let configuration = URLSessionConfiguration.default
         let session = URLSession(configuration: configuration)
         
@@ -20,7 +21,7 @@ final class Request {
             URLQueryItem(name: "user_id", value: String(SessionData.data.userId)),
             URLQueryItem(name: "order", value: "hints"),
             URLQueryItem(name: "count", value: "200"),
-            URLQueryItem(name: "fields", value: "nickname,photo_100"),
+            URLQueryItem(name: "fields", value: "nickname,photo_50,photo_100,photo_200"),
             URLQueryItem(name: "access_token", value: SessionData.data.token),
             URLQueryItem(name: "v", value: "5.131")
         ]
