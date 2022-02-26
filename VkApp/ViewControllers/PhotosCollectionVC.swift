@@ -122,7 +122,7 @@ class PhotosCollectionVC: UICollectionViewController {
                         relativeDuration: 1.0,
                         animations: {
                             prob.layer.position.x = a?.frame.midX ?? 0
-                            prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0)  + CGFloat(a?.frame.height ?? 0) - CGFloat(a?.itemImage.frame.height ?? 0) + prob.frame.size.height / 6.4  - self.collectionView.contentOffset.y// magic constant
+                            prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0) - self.collectionView.contentOffset.y - 12 // magic constant
                         })
                     
                     UIView.addKeyframe(
@@ -196,7 +196,7 @@ class PhotosCollectionVC: UICollectionViewController {
         prob.transform3D = CATransform3DMakeTranslation(0, 0, 1)
         prob.frame = a?.itemImage.frame ?? CGRect()
         prob.layer.position.x = a?.frame.midX ?? 0
-        prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0)  + CGFloat(a?.frame.height ?? 0) - CGFloat(a?.itemImage.frame.height ?? 0) + prob.frame.size.height / 2
+        prob.layer.position.y = CGFloat(a?.layer.position.y ?? 0) - self.collectionView.contentOffset.y - 12
         
         let k = self.view.frame.width / prob.frame.width
         
