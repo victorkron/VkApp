@@ -72,7 +72,7 @@ final class Request {
         else { return }
         
         var request = URLRequest(url: url)
-        //        print("Here",urlConstructor.url!)
+                print("Here",urlConstructor.url!)
         request.httpMethod = "POST"
         
         let task = session.dataTask(with: request) { (data, response, error) in

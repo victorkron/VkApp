@@ -46,7 +46,10 @@ class PhotosCollectionVC: UICollectionViewController {
             switch result {
             case .success(let photos):
                 photos.items.forEach { i in
-                    self?.photos?.append(i.sizes.first?.url ?? "")
+                    let value = i.sizes.first { i in
+                        i.type == "p"
+                    }
+                    self?.photos?.append(value?.url ?? "") // rewrite with type "p"
                     self?.photosBigSize?.append(i.sizes.last?.url ?? "")
                 }
             case .failure(let error):
