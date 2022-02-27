@@ -45,6 +45,11 @@ final class VKLoginVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        do {
+            try RealmService.clear()
+        } catch {
+            print(error)
+        } 
         guard
             let url = urlComponent.url
         else { return }
@@ -63,6 +68,8 @@ final class VKLoginVC: UIViewController {
 //        loadFromCoreData()
     }
     
+    
+    
     private var urlComponent: URLComponents = {
         var comp = URLComponents()
         comp.scheme = "https"
@@ -78,6 +85,7 @@ final class VKLoginVC: UIViewController {
         ]
         return comp
     }()
+    
 }
 
 extension VKLoginVC: WKNavigationDelegate {

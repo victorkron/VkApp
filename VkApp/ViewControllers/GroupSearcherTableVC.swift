@@ -9,10 +9,10 @@ import UIKit
 
 class GroupSearcherTableVC: UITableViewController {
 
-    var addedGroup: [Group] = []
-    var baseGroups: [Group] = []
+    var addedGroup: [GroupData] = []
+    var baseGroups: [GroupData] = []
     
-    var allGroups: [Group] = [] {
+    var allGroups: [GroupData] = [] {
         didSet {
             addedGroup.forEach{ (addedGroupItem) in
                 if self.allGroups.contains(where: { allGroupsItem in
@@ -58,7 +58,8 @@ class GroupSearcherTableVC: UITableViewController {
             case .success(let myGroups):
                 myGroups.items.forEach() { i in
                     print(i)
-                    self?.allGroups.append(Group(
+                    self?.allGroups.append(GroupData(
+                        id: i.id,
                         name: i.name,
                         photo: i.photo))
                 }
@@ -126,7 +127,8 @@ extension GroupSearcherTableVC: UISearchBarDelegate {
                         self?.allGroups = []
                         myGroups.items.forEach() { i in
                             print(i)
-                            self?.allGroups.append(Group(
+                            self?.allGroups.append(GroupData(
+                                id: i.id,
                                 name: i.name,
                                 photo: i.photo))
                         }

@@ -7,6 +7,7 @@ target 'VkApp' do
 
   # Pods for VkApp
 	pod 'KeychainSwift', '~> 20.0'
-  	pod 'Alamofire', '~> 5.5	'
+  pod 'Alamofire', '~> 5.5	'
 	pod 'Kingfisher', '~> 7.1.2'
+  pod 'RealmSwift', '~>10'
 end

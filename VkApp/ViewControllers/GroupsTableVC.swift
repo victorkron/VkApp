@@ -6,18 +6,27 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class GroupsTableVC: UITableViewController {
     
-    var groups: [Group] = []
-    {
+    
+    var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
         didSet {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
-        
     }
+//    var groups: [Group] = []
+//    {
+//        didSet {
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+//        
+//    }
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
         guard
@@ -26,14 +35,37 @@ final class GroupsTableVC: UITableViewController {
             let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow
 //            !self.groups.contains(allGroupsController.allGroups[groupIndexPath.row])
         else { return }
-        
-        for item in self.groups {
-            if (item.name == allGroupsController.allGroups[groupIndexPath.row].name) {
-                return
+//
+//        guard
+//            self.groups != nil
+//        else { return }
+//
+//        for item in self.groups {
+//            if (item.name == allGroupsController.allGroups[groupIndexPath.row].name) {
+//                return
+//            }
+//        }
+//
+//        let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
+//
+//        do {
+//            try RealmService.add(item: <#T##T#>)
+//        } catch {
+//            print(error)
+//        }
+//        groups.append(allGroupsController.allGroups[groupIndexPath.row]) // ИСПРАВИТЬ!!!!!!!!
+        do {
+            let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
+            self.groups?.forEach{ i in
+                if (i.id == item.id) {
+                    return
+                }
             }
+            try RealmService.add(item: item)
+            self.groups = try RealmService.load(typeOf: RealmGroup.self)
+        } catch {
+            print(error)
         }
-        
-        self.groups.append(allGroupsController.allGroups[groupIndexPath.row])
         tableView.reloadData()
     }
     
@@ -51,12 +83,23 @@ final class GroupsTableVC: UITableViewController {
         request.getGroups() { [weak self] result in
             switch result {
             case .success(let myGroups):
-                myGroups.items.forEach() { i in
-                    print(i)
-                    self?.groups.append(Group(
-                        name: i.name,
-                        photo: i.photo))
+                let items = myGroups.items.map { i in
+                    RealmGroup(group: i)
                 }
+                DispatchQueue.main.async {
+                    do {
+                        try RealmService.save(items: items)
+                        self?.groups = try RealmService.load(typeOf: RealmGroup.self)
+                    } catch {
+                        print(error)
+                    }
+                }
+//                myGroups.items.forEach() { i in
+//                    print(i)
+//                    self?.groups.append(Group(
+//                        name: i.name,
+//                        photo: i.photo))
+//                }
 
             case .failure(let error):
                 print(error)
@@ -65,23 +108,23 @@ final class GroupsTableVC: UITableViewController {
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard
-            segue.identifier == "showAllGroups"
-        else { return }
-
-        guard
-            let destination = segue.destination as? GroupSearcherTableVC
-        else { return }
-        
-        destination.addedGroup = groups
-    }
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        guard
+//            segue.identifier == "showAllGroups"
+//        else { return }
+//
+//        guard
+//            let destination = segue.destination as? GroupSearcherTableVC
+//        else { return }
+//
+//        destination.addedGroup = groups
+//    }
     
     // MARK: - Table view data source
 
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        groups.count
+        return groups?.count ?? 0
     }
 
     
@@ -90,8 +133,8 @@ final class GroupsTableVC: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath) as? GroupCell
         else { return UITableViewCell() }
 
-        let currentName = groups[indexPath.row].name
-        let currentPhoto = groups[indexPath.row].photo ?? ""
+        let currentName = groups?[indexPath.row].name ?? ""
+        let currentPhoto = groups?[indexPath.row].photo ?? ""
         
         cell.configure(emblem: currentPhoto,
                        name: currentName)
@@ -106,15 +149,23 @@ final class GroupsTableVC: UITableViewController {
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
-            
+
         if editingStyle == .delete {
-            groups.remove(at: indexPath.row)
+            do {
+                guard
+                    let group = groups?[indexPath.row]
+                else { return }
+                try RealmService.delete(object: group)
+                self.groups = try RealmService.load(typeOf: RealmGroup.self)
+            } catch {
+                print(error)
+            }
             tableView.deleteRows(
                 at: [indexPath],
                 with: .fade)
-        } 
+        }
     }
-    
+//
 
     /*
     // Override to support rearranging the table view.

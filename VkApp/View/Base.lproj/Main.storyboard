@@ -239,9 +239,16 @@
                             <outlet property="delegate" destination="XjA-OM-Gur" id="U2s-pd-B2a"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Photos" id="yBp-Gd-QgP"/>
+                    <navigationItem key="navigationItem" title="Photos" id="yBp-Gd-QgP">
+                        <barButtonItem key="leftBarButtonItem" title="Friends" image="arrow.turn.up.left" catalog="system" id="aL7-Kh-N7G">
+                            <connections>
+                                <segue destination="ZJT-Az-JvL" kind="unwind" unwindAction="celarPhotoWithSegue:" id="4ZW-rd-fdV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u57-3U-CdW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="ZJT-Az-JvL" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4649.275362318841" y="34.821428571428569"/>
         </scene>
@@ -512,6 +519,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.turn.up.left" catalog="system" width="128" height="99"/>
         <image name="newspaper.fill" catalog="system" width="128" height="111"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>

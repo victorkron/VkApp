@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class PhotosCollectionVC: UICollectionViewController {
     
@@ -13,13 +14,20 @@ class PhotosCollectionVC: UICollectionViewController {
     var lastname: String? = nil
     var id: Int = 0
     var avatar: String = ""
-    var photos: [String]? = [] {
+    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
     }
+//    var photos: [String]? = [] {
+//        didSet {
+//            DispatchQueue.main.async {
+//                self.collectionView.reloadData()
+//            }
+//        }
+//    }
     var photosBigSize: [String]? = []
     
     
@@ -41,28 +49,8 @@ class PhotosCollectionVC: UICollectionViewController {
                   bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "someCollectionReusableView")
-        let request = Request()
-        request.getPhotos(id: String(id)) { [weak self] result in
-            switch result {
-            case .success(let photos):
-                photos.items.forEach { i in
-                    let value = i.sizes.first { i in
-                        i.type == "p"
-                    }
-                    self?.photos?.append(value?.url ?? "") // rewrite with type "p"
-                    self?.photosBigSize?.append(i.sizes.last?.url ?? "")
-                }
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
-        
-        
+        self.getPhoto()
     }
-    
-    
-    
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
@@ -77,11 +65,46 @@ class PhotosCollectionVC: UICollectionViewController {
         destination.currentIndex = PhotosCollectionVC.curretnIndex
     }
     
+    private func getPhoto() {
+        let request = Request()
+        request.getPhotos(id: String(id)) { [weak self] result in
+            switch result {
+            case .success(let photos):
+                let items = photos.items.map { i -> RealmPhotoCell in
+                    self?.photosBigSize?.append(i.sizes.last?.url ?? "")
+                    let value = i.sizes.first { i in
+                        i.type == "p"
+                    }
+                    let elem = RealmPhotoCell(photo: Photo(
+                        height: value?.height ?? 0,
+                        url: value?.url ?? "",
+                        type: value?.type ?? ""))
+                    return elem
+                }
+                DispatchQueue.main.async {
+                    do {
+                        try RealmService.save(items: items)
+                        self?.photos = try RealmService.load(typeOf: RealmPhotoCell.self)
+                    } catch {
+                        print(error)
+                    }
+                }
+//                photos.items.forEach { i in
+//                    let value = i.sizes.first { i in
+//                        i.type == "p"
+//                    }
+//                    self?.photos?.append(value?.url ?? "") // rewrite with type "p"
+
+//                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
-        
         if PhotosCollectionVC.fromFullScrenn ?? false {
-            print(self.collectionView.scrollIndicatorInsets.bottom)
             let fullDuration = 0.7
             let a = collectionView.cellForItem(at: [0, PhotosCollectionVC.curretnIndex ?? 0]) as? PhotoItem
 //            let a = collectionView.visibleCells[PhotosCollectionVC.curretnIndex ?? 0]
@@ -167,7 +190,10 @@ class PhotosCollectionVC: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return photos!.count
+        guard
+            let photos = photos
+        else { return 0 }
+        return photos.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -178,7 +204,7 @@ class PhotosCollectionVC: UICollectionViewController {
                 as? PhotoItem
         else { return UICollectionViewCell() }
             
-        cell.configure(image: photos?[indexPath.row] ?? "")
+        cell.configure(image: photos?[indexPath.row].url ?? "")
         return cell
         
     }

@@ -37,18 +37,6 @@ struct User {
     let photo: String
     let photo100: String
     let photo200: String
-    
-    
-//    init(id: Int, name: String, surname: String, photo: String) {
-//        self.id = id
-//        self.firstName = name
-//        self.lastName = surname
-//        self.photo = photo
-//    }
-//
-//    deinit {
-//        print("Item of User have deinitialized")
-//    }
 }
 
 extension User: Codable {

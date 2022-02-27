@@ -42,11 +42,6 @@ final class FriendCell: UITableViewCell {
         name: String) {
             self.friendEmblem.downloaded(from: emblem)
             self.friendName.text = name
-//            self.friendEmblem.image = emblem
-//            let url = URL(string: emblem)
-//            let data = try? Data(contentsOf: url!)
-//            self.friendEmblem.image = UIImage(data: data!)
-            
         }
 
 

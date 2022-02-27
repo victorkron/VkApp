@@ -6,15 +6,20 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class FriendsTableVC: UITableViewController {
     
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
     
-    var friends = [User]() {
+    var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
         didSet {
-            for friend in friends where friend.firstName != "DELETED" {
+            guard
+                let friends = friends
+            else { return }
+
+            for friend in friends where friend.firstName != "DELETED" { // warning: hard unwrap
                 let personKey = String(friend.lastName.prefix(1))
                 if var personsValue = personsDictionary[personKey] {
                     if personsValue.contains(friend.lastName) {
@@ -32,13 +37,50 @@ final class FriendsTableVC: UITableViewController {
             for eachFriendsFirstChar in personsDictionary {
                 personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
             }
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
     }
+//    var friends = [User]() {
+//        didSet {
+//            for friend in friends where friend.firstName != "DELETED" {
+//                let personKey = String(friend.lastName.prefix(1))
+//                if var personsValue = personsDictionary[personKey] {
+//                    if personsValue.contains(friend.lastName) {
+//
+//                    } else {
+//                        personsValue.append(friend.lastName)
+//                        personsDictionary[personKey] = personsValue
+//                    }
+//                } else {
+//                    personsDictionary[personKey] = [friend.lastName]
+//                }
+//            }
+//            personSectionTitles = [String](personsDictionary.keys)
+//            personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
+//            for eachFriendsFirstChar in personsDictionary {
+//                personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
+//            }
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
+//    }
 
-    
+    @IBAction func celarPhoto(segue: UIStoryboardSegue) {
+        guard
+            let sender = segue.source as? PhotosCollectionVC
+        else { return }
+        DispatchQueue.main.async {
+            do {
+                try RealmService.delete(object: sender.photos!)
+            } catch {
+                print(error)
+            }
+        }
+    }
     // MARK: - Lifecycle
     
     
@@ -57,13 +99,24 @@ final class FriendsTableVC: UITableViewController {
         request.getFriends() { [weak self] result in
             switch result {
             case .success(let responseFriends):
-                self?.friends = responseFriends.items
+                let items = responseFriends.items.map {
+                    RealmFriend(user: $0)
+                }
+                DispatchQueue.main.async {
+                    do {
+                        try RealmService.save(items: items)
+                        self?.friends = try RealmService.load(typeOf: RealmFriend.self)
+                    } catch {
+                        print(error)
+                    }
+                }
+                
+//                self?.friends = responseFriends.items
             case .failure(let error):
                 print(error)
             }
             
         }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -76,7 +129,7 @@ final class FriendsTableVC: UITableViewController {
         let letter = personSectionTitles[indexPath.section]
         let name = personsDictionary[letter]![indexPath.row]
 
-        let person = friends.first(where: { (i) -> Bool in
+        let person = friends?.first(where: { (i) -> Bool in
             i.lastName == name
         })
 
@@ -107,14 +160,14 @@ final class FriendsTableVC: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendCell,
             let letter = Optional(personSectionTitles[indexPath.section]) ?? nil,
             let lastName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil,
-            let firstName = Optional(friends.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
-            let photo = Optional(friends.first(where: {$0.lastName == lastName})?.photo) ?? nil
+            let firstName = Optional(friends?.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
+            let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
         else { return UITableViewCell() }
         
         
         cell.configure(emblem: photo,
                        name: "\(lastName) \(firstName)")
-//        print(persons)
+
         return cell
     }
     
