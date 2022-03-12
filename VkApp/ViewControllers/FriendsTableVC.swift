@@ -12,8 +12,9 @@ final class FriendsTableVC: UITableViewController {
     
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
+    private var friendsToken: NotificationToken?
     
-    var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
+    private var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
         didSet {
             guard
                 let friends = friends
@@ -39,35 +40,10 @@ final class FriendsTableVC: UITableViewController {
             }
             
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+//                self.tableView.reloadData()
             }
         }
     }
-//    var friends = [User]() {
-//        didSet {
-//            for friend in friends where friend.firstName != "DELETED" {
-//                let personKey = String(friend.lastName.prefix(1))
-//                if var personsValue = personsDictionary[personKey] {
-//                    if personsValue.contains(friend.lastName) {
-//
-//                    } else {
-//                        personsValue.append(friend.lastName)
-//                        personsDictionary[personKey] = personsValue
-//                    }
-//                } else {
-//                    personsDictionary[personKey] = [friend.lastName]
-//                }
-//            }
-//            personSectionTitles = [String](personsDictionary.keys)
-//            personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
-//            for eachFriendsFirstChar in personsDictionary {
-//                personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
-//            }
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//    }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
         guard
@@ -83,17 +59,13 @@ final class FriendsTableVC: UITableViewController {
     }
     // MARK: - Lifecycle
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.register(
             UINib(
                 nibName: "FriendCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
-        
         
         let request = Request()
         request.getFriends() { [weak self] result in
@@ -110,13 +82,34 @@ final class FriendsTableVC: UITableViewController {
                         print(error)
                     }
                 }
-                
 //                self?.friends = responseFriends.items
             case .failure(let error):
                 print(error)
             }
-            
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        friendsToken = friends?.observe { [weak self] citiesChanges in
+            switch citiesChanges {
+            case .initial, .update:
+                self?.tableView.reloadData()
+//            case .update(
+//                _,
+//                deletions: let deletions,
+//                insertions: let insertions,
+//                modifications: let modifications):
+//                print(deletions, insertions, modifications)
+            case .error(let error):
+                print(error)
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        friendsToken?.invalidate()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

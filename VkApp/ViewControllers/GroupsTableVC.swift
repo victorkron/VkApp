@@ -10,50 +10,22 @@ import RealmSwift
 
 final class GroupsTableVC: UITableViewController {
     
+    private var groupsToken: NotificationToken?
     
-    var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
+    private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
         didSet {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+//                self.tableView.reloadData()
             }
         }
     }
-//    var groups: [Group] = []
-//    {
-//        didSet {
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-//        
-//    }
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
         guard
             segue.identifier == "addGroup",
             let allGroupsController = segue.source as? GroupSearcherTableVC,
             let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow
-//            !self.groups.contains(allGroupsController.allGroups[groupIndexPath.row])
         else { return }
-//
-//        guard
-//            self.groups != nil
-//        else { return }
-//
-//        for item in self.groups {
-//            if (item.name == allGroupsController.allGroups[groupIndexPath.row].name) {
-//                return
-//            }
-//        }
-//
-//        let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
-//
-//        do {
-//            try RealmService.add(item: <#T##T#>)
-//        } catch {
-//            print(error)
-//        }
-//        groups.append(allGroupsController.allGroups[groupIndexPath.row]) // ИСПРАВИТЬ!!!!!!!!
         do {
             let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
             self.groups?.forEach{ i in
@@ -94,18 +66,35 @@ final class GroupsTableVC: UITableViewController {
                         print(error)
                     }
                 }
-//                myGroups.items.forEach() { i in
-//                    print(i)
-//                    self?.groups.append(Group(
-//                        name: i.name,
-//                        photo: i.photo))
-//                }
 
             case .failure(let error):
                 print(error)
             }
 
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        groupsToken = groups?.observe { [weak self] groupsChange in
+            switch groupsChange {
+            case .initial, .update:
+                self?.tableView.reloadData()
+//            case .update(
+//                _,
+//                deletions: let deletions,
+//                insertions: let insertions,
+//                modifications: let modifications):
+//                print(deletions, insertions, modifications)
+            case .error(let error):
+                print(error)
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        groupsToken?.invalidate()
     }
     
 //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

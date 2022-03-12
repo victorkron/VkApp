@@ -14,6 +14,8 @@ class PhotosCollectionVC: UICollectionViewController {
     var lastname: String? = nil
     var id: Int = 0
     var avatar: String = ""
+    private var photosToken: NotificationToken?
+    
     var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) {
         didSet {
             DispatchQueue.main.async {
@@ -175,7 +177,26 @@ class PhotosCollectionVC: UICollectionViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        super.viewDidAppear(animated)
+        photosToken = photos?.observe { [weak self] photosChange in
+            switch photosChange {
+            case .initial, .update:
+                self?.collectionView.reloadData()
+//            case .update(
+//                _,
+//                deletions: let deletions,
+//                insertions: let insertions,
+//                modifications: let modifications):
+//                print(deletions, insertions, modifications)
+            case .error(let error):
+                print(error)
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        photosToken?.invalidate()
     }
     
     
