@@ -8,10 +8,13 @@
 import UIKit
 import WebKit
 import KeychainSwift
+import FirebaseDatabase
 //import Alamofire
 
 
 final class VKLoginVC: UIViewController {
+    
+    private let reference = Database.database().reference()
     
     private let keychainSwift = KeychainSwift()
     private let appDelegate = UIApplication.shared.delegate as? AppDelegate
@@ -117,7 +120,8 @@ extension VKLoginVC: WKNavigationDelegate {
             
             SessionData.data.token = token
             SessionData.data.userId = userID
-
+            
+            self.reference.child(String(SessionData.data.userId)).child("status").setValue("initialized")
             
             goToNextPage()
             
