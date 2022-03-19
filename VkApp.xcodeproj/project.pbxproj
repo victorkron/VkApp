@@ -50,6 +50,8 @@
 		6C95229A2794191D00B11FF8 /* newsActionsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C9522982794191D00B11FF8 /* newsActionsCell.xib */; };
 		6C9CF6AE27A125A7005E0699 /* CustomNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9CF6AD27A125A7005E0699 /* CustomNavController.swift */; };
 		6C9CF6B027A12C4C005E0699 /* NavigationAnimators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C9CF6AF27A12C4C005E0699 /* NavigationAnimators.swift */; };
+		6CA6CAD127E5C996004FF801 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6CA6CAD027E5C996004FF801 /* GoogleService-Info.plist */; };
+		6CA6CAD427E619FC004FF801 /* FirebaseGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA6CAD327E619FC004FF801 /* FirebaseGroup.swift */; };
 		6CA868912781DA8900E23E86 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CA8688F2781DA8900E23E86 /* PhotoItem.swift */; };
 		6CA868922781DA8900E23E86 /* PhotoItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6CA868902781DA8900E23E86 /* PhotoItem.xib */; };
 		6CC9FC84276A546C00728F63 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC9FC83276A546C00728F63 /* AppDelegate.swift */; };
@@ -120,6 +122,8 @@
 		6C9522982794191D00B11FF8 /* newsActionsCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = newsActionsCell.xib; sourceTree = "<group>"; };
 		6C9CF6AD27A125A7005E0699 /* CustomNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavController.swift; sourceTree = "<group>"; };
 		6C9CF6AF27A12C4C005E0699 /* NavigationAnimators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationAnimators.swift; sourceTree = "<group>"; };
+		6CA6CAD027E5C996004FF801 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6CA6CAD327E619FC004FF801 /* FirebaseGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseGroup.swift; sourceTree = "<group>"; };
 		6CA8688F2781DA8900E23E86 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
 		6CA868902781DA8900E23E86 /* PhotoItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoItem.xib; sourceTree = "<group>"; };
 		6CC9FC80276A546C00728F63 /* VkApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VkApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -200,6 +204,7 @@
 		6C74FED02775A180006E1694 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				6CA6CAD227E619E3004FF801 /* Firebase */,
 				6C91B7AE27CB8C830085E731 /* Realm */,
 				6C91B7A227C1221E0085E731 /* CoreData */,
 				6C74FED32775A1B3006E1694 /* User.swift */,
@@ -315,6 +320,14 @@
 			path = UIHelpers;
 			sourceTree = "<group>";
 		};
+		6CA6CAD227E619E3004FF801 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				6CA6CAD327E619FC004FF801 /* FirebaseGroup.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
 		6CC9FC77276A546C00728F63 = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +359,7 @@
 				6CC9FC98276A550D00728F63 /* ViewControllers */,
 				6CC9FC99276A551700728F63 /* Source */,
 				6CC9FC8C276A546D00728F63 /* Assets.xcassets */,
+				6CA6CAD027E5C996004FF801 /* GoogleService-Info.plist */,
 				6CC9FC91276A546D00728F63 /* Info.plist */,
 				6C91B79F27C11D330085E731 /* Model.xcdatamodeld */,
 			);
@@ -463,6 +477,7 @@
 				6CC9FC8B276A546C00728F63 /* Main.storyboard in Resources */,
 				6C9522962793641C00B11FF8 /* ImageCell.xib in Resources */,
 				6CA868922781DA8900E23E86 /* PhotoItem.xib in Resources */,
+				6CA6CAD127E5C996004FF801 /* GoogleService-Info.plist in Resources */,
 				6C952290279350E400B11FF8 /* DescriptionCell.xib in Resources */,
 				6C9522822792D3BB00B11FF8 /* SomeCollectionReusableView.xib in Resources */,
 				6C74FECA2774F505006E1694 /* GroupCell.xib in Resources */,
@@ -530,6 +545,7 @@
 				6C91B7B427CBCF380085E731 /* RealmPhotoCells.swift in Sources */,
 				6C74FEC92774F505006E1694 /* GroupCell.swift in Sources */,
 				6C473612276D0B610074C7B1 /* PhotosCollectionVC.swift in Sources */,
+				6CA6CAD427E619FC004FF801 /* FirebaseGroup.swift in Sources */,
 				6CC9FC88276A546C00728F63 /* LoginViewController.swift in Sources */,
 				6C540F0B27A7C20E007D6026 /* CustomSegue.swift in Sources */,
 				6C95228F279350E400B11FF8 /* DescriptionCell.swift in Sources */,

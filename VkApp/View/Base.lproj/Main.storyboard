@@ -12,7 +12,7 @@
         <!--StartVC-->
         <scene sceneID="LbO-os-Pom">
             <objects>
-                <viewController id="uUl-Ro-tke" customClass="StartVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="startAnimationVC" id="uUl-Ro-tke" customClass="StartVC" customModule="VkApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="26R-wq-8Nz" customClass="GradientView" customModule="VkApp" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -136,14 +136,23 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Nb-Gz-Bq6">
-                                        <rect key="frame" x="145" y="578" width="124" height="31"/>
+                                        <rect key="frame" x="143" y="578" width="128" height="31"/>
                                         <color key="backgroundColor" systemColor="systemIndigoColor"/>
                                         <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="Log In"/>
                                         <connections>
                                             <action selector="logInButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="LWH-Jx-cNL"/>
-                                            <segue destination="kAf-TQ-lCw" kind="presentation" identifier="goToMain" modalPresentationStyle="fullScreen" id="bG5-Va-oU5"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wcm-kz-RJu">
+                                        <rect key="frame" x="142.5" y="637" width="129.5" height="31"/>
+                                        <color key="backgroundColor" systemColor="systemTealColor"/>
+                                        <color key="tintColor" systemColor="secondarySystemGroupedBackgroundColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Sign up &amp; Login "/>
+                                        <connections>
+                                            <action selector="registerButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Njf-Wt-Ksz"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -154,11 +163,14 @@
                                     <constraint firstItem="9Nb-Gz-Bq6" firstAttribute="centerX" secondItem="cZY-lb-Nks" secondAttribute="centerX" id="7nR-dM-6wC"/>
                                     <constraint firstItem="1fo-Zl-JAc" firstAttribute="top" secondItem="cZY-lb-Nks" secondAttribute="topMargin" constant="150" id="BFN-ch-4aw"/>
                                     <constraint firstAttribute="bottom" secondItem="9Nb-Gz-Bq6" secondAttribute="bottom" constant="20" id="EK7-XW-hba"/>
+                                    <constraint firstItem="wcm-kz-RJu" firstAttribute="width" secondItem="9Nb-Gz-Bq6" secondAttribute="width" multiplier="1.00806" id="GQj-uN-QHA"/>
                                     <constraint firstItem="IfI-G1-2ue" firstAttribute="top" secondItem="1fo-Zl-JAc" secondAttribute="bottom" constant="150" id="Lnt-oW-VFL"/>
                                     <constraint firstItem="1fo-Zl-JAc" firstAttribute="leading" secondItem="cZY-lb-Nks" secondAttribute="leading" constant="20" id="MGV-mE-DIY"/>
                                     <constraint firstItem="1fo-Zl-JAc" firstAttribute="centerX" secondItem="cZY-lb-Nks" secondAttribute="centerX" id="MbV-ek-vcX"/>
                                     <constraint firstAttribute="trailing" secondItem="1fo-Zl-JAc" secondAttribute="trailing" priority="999" constant="20" id="Oey-uP-qjG"/>
                                     <constraint firstAttribute="trailing" secondItem="IfI-G1-2ue" secondAttribute="trailing" constant="20" id="gjw-OL-qqA"/>
+                                    <constraint firstItem="wcm-kz-RJu" firstAttribute="centerX" secondItem="cZY-lb-Nks" secondAttribute="centerX" id="uLv-QO-Hsl"/>
+                                    <constraint firstItem="wcm-kz-RJu" firstAttribute="top" secondItem="9Nb-Gz-Bq6" secondAttribute="bottom" constant="28" id="uWv-Ug-Q9T"/>
                                     <constraint firstItem="9Nb-Gz-Bq6" firstAttribute="top" secondItem="IfI-G1-2ue" secondAttribute="bottom" constant="100" id="yJg-1C-5nx"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="3s5-wx-wyZ"/>
@@ -172,7 +184,6 @@
                             <constraint firstAttribute="bottom" secondItem="cZY-lb-Nks" secondAttribute="bottom" id="3TY-eX-JQP"/>
                             <constraint firstAttribute="trailing" secondItem="cZY-lb-Nks" secondAttribute="trailing" id="8ey-Ie-BuL"/>
                             <constraint firstItem="cZY-lb-Nks" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="bzc-z9-3GZ"/>
-                            <constraint firstItem="9Nb-Gz-Bq6" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.3" id="sE5-gZ-NRO"/>
                             <constraint firstItem="cZY-lb-Nks" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="zPG-xe-c7F"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>
@@ -201,11 +212,12 @@
                         <outlet property="scrollView" destination="cZY-lb-Nks" id="wY5-Fc-zKf"/>
                         <outlet property="userNameTextField" destination="a5D-5N-XhY" id="3DV-97-HPX"/>
                         <outlet property="userPasswordTextField" destination="aR5-cS-OME" id="xH8-dV-R9x"/>
+                        <segue destination="kAf-TQ-lCw" kind="presentation" identifier="goToMain" modalPresentationStyle="fullScreen" id="Vrz-Yl-5g6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="117" y="744"/>
+            <point key="canvasLocation" x="115.94202898550725" y="743.97321428571422"/>
         </scene>
         <!--Photos-->
         <scene sceneID="wHL-a5-KWi">
@@ -329,7 +341,7 @@
                     <navigationItem key="navigationItem" title="Friends" id="HKJ-jF-FPI">
                         <barButtonItem key="leftBarButtonItem" title="exit" image="rectangle.lefthalf.inset.fill.arrow.left" catalog="system" id="jjo-NK-t81">
                             <connections>
-                                <segue destination="5zp-EE-UZk" kind="unwind" unwindAction="unwindToVKLogin:" id="vrs-lJ-bA7"/>
+                                <segue destination="5zp-EE-UZk" kind="unwind" unwindAction="logOutWithUnwindSegue:" id="C2B-uq-NuO"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -358,6 +370,7 @@
                     <navigationItem key="navigationItem" title="My Groups" id="3qP-aY-pSg">
                         <barButtonItem key="rightBarButtonItem" title="add" image="plus" catalog="system" id="uY9-Kg-ssk">
                             <connections>
+                                <action selector="buttonAddGroup:" destination="jwE-AO-KWU" id="xzS-MQ-NrK"/>
                                 <segue destination="Gid-Ga-PxL" kind="show" identifier="showAllGroups" id="mqo-ET-aM9"/>
                             </connections>
                         </barButtonItem>
@@ -539,6 +552,9 @@
         </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemTealColor">
+            <color red="0.18823529411764706" green="0.69019607843137254" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiarySystemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

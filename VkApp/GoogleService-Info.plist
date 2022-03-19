@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>724190589483-ggqdr34musefofotpqhk2chjssvvimve.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.724190589483-ggqdr34musefofotpqhk2chjssvvimve</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDwflC_CpnKxtR7LOWAtXa4iDw2knLHonc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>724190589483</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>ip.myVkApp</string>
+	<key>PROJECT_ID</key>
+	<string>vkapp-3ce7a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vkapp-3ce7a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:724190589483:ios:056bb4c28a523170e2706e</string>
+</dict>
+</plist>

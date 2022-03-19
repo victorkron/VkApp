@@ -128,7 +128,7 @@ extension VKLoginVC: WKNavigationDelegate {
     
     private func goToNextPage() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "mainTabBarController") as? UIViewController
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loginVC") as? UIViewController
         nextViewController?.modalPresentationStyle = .fullScreen
         self.present(nextViewController ?? UIViewController(), animated: true, completion: nil)
     }

@@ -38,6 +38,11 @@ final class GroupCell: UITableViewCell {
             self.groupEmblem.downloaded(from: emblem)
         }
     
+    func configure(_ firebaseGroup: FirebaseGroup) {
+        self.groupName.text = firebaseGroup.name
+        self.groupEmblem.downloaded(from: firebaseGroup.photo)
+    }
+    
     func animateTapForImage() {
         UIView.animate(
             withDuration: 0.1,
