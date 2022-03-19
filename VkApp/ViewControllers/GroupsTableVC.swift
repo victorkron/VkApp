@@ -29,26 +29,21 @@ final class GroupsTableVC: UITableViewController {
 //        }
 //    }
 
-//    @IBAction func addGroup(segue: UIStoryboardSegue) {
-//        guard
-//            segue.identifier == "addGroup",
-//            let allGroupsController = segue.source as? GroupSearcherTableVC,
-//            let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow
-//        else { return }
-//        do {
-//            let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
-//            self.groups?.forEach{ i in
-//                if (i.id == item.id) {
-//                    return
-//                }
-//            }
-//            try RealmService.add(item: item)
-//            self.groups = try RealmService.load(typeOf: RealmGroup.self)
-//        } catch {
-//            print(error)
-//        }
-//        tableView.reloadData()
-//    }
+    @IBAction func addGroup(segue: UIStoryboardSegue) {
+        guard
+            segue.identifier == "addGroup",
+            let allGroupsController = segue.source as? GroupSearcherTableVC,
+            let groupIndexPath = allGroupsController.tableView.indexPathForSelectedRow
+        else { return }
+        
+        do {
+            let item = RealmGroup(group: allGroupsController.allGroups[groupIndexPath.row])
+            self.reference.child(String(item.id)).child("name").setValue(item.name)
+            self.reference.child(String(item.id)).child("photo").setValue(item.photo)
+        } catch {
+            print(error)
+        }
+    }
     
     // MARK: - Lifecycle
     
@@ -147,10 +142,6 @@ final class GroupsTableVC: UITableViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        print(groups)
-        groups.forEach { i in
-            i.reference?.removeValue()
-        }
 //        groupsToken?.invalidate()
     }
     
@@ -180,8 +171,8 @@ final class GroupsTableVC: UITableViewController {
         else { return UITableViewCell() }
         print(groups)
 
-        let currentName = groups[indexPath.row].name ?? ""
-        let currentPhoto = groups[indexPath.row].photo ?? ""
+        let currentName = groups[indexPath.row].name
+        let currentPhoto = groups[indexPath.row].photo 
         
         cell.configure(emblem: currentPhoto,
                        name: currentName)
@@ -197,15 +188,13 @@ final class GroupsTableVC: UITableViewController {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
 
-        if editingStyle == .delete {
-            let group = groups[indexPath.row]
-            tableView.deleteRows(
-                at: [indexPath],
-                with: .fade)
-            group.reference?.removeValue()
-        }
+            if editingStyle == .delete {
+                let group = groups[indexPath.row]
+                group.reference?.removeValue()
+            }
             
-    }
+        }
+    
 
     /*
     // Override to support rearranging the table view.
