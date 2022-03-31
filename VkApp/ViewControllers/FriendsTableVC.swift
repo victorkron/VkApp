@@ -13,6 +13,7 @@ final class FriendsTableVC: UITableViewController {
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
     private var friendsToken: NotificationToken?
+    private var netwokService = Request<User>()
     
     private var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
         didSet {
@@ -67,11 +68,10 @@ final class FriendsTableVC: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
         
-        let request = Request()
-        request.getFriends() { [weak self] result in
+        netwokService.fetch(type: .friends) { [weak self] result in
             switch result {
             case .success(let responseFriends):
-                let items = responseFriends.items.map {
+                let items = responseFriends.map {
                     RealmFriend(user: $0)
                 }
                 DispatchQueue.main.async {

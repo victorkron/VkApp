@@ -11,6 +11,7 @@ class GroupSearcherTableVC: UITableViewController {
 
     var addedGroup: [GroupData] = []
     var baseGroups: [GroupData] = []
+    private var networkService = Request<GroupData>()
     
     var allGroups: [GroupData] = [] {
         didSet {
@@ -52,11 +53,11 @@ class GroupSearcherTableVC: UITableViewController {
         
         baseGroups = allGroups
         
-        let request = Request()
-        request.searchGroups(str: "n", count: 10) { [weak self] result in
+        
+        networkService.fetch(type: .searchGroups) { [weak self] result in
             switch result {
             case .success(let myGroups):
-                myGroups.items.forEach() { i in
+                myGroups.forEach() { i in
                     print(i)
                     self?.allGroups.append(GroupData(
                         id: i.id,
@@ -119,13 +120,11 @@ extension GroupSearcherTableVC: UISearchBarDelegate {
         timer.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: false, block: { _ in
             if (searchText != "") {
-                let request = Request()
-                
-                request.searchGroups(str: searchText, count: 10) { [weak self] result in
+                self.networkService.fetch(type: .searchGroups, str: searchText) { [weak self] result in
                     switch result {
                     case .success(let myGroups):
                         self?.allGroups = []
-                        myGroups.items.forEach() { i in
+                        myGroups.forEach() { i in
                             print(i)
                             self?.allGroups.append(GroupData(
                                 id: i.id,
@@ -139,8 +138,6 @@ extension GroupSearcherTableVC: UISearchBarDelegate {
                 }
             }
         })
-        
-        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

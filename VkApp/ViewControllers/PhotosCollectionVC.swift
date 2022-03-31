@@ -15,6 +15,7 @@ class PhotosCollectionVC: UICollectionViewController {
     var id: Int = 0
     var avatar: String = ""
     private var photosToken: NotificationToken?
+    private var networkService = Request<Albums>()
     
     var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) {
         didSet {
@@ -68,11 +69,10 @@ class PhotosCollectionVC: UICollectionViewController {
     }
     
     private func getPhoto() {
-        let request = Request()
-        request.getPhotos(id: String(id)) { [weak self] result in
+        networkService.fetch(type: .photos, id: id) { [weak self] result in
             switch result {
             case .success(let photos):
-                let items = photos.items.map { i -> RealmPhotoCell in
+                let items = photos.map { i -> RealmPhotoCell in
                     self?.photosBigSize?.append(i.sizes.last?.url ?? "")
                     let value = i.sizes.first { i in
                         i.type == "p"
@@ -91,6 +91,8 @@ class PhotosCollectionVC: UICollectionViewController {
                         print(error)
                     }
                 }
+                
+                print(123)
 //                photos.items.forEach { i in
 //                    let value = i.sizes.first { i in
 //                        i.type == "p"

@@ -8,6 +8,10 @@
 import Foundation
 import UIKit
 
+struct NewsResponse {
+//    let response = 
+}
+
 struct Title {
     var avatar: UIImage?
     var name: String

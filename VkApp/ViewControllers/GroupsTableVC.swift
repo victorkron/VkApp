@@ -11,6 +11,7 @@ import RealmSwift
 final class GroupsTableVC: UITableViewController {
     
     private var groupsToken: NotificationToken?
+    private var networkService = Request<GroupData>()
     
     private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
         didSet {
@@ -51,11 +52,12 @@ final class GroupsTableVC: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupCell")
         
-        let request = Request()
-        request.getGroups() { [weak self] result in
+        
+        
+        networkService.fetch(type: .groups){ [weak self] result in
             switch result {
             case .success(let myGroups):
-                let items = myGroups.items.map { i in
+                let items = myGroups.map { i in
                     RealmGroup(group: i)
                 }
                 DispatchQueue.main.async {
