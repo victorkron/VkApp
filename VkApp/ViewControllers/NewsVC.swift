@@ -58,29 +58,34 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                 nibName: "newsActionsCell",
                 bundle: nil),
             forCellReuseIdentifier: "newsActionsCell")
-        
-        networkService.fetch(type: .feed) { [weak self] result in
-            switch result {
-            case .success(let myNews):
-                myNews.forEach() { i in
-                    guard let attachment = i.contentImages else { return }
-                    attachment.forEach { ii in
-                        guard ii.type == "photo" else { return }
-                        let singleNews = News(
-                            sourceID: i.sourceID,
-                            text: i.text,
-                            date: i.date,
-                            contentImages: attachment,
-                            likes: i.likes,
-                            reposts: i.reposts,
-                            comments: i.comments)
-                        guard !self!.userNews.contains(singleNews) else { return }
-                    self?.userNews.append(singleNews) }
+//        DispatchQueue.global().async {
+            self.networkService.fetch(type: .feed) { [weak self] result in
+                switch result {
+                case .success(let myNews):
+                    DispatchQueue.global().async {
+                        myNews.forEach() { i in
+                            guard let attachment = i.contentImages else { return }
+                            attachment.forEach { ii in
+                                guard ii.type == "photo" else { return }
+                                let singleNews = News(
+                                        sourceID: i.sourceID,
+                                        text: i.text,
+                                        date: i.date,
+                                        contentImages: attachment,
+                                        likes: i.likes,
+                                        reposts: i.reposts,
+                                        comments: i.comments)
+                                 
+                                guard !self!.userNews.contains(singleNews) else { return }
+                            self?.userNews.append(singleNews) }
+                        }
+                    }
+                case .failure(let error):
+                    print(error)
                 }
-            case .failure(let error):
-                print(error)
             }
-        }
+//        }
+        
 
     }
 

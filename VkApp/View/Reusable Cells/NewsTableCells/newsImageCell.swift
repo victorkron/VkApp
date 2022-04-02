@@ -12,9 +12,9 @@ class newsImageCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     func configure(url: String) {
         self.imageCell.isHidden = true
-        self.imageCell.image = nil
-        self.imageCell.downloaded(from: url)
-        self.imageCell.contentMode = .scaleAspectFit
+        self.imageCell.image = UIImage(named: "load")
+        self.imageCell.downloaded(from: url, contentMode: .scaleAspectFill)
+//        self.imageCell.contentMode = .scaleToFill
         self.imageCell.isHidden = false
     }
     

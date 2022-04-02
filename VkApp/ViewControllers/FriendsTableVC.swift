@@ -47,21 +47,22 @@ final class FriendsTableVC: UITableViewController {
     }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
-        guard
-            let sender = segue.source as? PhotosCollectionVC
-        else { return }
-        DispatchQueue.main.async {
-            do {
-                try RealmService.delete(object: sender.photos!)
-            } catch {
-                print(error)
-            }
-        }
+//        guard
+//            let sender = segue.source as? PhotosCollectionVC
+//        else { return }
+//        DispatchQueue.main.async {
+//            do {
+//                try RealmService.delete(object: sender.photos!)
+//            } catch {
+//                print(error)
+//            }
+//        }
     }
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.register(
             UINib(
                 nibName: "FriendCell",
@@ -87,6 +88,7 @@ final class FriendsTableVC: UITableViewController {
                 print(error)
             }
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -105,6 +107,21 @@ final class FriendsTableVC: UITableViewController {
                 print(error)
             }
         }
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        guard
+            let sender = storyBoard.instantiateViewController(withIdentifier: "personCollection") as? PhotosCollectionVC
+        else { return }
+        DispatchQueue.main.async {
+            do {
+                try RealmService.delete(object: sender.photos!)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

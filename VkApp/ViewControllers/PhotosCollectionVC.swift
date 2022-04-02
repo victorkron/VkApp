@@ -16,15 +16,7 @@ class PhotosCollectionVC: UICollectionViewController {
     var avatar: String = ""
     private var photosToken: NotificationToken?
     private var networkService = Request<Albums>()
-    
-    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
-//    var photos: [String]? = [] {
+    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) //{
 //        didSet {
 //            DispatchQueue.main.async {
 //                self.collectionView.reloadData()
@@ -52,7 +44,10 @@ class PhotosCollectionVC: UICollectionViewController {
                   bundle: nil),
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
             withReuseIdentifier: "someCollectionReusableView")
-        self.getPhoto()
+        DispatchQueue.global().async {
+            self.getPhoto()
+        }
+        
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -91,15 +86,6 @@ class PhotosCollectionVC: UICollectionViewController {
                         print(error)
                     }
                 }
-                
-                print(123)
-//                photos.items.forEach { i in
-//                    let value = i.sizes.first { i in
-//                        i.type == "p"
-//                    }
-//                    self?.photos?.append(value?.url ?? "") // rewrite with type "p"
-
-//                }
             case .failure(let error):
                 print(error)
             }
@@ -111,7 +97,6 @@ class PhotosCollectionVC: UICollectionViewController {
         if PhotosCollectionVC.fromFullScrenn ?? false {
             let fullDuration = 0.7
             let a = collectionView.cellForItem(at: [0, PhotosCollectionVC.curretnIndex ?? 0]) as? PhotoItem
-//            let a = collectionView.visibleCells[PhotosCollectionVC.curretnIndex ?? 0]
             let k = self.view.frame.width / (a?.frame.width ?? self.view.frame.width)
             
             let mask = UIView()
@@ -204,15 +189,12 @@ class PhotosCollectionVC: UICollectionViewController {
     
     // MARK: UICollectionViewDataSource
     
-
-    
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         PhotosCollectionVC.curretnIndex = indexPath.row
         onTap(currentIndex: indexPath)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
         guard
             let photos = photos
         else { return 0 }
@@ -220,16 +202,14 @@ class PhotosCollectionVC: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "photoItem",
             for: indexPath)
                 as? PhotoItem
         else { return UICollectionViewCell() }
-            
-        cell.configure(image: photos?[indexPath.row].url ?? "")
+        cell.itemImage.image = UIImage(named: "load")
+        cell.configure(image: self.photos?[indexPath.row].url ?? "")
         return cell
-        
     }
     
     
@@ -343,11 +323,7 @@ class PhotosCollectionVC: UICollectionViewController {
 
 extension PhotosCollectionVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let width = UIScreen.main.bounds.width
-//        layout.headerReferenceSize = CGSize(width: width, height: 120)
-//        layout.sectionHeadersPinToVisibleBounds = true
-        
         return CGSize(width: width, height: 150)
     }
     
