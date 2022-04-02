@@ -19,7 +19,7 @@ class newsActionsCell: UITableViewCell {
     @IBOutlet var sendButton: UIButton!
     @IBOutlet var sendCount: UILabel!
     
-    @IBOutlet var viewsCount: UILabel!
+//    @IBOutlet var viewsCount: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -58,11 +58,13 @@ class newsActionsCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func configure(_ data: ActionsData) {
-        likeCount.text = String(data.likes!)
-        commentCount.text = String(data.comments!)
-        sendCount.text = String(data.sends!)
-        viewsCount.text = String(data.views!)
+    
+    func configure(isLiked: Bool = false, likes: Int, comments: Int, reposts: Int) {
+        self.likeButtonPressed = isLiked
+        likeCount.text = String(likes)
+        commentCount.text = String(comments)
+        sendCount.text = String(reposts)
+//        viewsCount.text = String(views)
     }
     
 }

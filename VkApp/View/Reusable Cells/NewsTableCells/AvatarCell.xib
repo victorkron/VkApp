@@ -17,36 +17,36 @@
                 <rect key="frame" x="0.0" y="0.0" width="947" height="146"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q3q-Ka-daq">
-                        <rect key="frame" x="25" y="16" width="42.5" height="42.5"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q3q-Ka-daq" customClass="AvatarImage" customModule="VkApp" customModuleProvider="target">
+                        <rect key="frame" x="20" y="16" width="31" height="31"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Q3q-Ka-daq" secondAttribute="height" id="2C3-dQ-Q04"/>
                             <constraint firstAttribute="width" constant="40" id="XG4-wt-0H6"/>
                         </constraints>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wHf-wi-UKw">
-                        <rect key="frame" x="879.5" y="16" width="42.5" height="52.5"/>
+                        <rect key="frame" x="888" y="16" width="39" height="41"/>
                         <state key="normal" title="Button"/>
                         <buttonConfiguration key="configuration" style="plain">
-                            <imageReference key="image" image="ellipsis" catalog="system" symbolScale="large"/>
+                            <imageReference key="image" image="ellipsis" catalog="system" symbolScale="medium"/>
                         </buttonConfiguration>
                         <connections>
                             <action selector="buttonHasPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="OMB-sx-7YK"/>
                         </connections>
                     </button>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="XcV-qd-XNp">
-                        <rect key="frame" x="85.5" y="15" width="41.5" height="44.5"/>
+                        <rect key="frame" x="69" y="15" width="35.5" height="33"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ahe-RU-85Q">
-                                <rect key="frame" x="0.0" y="0.0" width="41.5" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="0.0" y="0.0" width="35.5" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8nu-cV-zcf">
-                                <rect key="frame" x="0.0" y="24" width="41.5" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <rect key="frame" x="0.0" y="17" width="35.5" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -56,7 +56,7 @@
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="Q3q-Ka-daq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="5" id="8Hc-Jb-yRe"/>
+                    <constraint firstItem="Q3q-Ka-daq" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="8Hc-Jb-yRe"/>
                     <constraint firstAttribute="bottom" secondItem="XcV-qd-XNp" secondAttribute="bottom" constant="15" id="I6Y-D8-mFh"/>
                     <constraint firstItem="wHf-wi-UKw" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" constant="5" id="KfA-bh-j2D"/>
                     <constraint firstItem="XcV-qd-XNp" firstAttribute="leading" secondItem="Q3q-Ka-daq" secondAttribute="trailing" constant="18" id="MUD-u4-4ju"/>
@@ -64,7 +64,7 @@
                     <constraint firstItem="XcV-qd-XNp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="l5n-xU-pFz"/>
                     <constraint firstItem="Q3q-Ka-daq" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="mwI-Dh-6QZ"/>
                     <constraint firstItem="wHf-wi-UKw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="5" id="sbo-ja-d0M"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="wHf-wi-UKw" secondAttribute="trailing" constant="5" id="t7Z-my-S8W"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="wHf-wi-UKw" secondAttribute="trailing" id="t7Z-my-S8W"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

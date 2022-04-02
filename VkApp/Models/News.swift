@@ -8,63 +8,61 @@
 import Foundation
 import UIKit
 
-struct NewsResponse {
-//    let response = 
+struct News {
+    let sourceID: Int
+    var text: String?
+    let date: Date
+    let contentImages: [Attachment]?
+    let likes: Likes
+    let reposts: Reposts
+    let comments: Comments
 }
 
-struct Title {
-    var avatar: UIImage?
-    var name: String
-    
-    init(_ avatar: UIImage?, _ name: String) {
-        self.avatar = avatar
-        self.name = name
-    }
-}
-
-struct ActionsData {
-    var likes: Int?
-    var comments: Int?
-    var sends: Int?
-    var views: Int?
-    
-    init(_ likes: Int, _ comments: Int, _ sends: Int, _ views: Int) {
-        self.likes = likes
-        self.comments = comments
-        self.sends = sends
-        self.views = views
+extension News: Comparable {
+    static func < (lhs: News, rhs: News) -> Bool {
+        lhs.date < rhs.date
     }
     
-    init() {
-        self.likes = -1
-        self.comments = -1
-        self.sends = -1
-        self.views = -1
+    static func == (lhs: News, rhs: News) -> Bool {
+        lhs.date == rhs.date && lhs.sourceID == rhs.sourceID
     }
 }
 
-
-
-class News {
-    
-    var title: Title?
-    var description: String?
-    var contentImage: UIImage?
-    var dataOfActions: ActionsData?
-    
-    init(_ title: Title?, _ description: String?, _ contentImage: UIImage?, _ actionsData: ActionsData?) {
-        self.title = title
-        self.description = description
-        self.contentImage = contentImage
-        self.dataOfActions = actionsData
-    }
-    
-    init() {
-        
-    }
-    
-    deinit {
-        print("Item of News have deinitialized")
+extension News: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case sourceID = "source_id"
+        case date
+        case text
+        case contentImages = "attachments"
+        case comments
+        case likes
+        case reposts
     }
 }
 
+struct Likes: Codable {
+    let count: Int
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+}
+
+struct Reposts: Codable {
+    let count: Int
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+}
+
+struct Comments: Codable {
+    let count: Int
+    enum CodingKeys: String, CodingKey {
+        case count
+    }
+}
+
+
+struct Attachment: Decodable {
+    let type: String
+    let photo: Albums?
+}

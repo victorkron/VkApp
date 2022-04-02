@@ -74,7 +74,14 @@ final class Request<ItemsType: Decodable> {
                 URLQueryItem(name: "v", value: "5.131")
             ]
         case .feed:
-            print("Feed")
+            constructor.path = "/method/newsfeed.get"
+            constructor.queryItems = [
+                URLQueryItem(name: "filters", value: "post,photo"),
+                URLQueryItem(name: "max_photos", value: "9"),
+                URLQueryItem(name: "source_ids", value: "friends,groups,pages"),
+                URLQueryItem(name: "v", value: "5.131"),
+                URLQueryItem(name: "access_token", value: SessionData.data.token),
+            ]
         }
         
         guard let url = constructor.url else { return }
@@ -97,33 +104,4 @@ final class Request<ItemsType: Decodable> {
         task.resume()
     }
     
-    
-//    func addGroup(id: Int) {
-//        let configuration = URLSessionConfiguration.default
-//        let session = URLSession(configuration: configuration)
-//
-//        var urlConstructor = URLComponents()
-//        urlConstructor.scheme = "https"
-//        urlConstructor.host = "api.vk.com"
-//        urlConstructor.path = "/method/groups.search"
-//        urlConstructor.queryItems = [
-//            URLQueryItem(name: "group_id", value: String(id)),
-//            URLQueryItem(name: "not_sure", value: "0"),
-//            URLQueryItem(name: "access_token", value: SessionData.data.token),
-//            URLQueryItem(name: "v", value: "5.131")
-//        ]
-//
-//        guard let
-//                url = urlConstructor.url
-//        else { return }
-//
-//        var request = URLRequest(url: url)
-//        //        print("Here",urlConstructor.url!)
-//        request.httpMethod = "GET"
-//
-//        let task = session.dataTask(with: request) { (data, response, error) in
-//
-//        }
-//        task.resume()
-//    }
 }

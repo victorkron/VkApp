@@ -20,6 +20,7 @@ extension PhotosResponse: Codable {
 struct Photos {
     let count: Int
     let items: [Albums]
+    
 }
 
 extension Photos: Codable {
@@ -31,13 +32,16 @@ extension Photos: Codable {
 
 struct Albums {
     let sizes: [Photo]
-    let likes: Likes
+//    let likes: Likes
+    let ownerID: Int
+
 }
 
 extension Albums: Codable {
     enum CodingKeys: String, CodingKey {
         case sizes
-        case likes
+//        case likes
+        case ownerID = "owner_id"
     }
 }
 
@@ -55,12 +59,5 @@ extension Photo: Codable {
     }
 }
 
-struct Likes {
-    let count: Int
-}
 
-extension Likes: Codable {
-    enum CodingKeys: String, CodingKey {
-        case count
-    }
-}
+

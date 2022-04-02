@@ -36,3 +36,4 @@ class AvatarBackShadow: UIView {
     }
     
 }
+
