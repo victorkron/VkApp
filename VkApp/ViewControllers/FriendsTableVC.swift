@@ -21,7 +21,7 @@ final class FriendsTableVC: UITableViewController {
                 let friends = friends
             else { return }
 
-            for friend in friends where friend.firstName != "DELETED" { // warning: hard unwrap
+            for friend in friends where friend.firstName != "DELETED" {
                 let personKey = String(friend.lastName.prefix(1))
                 if var personsValue = personsDictionary[personKey] {
                     if personsValue.contains(friend.lastName) {
@@ -40,23 +40,11 @@ final class FriendsTableVC: UITableViewController {
                 personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
             }
             
-            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-            }
         }
     }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
-//        guard
-//            let sender = segue.source as? PhotosCollectionVC
-//        else { return }
-//        DispatchQueue.main.async {
-//            do {
-//                try RealmService.delete(object: sender.photos!)
-//            } catch {
-//                print(error)
-//            }
-//        }
+
     }
     // MARK: - Lifecycle
     
@@ -83,7 +71,6 @@ final class FriendsTableVC: UITableViewController {
                         print(error)
                     }
                 }
-//                self?.friends = responseFriends.items
             case .failure(let error):
                 print(error)
             }

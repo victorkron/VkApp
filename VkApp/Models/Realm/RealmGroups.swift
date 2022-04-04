@@ -10,7 +10,6 @@ import RealmSwift
 
 class RealmGroup: Object {
     @Persisted(primaryKey: true) var id: Int = 0
-//    @Persisted(indexed: true) var value: String = ""
     @Persisted var name: String = ""
     @Persisted var photo: String = ""
 }

@@ -17,8 +17,6 @@ final class Request<ItemsType: Decodable> {
         case feed
     }
     
-//    let configuration = URLSessionConfiguration.default
-//    let session = URLSession(configuration: configuration)
     
     lazy var session = URLSession.shared
     let scheme = "https"
@@ -88,21 +86,21 @@ final class Request<ItemsType: Decodable> {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        DispatchQueue.global().async {
-            let task = self.session.dataTask(with: request) { (data, response, error) in
-                guard
-                    error == nil,
-                    let data = data
-                else { return }
-                do {
-                    let json = try JSONDecoder().decode(Response<ItemsType>.self, from: data)
-                    complition(.success(json.response.items))
-                } catch {
-                    complition(.failure(error))
-                }
+        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard
+                error == nil,
+                let data = data
+            else { return }
+            do {
+                let json = try JSONDecoder().decode(Response<ItemsType>.self, from: data)
+                complition(.success(json.response.items))
+            } catch {
+                complition(.failure(error))
             }
-            task.resume()
         }
+        task.resume()
+
     }
     
 }

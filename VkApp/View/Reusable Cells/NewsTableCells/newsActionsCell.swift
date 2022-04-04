@@ -19,15 +19,12 @@ class newsActionsCell: UITableViewCell {
     @IBOutlet var sendButton: UIButton!
     @IBOutlet var sendCount: UILabel!
     
-//    @IBOutlet var viewsCount: UILabel!
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         likeButton.addTarget(
             self,
             action: #selector(likeButtonClciked),
             for: .touchUpInside)
-        // Initialization code
     }
     
     
@@ -54,8 +51,6 @@ class newsActionsCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     
@@ -64,7 +59,6 @@ class newsActionsCell: UITableViewCell {
         likeCount.text = String(likes)
         commentCount.text = String(comments)
         sendCount.text = String(reposts)
-//        viewsCount.text = String(views)
     }
     
 }

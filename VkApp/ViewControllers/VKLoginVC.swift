@@ -54,18 +54,6 @@ final class VKLoginVC: UIViewController {
             let url = urlComponent.url
         else { return }
         webView.load(URLRequest(url: url))
-//        self.saveToUserDefaults()
-//        self.loadFromUserDefaults()
-//        self.deleteFromUserDefaults()
-//
-//        saveToKeychain()
-//        loadFromKeychain()
-//        removeFromKeychain()
-//
-//        saveFile()
-//        loadFromDisk()
-//        saveToCoreData()
-//        loadFromCoreData()
     }
     
     

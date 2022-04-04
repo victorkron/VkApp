@@ -14,7 +14,6 @@ class newsImageCell: UICollectionViewCell, UIGestureRecognizerDelegate {
         self.imageCell.isHidden = true
         self.imageCell.image = UIImage(named: "load")
         self.imageCell.downloaded(from: url, contentMode: .scaleAspectFill)
-//        self.imageCell.contentMode = .scaleToFill
         self.imageCell.isHidden = false
     }
     

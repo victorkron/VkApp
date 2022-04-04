@@ -11,7 +11,6 @@ class Group {
     var id: Int = 0
     var name: String
     var photo: String? = nil
-//    var id: Int = 0
     
     init(name: String, photo: String, id: Int) {
         self.name = name

@@ -12,7 +12,6 @@ class PhotoFullScrennVC: UIViewController {
     
     var photos: [String] = ["caption1"]
     var currentIndex: Int? = nil
-//    var personName: String = " "
     let duration: CGFloat = 0.5
     private var propertyAnimatorToTheRight: UIViewPropertyAnimator!
     private var propertyAnimatorToTheLeft: UIViewPropertyAnimator!
@@ -105,7 +104,7 @@ class PhotoFullScrennVC: UIViewController {
                 x: -Int(self.Container.bounds.width) + Int(self.Container.bounds.width - leftImageViewWidth) / 2,
                 y: Int(self.Container.bounds.midY) - Int(leftImageViewHeight / 2),
                 width: Int(leftImageViewWidth),
-                height: leftImageViewHeight))//leftImage?.size.height ?? Container.bounds.height))
+                height: leftImageViewHeight))
             leftImageView.downloaded(from: leftName)
             
             rightImageView = UIImageView(frame: CGRect(
@@ -237,18 +236,12 @@ class PhotoFullScrennVC: UIViewController {
         
     }
     
-    
-    
-    
-    
-    
-    
     func scalingMainView(_ imageV: UIImageView, _ scalingParam: Double) {
         let scaleTransform = CGAffineTransform(
             scaleX: scalingParam,
             y: scalingParam)
         
-        imageV.transform = scaleTransform//transform.concatenating(scaleTransform)
+        imageV.transform = scaleTransform
     }
     
     func setImage(_ index: Int?) {

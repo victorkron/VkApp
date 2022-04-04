@@ -145,9 +145,6 @@ final class PushFullScreen: NSObject, UIViewControllerAnimatedTransitioning {
         transitionContext.containerView.addSubview(destination.view)
         destination.view.frame = transitionContext.containerView.frame
         
-//        let rotate = CGAffineTransform(rotationAngle: -.pi / 2)
-//        destination.view.transform = rotate
-        
         
         destination.view.layer.anchorPoint = CGPoint(x: 1.0, y: 0.0)
         destination.view.layer.position = CGPoint(x: transitionContext.containerView.frame.width, y: 0)
@@ -202,9 +199,6 @@ final class PopToCollection: NSObject, UIViewControllerAnimatedTransitioning {
         
         transitionContext.containerView.addSubview(destination.view)
         destination.view.frame = transitionContext.containerView.frame
-        
-//        let rotate = CGAffineTransform(rotationAngle: .pi / 2)
-//        destination.view.transform = rotate
         
         destination.view.layer.anchorPoint = CGPoint(x: 1.0, y: 0.0)
         destination.view.layer.position = CGPoint(x: transitionContext.containerView.frame.width, y: 0)

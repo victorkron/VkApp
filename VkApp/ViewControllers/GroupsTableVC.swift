@@ -13,13 +13,7 @@ final class GroupsTableVC: UITableViewController {
     private var groupsToken: NotificationToken?
     private var networkService = Request<GroupData>()
     
-    private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
-        didSet {
-            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-            }
-        }
-    }
+    private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) 
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
         guard
@@ -133,9 +127,6 @@ final class GroupsTableVC: UITableViewController {
         return cell
     }
     
-    
-
-    // Override to support editing the table view.
     override func tableView(
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,

@@ -11,6 +11,7 @@ import UIKit
 final class FriendCell: UITableViewCell {
     @IBOutlet var friendName: UILabel!
     @IBOutlet var friendEmblem: AvatarImage!
+    
 //    @IBInspectable var cornerRadius: CGFloat = 12.0 {
 //        didSet {
 //            setNeedsLayout()
@@ -40,11 +41,11 @@ final class FriendCell: UITableViewCell {
     func configure(
         emblem: String,
         name: String) {
-            self.friendEmblem.downloaded(from: emblem)
             self.friendName.text = name
+            self.friendEmblem.downloaded(from: emblem)
         }
 
-
+ 
 
     
     func animateTapForImage() {

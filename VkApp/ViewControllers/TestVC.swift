@@ -60,10 +60,6 @@ final class TestVC: UIViewController {
         ]
         
         
-        
-        
-        
-        
         shape.add(animationGroup, forKey: nil)
         
         
@@ -96,34 +92,13 @@ final class TestVC: UIViewController {
             controlPoint1: CGPoint(x: width / 2 + 60, y: height / 2 + 20),
             controlPoint2: CGPoint(x: width / 2 - 20, y: height / 2 + 20))
         
-//        cloudPath.move(to: CGPoint(x: width / 2 - 20, y: height / 2))
-        
         cloudPath.close()
-//        cloudPath.stroke()
         return cloudPath
     }
     
     
     
-//    @IBOutlet var someButton: UIButton!
-//    
-//    private var count = 0
-//    
-//    @IBAction func didPressButton() {
-//        count = count + 1
-//        if (count % 2 == 0) {
-//            someButton.setImage(UIImage(systemName: "heart"), for: .normal)
-//        } else {
-//            someButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-//        }
-//    }
-//    
-//    private let someView: UIView = SomeRootView()
-//
-//    
-//    private func configView() {
-//        someButton.setImage(UIImage(systemName: "heart"), for: .normal)
-//    }
+
 }
 
 

@@ -8,13 +8,7 @@
 import UIKit
 
 final class PhotoItem: UICollectionViewCell {
-//
-//    @IBInspectable var imageWidth: CGFloat = 100 {
-//        didSet {
-//            setNeedsLayout()
-//            layoutIfNeeded()
-//        }
-//    }
+
     private var pressed: Bool = false
     private var amountOfLike: Int = 1
     private var duration = 0.5

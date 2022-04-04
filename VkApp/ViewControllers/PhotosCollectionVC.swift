@@ -16,13 +16,7 @@ class PhotosCollectionVC: UICollectionViewController {
     var avatar: String = ""
     private var photosToken: NotificationToken?
     private var networkService = Request<Albums>()
-    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self) //{
-//        didSet {
-//            DispatchQueue.main.async {
-//                self.collectionView.reloadData()
-//            }
-//        }
-//    }
+    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self)
     var photosBigSize: [String]? = []
     
     
@@ -301,8 +295,6 @@ class PhotosCollectionVC: UICollectionViewController {
                                  personFirstname: self.firstname ?? "",
                                      personImage: self.avatar)
                 return someHeader
-            //          case UICollectionView.elementKindSectionFooter:
-//
             default:
                 return UICollectionReusableView()
         }

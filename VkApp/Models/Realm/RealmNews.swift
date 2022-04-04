@@ -10,7 +10,6 @@ import RealmSwift
 
 class RealmNews: Object {
     @Persisted(primaryKey: true) var id: Int = 0
-//    @Persisted(indexed: true) var value: String = ""
     @Persisted var groupName: String = ""
     @Persisted var date: String = ""
     @Persisted var avatar: String = ""

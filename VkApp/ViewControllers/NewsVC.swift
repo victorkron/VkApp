@@ -9,7 +9,7 @@ import UIKit
 
 class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    enum typeOfCell {
+    enum NewsCell {
         case header
         case description
         case image
@@ -25,7 +25,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    var indexOfCell: typeOfCell?
+    var indexOfCell: NewsCell?
     
     @IBOutlet var NewsTable: UITableView!
 
@@ -35,58 +35,34 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         NewsTable.delegate = self
         NewsTable.dataSource = self
         
-        NewsTable.register(
-            UINib(
-                nibName: "AvatarCell",
-                bundle: nil),
-            forCellReuseIdentifier: "avatarCell")
+        NewsTable.register(registerClass: AvatarCell.self)
+        NewsTable.register(registerClass: DescriptionCell.self)
+        NewsTable.register(registerClass: ImageCell.self)
+        NewsTable.register(registerClass: newsActionsCell.self)
         
-        NewsTable.register(
-            UINib(
-                nibName: "DescriptionCell",
-                bundle: nil),
-            forCellReuseIdentifier: "descriptionCell")
-        
-        NewsTable.register(
-            UINib(
-                nibName: "ImageCell",
-                bundle: nil),
-            forCellReuseIdentifier: "imageCell")
-        
-        NewsTable.register(
-            UINib(
-                nibName: "newsActionsCell",
-                bundle: nil),
-            forCellReuseIdentifier: "newsActionsCell")
-//        DispatchQueue.global().async {
-            self.networkService.fetch(type: .feed) { [weak self] result in
-                switch result {
-                case .success(let myNews):
-                    DispatchQueue.global().async {
-                        myNews.forEach() { i in
-                            guard let attachment = i.contentImages else { return }
-                            attachment.forEach { ii in
-                                guard ii.type == "photo" else { return }
-                                let singleNews = News(
-                                        sourceID: i.sourceID,
-                                        text: i.text,
-                                        date: i.date,
-                                        contentImages: attachment,
-                                        likes: i.likes,
-                                        reposts: i.reposts,
-                                        comments: i.comments)
-                                 
-                                guard !self!.userNews.contains(singleNews) else { return }
-                            self?.userNews.append(singleNews) }
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
+        self.networkService.fetch(type: .feed) { [weak self] result in
+            switch result {
+            case .success(let myNews):
+                myNews.forEach() { i in
+                    guard let attachment = i.contentImages else { return }
+                    attachment.forEach { ii in
+                        guard ii.type == "photo" else { return }
+                        let singleNews = News(
+                            sourceID: i.sourceID,
+                            text: i.text,
+                            date: i.date,
+                            contentImages: attachment,
+                            likes: i.likes,
+                            reposts: i.reposts,
+                            comments: i.comments)
+                        
+                        guard !self!.userNews.contains(singleNews) else { return }
+                        self?.userNews.append(singleNews) }
                 }
+            case .failure(let error):
+                print(error)
             }
-//        }
-        
-
+        }
     }
 
     // MARK: - Table view data source
@@ -96,14 +72,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-                
-        
-//        do {
-//            rows = try sections[section].allProperties().count
-//        } catch {
-//            print("NewsTableVC Error Rows Count")
-//        }
+       
         var rows = 4
         if (userNews[section].contentImages == nil) {
             rows -= 1
@@ -119,25 +88,11 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         let news = userNews[indexPath.section]
         
-        switch indexPath.row {
-        case 0:
-            indexOfCell = .header
-        case 1:
-            indexOfCell = (news.text == nil) || (news.text == "") ? .image : .description
-        case 2:
-            indexOfCell = (news.text == nil) || (news.contentImages == nil) || (news.text == "") ? .footer : .image
-        case 3:
-            indexOfCell = .footer
-        default:
-            indexOfCell = .none
-        }
+        indexOfCell = getCellType(news: news, for: indexPath)
         
         switch indexOfCell {
-            
         case .header:
-            guard
-                let cell = tableView.dequeueReusableCell(withIdentifier: "avatarCell", for: indexPath) as? AvatarCell
-            else { return UITableViewCell() }
+            let cell: AvatarCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
             
             let group = loadGroup(news.sourceID)
             guard
@@ -164,8 +119,9 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .description:
+            
+            let cell: DescriptionCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
             guard
-                let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell", for: indexPath) as? DescriptionCell,
                 let text = news.text
             else { return UITableViewCell() }
             
@@ -174,9 +130,8 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .image:
-            guard
-                let cell = tableView.dequeueReusableCell(withIdentifier: "imageCell", for: indexPath) as? ImageCell
-            else { return UITableViewCell() }
+            
+            let cell: ImageCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
             
             var photos = [String]()
             news.contentImages?.forEach { i in
@@ -191,9 +146,8 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .footer:
-            guard
-                let cell = tableView.dequeueReusableCell(withIdentifier: "newsActionsCell", for: indexPath) as? newsActionsCell
-            else { return UITableViewCell() }
+            
+            let cell: newsActionsCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
             
             cell.configure(
                 likes: news.likes.count,
@@ -202,10 +156,27 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             
             return cell
             
-        case .none:
+        default:
             return UITableViewCell()
-            
+        
         }
+    }
+    
+    private func getCellType(news: News ,for item: IndexPath) -> NewsCell? {
+        var type: NewsCell
+        switch item.item {
+        case 0:
+            type = .header
+        case 1:
+            type = (news.text == nil) || (news.text == "") ? .image : .description
+        case 2:
+            type = (news.text == nil) || (news.contentImages == nil) || (news.text == "") ? .footer : .image
+        case 3:
+            type = .footer
+        default:
+            return nil
+        }
+        return type
     }
     
     private func loadGroup(_ id: Int) -> Group? {

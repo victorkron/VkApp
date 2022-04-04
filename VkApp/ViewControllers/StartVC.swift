@@ -17,8 +17,6 @@ class StartVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        view.addSubview(someView)
-//        configLoadBar()
         setAnimation()
     }
     
@@ -51,7 +49,6 @@ class StartVC: UIViewController {
         shape.lineWidth = 3
         shape.strokeColor = UIColor.purple.cgColor
         shape.fillColor = UIColor(displayP3Red: 1.0, green: 1.0, blue: 1.00, alpha: 1).cgColor
-        //shape.fillColor = UIColor(displayP3Red: 0.96, green: 0.85, blue: 0.99, alpha: 1).cgColor
         shape.strokeStart = 0.0
         shape.strokeEnd = 1.0
         
@@ -121,8 +118,6 @@ class StartVC: UIViewController {
             width: view.frame.width,
             height: view.frame.height))
         view.addSubview(container)
-//        container.backgroundColor = .gray.withAlphaComponent(0.7)
-        
         
         for i in 0...2 {
             let circle = UIView(frame: CGRect(

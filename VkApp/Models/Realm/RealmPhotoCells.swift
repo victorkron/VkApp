@@ -22,10 +22,3 @@ extension RealmPhotoCell {
         self.height = photo.height
     }
 }
-
-
-//struct Photo {
-//    let height: Int
-//    let url: String
-//    let type: String
-//}
