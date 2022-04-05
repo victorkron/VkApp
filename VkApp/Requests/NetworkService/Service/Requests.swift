@@ -17,6 +17,7 @@ final class Request<ItemsType: Decodable> {
         case feed
     }
     
+    var responseData: Data?
     
     lazy var session = URLSession.shared
     let scheme = "https"
@@ -103,4 +104,34 @@ final class Request<ItemsType: Decodable> {
 
     }
     
+    
+    
+    func getFriends(str: String? = "", id: Int? = 0) {
+        var constructor = urlConstructor
+        constructor.path = "/method/friends.get"
+        constructor.queryItems = [
+            URLQueryItem(name: "user_id", value: String(SessionData.data.userId)),
+            URLQueryItem(name: "order", value: "hints"),
+            URLQueryItem(name: "count", value: "200"),
+            URLQueryItem(name: "fields", value: "nickname,photo_50,photo_100,photo_200"),
+            URLQueryItem(name: "access_token", value: SessionData.data.token),
+            URLQueryItem(name: "v", value: "5.131")
+        ]
+        guard let url = constructor.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard
+                error == nil,
+                let data = data
+            else { return }
+            self.responseData = data
+        }
+        task.resume()
+    }
+    
 }
+
+

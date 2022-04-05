@@ -14,8 +14,15 @@ final class FriendsTableVC: UITableViewController {
     var personSectionTitles = [String]()
     private var friendsToken: NotificationToken?
     private var netwokService = Request<User>()
+    private let queue: OperationQueue = {
+        let queue = OperationQueue()
+        queue.maxConcurrentOperationCount = 5
+        queue.qualityOfService = .utility
+        return queue
+    }()
     
-    private var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
+    
+    fileprivate var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
         didSet {
             guard
                 let friends = friends
@@ -57,24 +64,59 @@ final class FriendsTableVC: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
         
-        netwokService.fetch(type: .friends) { [weak self] result in
-            switch result {
-            case .success(let responseFriends):
-                let items = responseFriends.map {
-                    RealmFriend(user: $0)
+        // Этот кусок кода я потом верну, поэтому не стал его удалять =)
+//        self.netwokService.fetch(type: .friends) { [weak self] result in
+//            switch result {
+//            case .success(let responseFriends):
+//                let items = responseFriends.map {
+//                    RealmFriend(user: $0)
+//                }
+//                DispatchQueue.main.async {
+//                    do {
+//                        try RealmService.save(items: items)
+//                        self?.friends = try RealmService.load(typeOf: RealmFriend.self)
+//                    } catch {
+//                        print(error)
+//                    }
+//                }
+//            case .failure(let error):
+//                print(error)
+//            }
+//        }
+//
+
+        let blockOperation1 = RequestBlock(nts: self.netwokService)
+        let blockOperation2 = ParseBlock(block: blockOperation1)
+        
+        let saveToRealmBlock = {
+            let itemsOptional = blockOperation2.jsonData?.response.items.map {
+                RealmFriend(user: $0)
+            }
+            guard let items = itemsOptional else {
+                return
+            }
+
+            OperationQueue.main.addOperation {
+                do {
+                    try RealmService.save(items: items)
+                    self.friends = try RealmService.load(typeOf: RealmFriend.self)
+                    print("third")
+                } catch {
+                    print(error)
                 }
-                DispatchQueue.main.async {
-                    do {
-                        try RealmService.save(items: items)
-                        self?.friends = try RealmService.load(typeOf: RealmFriend.self)
-                    } catch {
-                        print(error)
-                    }
-                }
-            case .failure(let error):
-                print(error)
             }
         }
+        
+        
+        
+        let blockOperation3 = BlockOperation(block: saveToRealmBlock)
+
+        blockOperation2.addDependency(blockOperation1)
+        blockOperation3.addDependency(blockOperation2)
+
+        queue.addOperation(blockOperation1)
+        queue.addOperation(blockOperation2)
+        queue.addOperation(blockOperation3)
         
     }
     
@@ -84,12 +126,6 @@ final class FriendsTableVC: UITableViewController {
             switch citiesChanges {
             case .initial, .update:
                 self?.tableView.reloadData()
-//            case .update(
-//                _,
-//                deletions: let deletions,
-//                insertions: let insertions,
-//                modifications: let modifications):
-//                print(deletions, insertions, modifications)
             case .error(let error):
                 print(error)
             }
@@ -164,7 +200,7 @@ final class FriendsTableVC: UITableViewController {
         
         cell.configure(emblem: photo,
                        name: "\(lastName) \(firstName)")
-
+        
         return cell
     }
     
@@ -195,6 +231,47 @@ final class FriendsTableVC: UITableViewController {
 
 
 }
+
+
+class RequestBlock: Operation {
+    var netwokService: Request<User>
+    var responseData: Data?
+    
+    override func main() {
+        self.netwokService.getFriends()
+        while self.netwokService.responseData == nil {
+            print("wait")
+        }
+        self.responseData = self.netwokService.responseData
+        print("first")
+    }
+    
+    init (nts: Request<User>) {
+        self.netwokService = nts
+    }
+}
+
+
+class ParseBlock: Operation {
+    var jsonData: Response<User>?
+    var block: RequestBlock
+    
+    override func main() {
+        guard let data = block.responseData else { return }
+        do {
+            jsonData = try JSONDecoder().decode(Response<User>.self, from: data)
+            print("second")
+        } catch {
+            print("error")
+        }
+    }
+    
+    init (block: RequestBlock) {
+        self.block = block
+    }
+}
+
+
 
 
 
