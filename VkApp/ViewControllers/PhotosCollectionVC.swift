@@ -19,7 +19,6 @@ class PhotosCollectionVC: UICollectionViewController {
     var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self)
     var photosBigSize: [String]? = []
     
-    
     static var curretnIndex: Int? = nil
     static var fromFullScrenn: Bool? = false
     
@@ -41,7 +40,6 @@ class PhotosCollectionVC: UICollectionViewController {
         DispatchQueue.global().async {
             self.getPhoto()
         }
-        
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

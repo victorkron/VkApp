@@ -30,7 +30,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="width" priority="999" constant="123" id="FWm-Qa-w3e"/>
+                            <constraint firstAttribute="width" constant="123" id="FPc-iK-lQS"/>
                             <constraint firstItem="gvv-n2-cgO" firstAttribute="centerY" secondItem="hDf-zg-ZbH" secondAttribute="centerY" id="oZd-Ne-yHq"/>
                             <constraint firstItem="gvv-n2-cgO" firstAttribute="centerX" secondItem="hDf-zg-ZbH" secondAttribute="centerX" id="qZv-GO-74A"/>
                             <constraint firstItem="gvv-n2-cgO" firstAttribute="width" secondItem="hDf-zg-ZbH" secondAttribute="width" id="sbu-Uv-hfH"/>

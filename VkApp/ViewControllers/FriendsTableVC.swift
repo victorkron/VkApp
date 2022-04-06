@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-final class FriendsTableVC: UITableViewController {
+final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
@@ -49,6 +49,10 @@ final class FriendsTableVC: UITableViewController {
             
         }
     }
+    
+    func refresh(friends: Results<RealmFriend>?) {
+        self.friends = friends
+    }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
 
@@ -63,53 +67,10 @@ final class FriendsTableVC: UITableViewController {
                 nibName: "FriendCell",
                 bundle: nil),
             forCellReuseIdentifier: "friendCell")
-        
-        // Этот кусок кода я потом верну, поэтому не стал его удалять =)
-//        self.netwokService.fetch(type: .friends) { [weak self] result in
-//            switch result {
-//            case .success(let responseFriends):
-//                let items = responseFriends.map {
-//                    RealmFriend(user: $0)
-//                }
-//                DispatchQueue.main.async {
-//                    do {
-//                        try RealmService.save(items: items)
-//                        self?.friends = try RealmService.load(typeOf: RealmFriend.self)
-//                    } catch {
-//                        print(error)
-//                    }
-//                }
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
-//
 
         let blockOperation1 = RequestBlock(nts: self.netwokService)
         let blockOperation2 = ParseBlock(block: blockOperation1)
-        
-        let saveToRealmBlock = {
-            let itemsOptional = blockOperation2.jsonData?.response.items.map {
-                RealmFriend(user: $0)
-            }
-            guard let items = itemsOptional else {
-                return
-            }
-
-            OperationQueue.main.addOperation {
-                do {
-                    try RealmService.save(items: items)
-                    self.friends = try RealmService.load(typeOf: RealmFriend.self)
-                    print("third")
-                } catch {
-                    print(error)
-                }
-            }
-        }
-        
-        
-        
-        let blockOperation3 = BlockOperation(block: saveToRealmBlock)
+        let blockOperation3 = SaveToDatabase(block: blockOperation2, delegate: self)
 
         blockOperation2.addDependency(blockOperation1)
         blockOperation3.addDependency(blockOperation2)
@@ -271,6 +232,39 @@ class ParseBlock: Operation {
     }
 }
 
+class SaveToDatabase: Operation {
+    private var block: ParseBlock
+    var delegate: ChangeFriendsDatabase?
+    
+    override func main() {
+        let itemsOptional = block.jsonData?.response.items.map {
+            RealmFriend(user: $0)
+        }
+        guard let items = itemsOptional else {
+            return
+        }
+
+        OperationQueue.main.addOperation {
+            do {
+                try RealmService.save(items: items)
+                let friends = try RealmService.load(typeOf: RealmFriend.self)
+                self.delegate?.refresh(friends: friends)
+                print("third")
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    init (block: ParseBlock, delegate: ChangeFriendsDatabase?) {
+        self.block = block
+        self.delegate = delegate
+    }
+}
+
+protocol ChangeFriendsDatabase {
+    func refresh(friends: Results<RealmFriend>?)
+}
 
 
 
