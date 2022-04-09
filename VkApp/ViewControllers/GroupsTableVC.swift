@@ -7,8 +7,14 @@
 
 import UIKit
 import RealmSwift
+import SwiftUI
+import PromiseKit
 
-final class GroupsTableVC: UITableViewController {
+fileprivate enum GroupsError: Error {
+    case loadError
+}
+
+final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
     private var groupsToken: NotificationToken?
     private var networkService = Request<GroupData>()
@@ -46,28 +52,27 @@ final class GroupsTableVC: UITableViewController {
                 bundle: nil),
             forCellReuseIdentifier: "groupCell")
         
-        
-        
-        networkService.fetch(type: .groups){ [weak self] result in
-            switch result {
-            case .success(let myGroups):
-                let items = myGroups.map { i in
-                    RealmGroup(group: i)
-                }
-                DispatchQueue.main.async {
-                    do {
-                        try RealmService.save(items: items)
-                        self?.groups = try RealmService.load(typeOf: RealmGroup.self)
-                    } catch {
-                        print(error)
-                    }
-                }
-
-            case .failure(let error):
+        networkService.getGroupsUrl()
+            .then(on: .global(), networkService.getGroups(url:))
+            .then(networkService.getParsedData(data:))
+            .then({ groupsArray in
+                self.networkService.saveToGroupsDatabse(groups: groupsArray, desination: self)
+            })
+            .done(on: .main) { result in
+                print(result)
+            }
+            .catch { error in
                 print(error)
             }
-
+    }
+    
+    func updateGroups() {
+        do {
+            self.groups = try RealmService.load(typeOf: RealmGroup.self)
+        } catch {
+            print("Load Realm")
         }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,12 +81,6 @@ final class GroupsTableVC: UITableViewController {
             switch groupsChange {
             case .initial, .update:
                 self?.tableView.reloadData()
-//            case .update(
-//                _,
-//                deletions: let deletions,
-//                insertions: let insertions,
-//                modifications: let modifications):
-//                print(deletions, insertions, modifications)
             case .error(let error):
                 print(error)
             }
@@ -93,21 +92,7 @@ final class GroupsTableVC: UITableViewController {
         groupsToken?.invalidate()
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        guard
-//            segue.identifier == "showAllGroups"
-//        else { return }
-//
-//        guard
-//            let destination = segue.destination as? GroupSearcherTableVC
-//        else { return }
-//
-//        destination.addedGroup = groups
-//    }
-    
     // MARK: - Table view data source
-
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return groups?.count ?? 0
     }
@@ -131,7 +116,7 @@ final class GroupsTableVC: UITableViewController {
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
-
+            
         if editingStyle == .delete {
             do {
                 guard
@@ -147,31 +132,9 @@ final class GroupsTableVC: UITableViewController {
                 with: .fade)
         }
     }
-//
+}
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
 
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+protocol UpdateGroupsFromRealm {
+    func updateGroups()
 }

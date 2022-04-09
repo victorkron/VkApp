@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PromiseKit
 
 final class Request<ItemsType: Decodable> {
     
@@ -15,6 +16,13 @@ final class Request<ItemsType: Decodable> {
         case photos
         case searchGroups
         case feed
+    }
+    
+    enum AppError: Error {
+        case notCorrectURL
+        case errorTask
+        case failedToDecode
+        case loadError
     }
     
     var responseData: Data?
@@ -30,7 +38,7 @@ final class Request<ItemsType: Decodable> {
         return constructor
     }()
     
-    func fetch(type: requestType, str: String? = "", id: Int? = 0, complition: @escaping (Result<[ItemsType], Error>) -> Void) {
+    func fetch(type: requestType, str: String? = "", id: Int? = 0, complition: @escaping (Swift.Result<[ItemsType], Error>) -> Void) {
         var constructor = urlConstructor
         switch type {
         case .friends:
@@ -105,7 +113,7 @@ final class Request<ItemsType: Decodable> {
     }
     
     
-    
+    // для Operation
     func getFriends(str: String? = "", id: Int? = 0) {
         var constructor = urlConstructor
         constructor.path = "/method/friends.get"
@@ -132,6 +140,71 @@ final class Request<ItemsType: Decodable> {
         task.resume()
     }
     
+    // Для Promise
+    func getGroupsUrl() -> Promise<URL> {
+        var constructor = urlConstructor
+        constructor.path = "/method/groups.get"
+        constructor.queryItems = [
+            URLQueryItem(name: "user_id", value: String(SessionData.data.userId)),
+            URLQueryItem(name: "extended", value: "1"),
+            URLQueryItem(name: "access_token", value: SessionData.data.token),
+            URLQueryItem(name: "v", value: "5.131")
+        ]
+        return Promise { resolver in
+            guard let url = constructor.url else {
+                resolver.reject(AppError.notCorrectURL)
+                return
+            }
+            resolver.fulfill(url)
+        }
+    }
+    
+    func getGroups(url: URL) -> Promise<Data> {
+        return Promise { resolver in
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            self.session.dataTask(with: request) { (data, response, error) in
+                guard
+                    error == nil,
+                    let data = data
+                else {
+                    resolver.reject(AppError.errorTask)
+                    return
+                }
+                resolver.fulfill(data)
+            }.resume()
+        }
+    }
+    
+    func  getParsedData(data: Data) -> Promise<[GroupData]> {
+        return Promise { resolver in
+            do {
+                let json = try JSONDecoder().decode(GroupsResponse.self, from: data).response.items
+                resolver.fulfill(json)
+            } catch {
+                resolver.reject(AppError.failedToDecode)
+            }
+        }
+    }
+    
+    func saveToGroupsDatabse(groups: [GroupData], desination: UpdateGroupsFromRealm) -> Promise<Bool> {
+        let destination = desination
+        return Promise { resolver in
+            let items = groups.map { i in
+                RealmGroup(group: i)
+            }
+            DispatchQueue.main.async {
+                do {
+                    try RealmService.save(items: items)
+                    destination.updateGroups()
+                    resolver.fulfill(true)
+                } catch {
+                    resolver.reject(AppError.loadError)
+                    print(error)
+                }
+            }
+        }
+    }
 }
 
 

@@ -69,8 +69,8 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
             forCellReuseIdentifier: "friendCell")
 
         let blockOperation1 = RequestBlock(nts: self.netwokService)
-        let blockOperation2 = ParseBlock(block: blockOperation1)
-        let blockOperation3 = SaveToDatabase(block: blockOperation2, delegate: self)
+        let blockOperation2 = ParseFriendsBlock(block: blockOperation1)
+        let blockOperation3 = SaveToFriendsDatabase(block: blockOperation2, delegate: self)
 
         blockOperation2.addDependency(blockOperation1)
         blockOperation3.addDependency(blockOperation2)
@@ -213,7 +213,7 @@ class RequestBlock: Operation {
 }
 
 
-class ParseBlock: Operation {
+class ParseFriendsBlock: Operation {
     var jsonData: Response<User>?
     var block: RequestBlock
     
@@ -232,8 +232,8 @@ class ParseBlock: Operation {
     }
 }
 
-class SaveToDatabase: Operation {
-    private var block: ParseBlock
+class SaveToFriendsDatabase: Operation {
+    private var block: ParseFriendsBlock
     var delegate: ChangeFriendsDatabase?
     
     override func main() {
@@ -256,7 +256,7 @@ class SaveToDatabase: Operation {
         }
     }
     
-    init (block: ParseBlock, delegate: ChangeFriendsDatabase?) {
+    init (block: ParseFriendsBlock, delegate: ChangeFriendsDatabase?) {
         self.block = block
         self.delegate = delegate
     }
