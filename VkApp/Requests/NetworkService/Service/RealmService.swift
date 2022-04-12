@@ -6,6 +6,7 @@
 //
 
 import RealmSwift
+import UIKit
 
 final class RealmService {
     static let deleteIfMigration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
@@ -33,6 +34,11 @@ final class RealmService {
     class func load<T:Object> (typeOf: T.Type) throws -> Results<T> {
         let realm = try Realm()
         return realm.objects(T.self)
+    }
+    
+    class func getPhoto<T:Object> (typeOf: T.Type, primaryKey: Any) throws -> T? {
+        let realm = try Realm()
+        return realm.object(ofType: T.self, forPrimaryKey: primaryKey)
     }
     
     

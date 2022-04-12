@@ -14,6 +14,8 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     var personSectionTitles = [String]()
     private var friendsToken: NotificationToken?
     private var netwokService = Request<User>()
+    
+    
     private let queue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 5
@@ -21,6 +23,7 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
         return queue
     }()
     
+    private var photoService: PhotoService?
     
     fileprivate var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
         didSet {
@@ -61,7 +64,7 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.photoService = PhotoService(container: self.tableView)
         tableView.register(
             UINib(
                 nibName: "FriendCell",
@@ -158,8 +161,8 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
             let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
         else { return UITableViewCell() }
         
-        
-        cell.configure(emblem: photo,
+        let image = photoService?.photo(atIndexPath: indexPath, byUrl: photo)
+        cell.configure(image: image,
                        name: "\(lastName) \(firstName)")
         
         return cell

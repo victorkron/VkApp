@@ -19,12 +19,15 @@ class PhotosCollectionVC: UICollectionViewController {
     var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self)
     var photosBigSize: [String]? = []
     
+    private var photoService: PhotoService?
+    
     static var curretnIndex: Int? = nil
     static var fromFullScrenn: Bool? = false
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        photoService = PhotoService(container: collectionView)
         self.collectionView!.register(
             PhotoItem.self,
             forCellWithReuseIdentifier: "photoItem")
@@ -194,13 +197,16 @@ class PhotosCollectionVC: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "photoItem",
-            for: indexPath)
-                as? PhotoItem
+        guard
+            let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: "photoItem",
+                for: indexPath)
+                as? PhotoItem,
+            let url = self.photos?[indexPath.row].url
         else { return UICollectionViewCell() }
         cell.itemImage.image = UIImage(named: "load")
-        cell.configure(image: self.photos?[indexPath.row].url ?? "")
+        let photo =  photoService?.photo(atIndexPath: indexPath, byUrl: url)
+        cell.configure(image: photo)
         return cell
     }
     

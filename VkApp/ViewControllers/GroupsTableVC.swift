@@ -19,6 +19,8 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     private var groupsToken: NotificationToken?
     private var networkService = Request<GroupData>()
     
+    private var photoService: PhotoService?
+    
     private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) 
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
@@ -46,6 +48,7 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        photoService = PhotoService(container: tableView)
         tableView.register(
             UINib(
                 nibName: "GroupCell",
@@ -105,10 +108,10 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
 
         let currentName = groups?[indexPath.row].name ?? ""
         let currentPhoto = groups?[indexPath.row].photo ?? ""
+        let photo = photoService?.photo(atIndexPath: indexPath, byUrl: currentPhoto)
         
-        cell.configure(emblem: currentPhoto,
-                       name: currentName)
-        print(currentName)
+        cell.configure(image: photo, name: currentName)
+
         return cell
     }
     

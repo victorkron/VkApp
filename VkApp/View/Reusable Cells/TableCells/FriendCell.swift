@@ -45,6 +45,12 @@ final class FriendCell: UITableViewCell {
             self.friendEmblem.downloaded(from: emblem)
         }
 
+    func configure(
+        image: UIImage?,
+        name: String) {
+            self.friendName.text = name
+            self.friendEmblem.image = image
+        }
  
 
     

@@ -38,6 +38,13 @@ final class GroupCell: UITableViewCell {
             self.groupEmblem.downloaded(from: emblem)
         }
     
+    func configure(
+        image: UIImage?,
+        name: String) {
+            self.groupName.text = name
+            self.groupEmblem.image = image
+        }
+    
     func animateTapForImage() {
         UIView.animate(
             withDuration: 0.1,

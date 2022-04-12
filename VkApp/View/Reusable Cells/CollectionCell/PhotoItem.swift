@@ -39,8 +39,14 @@ final class PhotoItem: UICollectionViewCell {
         print("Tap")
     }
 
-    func configure(image: String) {
-        self.itemImage.downloaded(from: image)
+    func configure(imageUrl: String) {
+        self.itemImage.downloaded(from: imageUrl)
+        self.itemImage.contentMode = .scaleAspectFill
+        self.likes.text = "\(self.amountOfLike)"
+    }
+    
+    func configure(image: UIImage?) {
+        self.itemImage.image = image
         self.itemImage.contentMode = .scaleAspectFill
         self.likes.text = "\(self.amountOfLike)"
     }
