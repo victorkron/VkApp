@@ -65,23 +65,21 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.photoService = PhotoService(container: self.tableView)
-        tableView.register(
-            UINib(
-                nibName: "FriendCell",
-                bundle: nil),
-            forCellReuseIdentifier: "friendCell")
-
-        let blockOperation1 = RequestBlock(nts: self.netwokService)
-        let blockOperation2 = ParseFriendsBlock(block: blockOperation1)
-        let blockOperation3 = SaveToFriendsDatabase(block: blockOperation2, delegate: self)
-
-        blockOperation2.addDependency(blockOperation1)
-        blockOperation3.addDependency(blockOperation2)
-
-        queue.addOperation(blockOperation1)
-        queue.addOperation(blockOperation2)
-        queue.addOperation(blockOperation3)
         
+        tableView.register(registerClass: friendCell.self)
+        
+        setupOperation()
+    }
+    
+    func setupOperation() {
+        let getFriends = RequestBlock(nts: self.netwokService)
+        let parseFriendsData = ParseFriendsBlock(block: getFriends)
+        let saveToFriendsDatabase = SaveToFriendsDatabase(block: parseFriendsData, delegate: self)
+
+        parseFriendsData.addDependency(getFriends)
+        saveToFriendsDatabase.addDependency(parseFriendsData)
+
+        queue.addOperations([getFriends, parseFriendsData, saveToFriendsDatabase], waitUntilFinished: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -105,10 +103,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
                 print(error)
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -153,19 +147,24 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: "friendCell", for: indexPath) as? FriendCell,
-            let letter = Optional(personSectionTitles[indexPath.section]) ?? nil,
-            let lastName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil,
-            let firstName = Optional(friends?.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
-            let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
-        else { return UITableViewCell() }
-        
-        let image = photoService?.photo(atIndexPath: indexPath, byUrl: photo)
-        cell.configure(image: image,
-                       name: "\(lastName) \(firstName)")
+        let cell: friendCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard
+            let cell = cell as? friendCell,
+            let arr = generateDataForCell(cell: cell, indexPath: indexPath)
+        else { return }
+        
+        let image = photoService?.photo(atIndexPath: indexPath, byUrl: arr[0])
+        let name = arr[1]
+        
+        cell.configure(
+            image: image,
+            name: name
+        )
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -185,16 +184,29 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+//        tableView.sectionIndexBackgroundColor = .white
         return personSectionTitles
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let header = view as? UITableViewHeaderFooterView
-        header?.tintColor = UIColor.gray.withAlphaComponent(0.1)
+        header?.tintColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
     }
-
-
+    
+    func generateDataForCell(cell: UITableViewCell, indexPath: IndexPath) -> [String]? {
+        guard
+            let letter = Optional(personSectionTitles[indexPath.section]) ?? nil,
+            let lastName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil,
+            let firstName = Optional(friends?.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
+            let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
+        else { return nil }
+        
+        let arr = [photo, "\(lastName) \(firstName)"]
+        return arr
+    }
+    
 }
+
 
 
 class RequestBlock: Operation {

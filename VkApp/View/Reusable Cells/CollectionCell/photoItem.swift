@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PhotoItem: UICollectionViewCell {
+final class photoItem: UICollectionViewCell {
 
     private var pressed: Bool = false
     private var amountOfLike: Int = 1

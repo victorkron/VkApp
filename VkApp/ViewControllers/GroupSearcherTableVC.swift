@@ -44,15 +44,10 @@ class GroupSearcherTableVC: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(
-            UINib(
-                nibName: "GroupCell",
-                bundle: nil),
-            forCellReuseIdentifier: "groupCell")
         
+        tableView.register(registerClass: groupCell.self)
         
         baseGroups = allGroups
-        
         
         networkService.fetch(type: .searchGroups) { [weak self] result in
             switch result {
@@ -82,17 +77,16 @@ class GroupSearcherTableVC: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath) as? GroupCell
-        else { return UITableViewCell() }
-    
-        guard
-            let currentName = allGroups[indexPath.row].name as? String,
-            let currentPhoto = allGroups[indexPath.row].photo as? String
-        else { return UITableViewCell() }
         
-        cell.configure(emblem: currentPhoto,
-                       name: currentName)
+        let cell: groupCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
+    
+        let currentName = allGroups[indexPath.row].name
+        let currentPhoto = allGroups[indexPath.row].photo
+        
+        cell.configure(
+            emblem: currentPhoto,
+            name: currentName
+        )
 
         return cell
     }
@@ -101,7 +95,8 @@ class GroupSearcherTableVC: UITableViewController {
         defer {
             tableView.deselectRow(
                 at: indexPath,
-                animated: true)
+                animated: true
+            )
         }
         
         performSegue(

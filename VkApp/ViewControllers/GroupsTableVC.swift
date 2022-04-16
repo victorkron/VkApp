@@ -49,11 +49,8 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     override func viewDidLoad() {
         super.viewDidLoad()
         photoService = PhotoService(container: tableView)
-        tableView.register(
-            UINib(
-                nibName: "GroupCell",
-                bundle: nil),
-            forCellReuseIdentifier: "groupCell")
+        
+        tableView.register(registerClass: groupCell.self)
         
         networkService.getGroupsUrl()
             .then(on: .global(), networkService.getGroups(url:))
@@ -102,16 +99,18 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: groupCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath) as? GroupCell
+            let currentName = groups?[indexPath.row].name,
+            let currentPhoto = groups?[indexPath.row].photo
         else { return UITableViewCell() }
 
-        let currentName = groups?[indexPath.row].name ?? ""
-        let currentPhoto = groups?[indexPath.row].photo ?? ""
         let photo = photoService?.photo(atIndexPath: indexPath, byUrl: currentPhoto)
+        cell.configure(
+            image: photo,
+            name: currentName
+        )
         
-        cell.configure(image: photo, name: currentName)
-
         return cell
     }
     

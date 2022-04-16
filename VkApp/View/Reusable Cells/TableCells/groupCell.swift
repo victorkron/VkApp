@@ -1,5 +1,5 @@
 //
-//  FriendCell.swift
+//  GroupCell.swift
 //  VkApp
 //
 //  Created by Карим Руабхи on 23.12.2021.
@@ -7,23 +7,15 @@
 
 import UIKit
 
-
-final class FriendCell: UITableViewCell {
-    @IBOutlet var friendName: UILabel!
-    @IBOutlet var friendEmblem: AvatarImage!
-    
-//    @IBInspectable var cornerRadius: CGFloat = 12.0 {
-//        didSet {
-//            setNeedsLayout()
-//            layoutIfNeeded()
-//        }
-//    }
+final class groupCell: UITableViewCell {
+    @IBOutlet var groupEmblem: AvatarImage!
+    @IBOutlet var groupName: UILabel!
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
        
         super.touchesBegan(touches, with: event)
         
-        if (touches.first?.view == friendEmblem.superview) {
+        if (touches.first?.view == groupEmblem.superview) {
             animateTapForImage()
         }
         
@@ -31,28 +23,27 @@ final class FriendCell: UITableViewCell {
     
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let delay = 0.2
+        let delay = 0.6
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                     super.touchesEnded(touches, with: event)
         })
 
     }
     
+    
     func configure(
         emblem: String,
         name: String) {
-            self.friendName.text = name
-            self.friendEmblem.downloaded(from: emblem)
+            self.groupName.text = name
+            self.groupEmblem.downloaded(from: emblem)
         }
-
+    
     func configure(
         image: UIImage?,
         name: String) {
-            self.friendName.text = name
-            self.friendEmblem.image = image
+            self.groupName.text = name
+            self.groupEmblem.image = image
         }
- 
-
     
     func animateTapForImage() {
         UIView.animate(
@@ -65,11 +56,11 @@ final class FriendCell: UITableViewCell {
                 
             ],
             animations: {
-                self.friendEmblem.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+                self.groupEmblem.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             },
             completion: { elem in
                 UIView.animate(
-                    withDuration: 0.7,
+                    withDuration: 1,
                     delay: 0,
                     usingSpringWithDamping: 0.2,
                     initialSpringVelocity: 10,
@@ -77,12 +68,11 @@ final class FriendCell: UITableViewCell {
                         .curveEaseInOut,
                     ],
                     animations: {
-                        self.friendEmblem.transform = CGAffineTransform(scaleX: 1, y: 1)
+                        self.groupEmblem.transform = CGAffineTransform(scaleX: 1, y: 1)
                     },
                     completion: { elem in
                         
                     })
             })
     }
-    
 }

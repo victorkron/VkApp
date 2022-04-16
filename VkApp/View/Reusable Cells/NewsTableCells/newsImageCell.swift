@@ -12,7 +12,7 @@ class newsImageCell: UICollectionViewCell, UIGestureRecognizerDelegate {
     
     func configure(url: String) {
         self.imageCell.isHidden = true
-        self.imageCell.image = UIImage(named: "load")
+        self.imageCell.backgroundColor = .gray
         self.imageCell.downloaded(from: url, contentMode: .scaleAspectFill)
         self.imageCell.isHidden = false
     }

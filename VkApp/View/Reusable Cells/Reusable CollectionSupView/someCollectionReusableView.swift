@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SomeCollectionReusableView: UICollectionReusableView {
+class someCollectionReusableView: UICollectionReusableView {
     
     
     @IBOutlet var personImage: UIImageView!

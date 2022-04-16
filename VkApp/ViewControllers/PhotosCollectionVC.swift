@@ -28,18 +28,12 @@ class PhotosCollectionVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         photoService = PhotoService(container: collectionView)
-        self.collectionView!.register(
-            PhotoItem.self,
-            forCellWithReuseIdentifier: "photoItem")
-        self.collectionView.register(
-            UINib(nibName: "PhotoItem",
-                  bundle: nil),
-            forCellWithReuseIdentifier: "photoItem")
-        self.collectionView.register(
-            UINib(nibName: "SomeCollectionReusableView",
-                  bundle: nil),
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "someCollectionReusableView")
+        
+        collectionView.register(registerClass: photoItem.self)
+        collectionView.register(
+            registerClass: someCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
+        )
         DispatchQueue.global().async {
             self.getPhoto()
         }
@@ -91,7 +85,7 @@ class PhotosCollectionVC: UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         if PhotosCollectionVC.fromFullScrenn ?? false {
             let fullDuration = 0.7
-            let a = collectionView.cellForItem(at: [0, PhotosCollectionVC.curretnIndex ?? 0]) as? PhotoItem
+            let a = collectionView.cellForItem(at: [0, PhotosCollectionVC.curretnIndex ?? 0]) as? photoItem
             let k = self.view.frame.width / (a?.frame.width ?? self.view.frame.width)
             
             let mask = UIView()
@@ -164,12 +158,6 @@ class PhotosCollectionVC: UICollectionViewController {
             switch photosChange {
             case .initial, .update:
                 self?.collectionView.reloadData()
-//            case .update(
-//                _,
-//                deletions: let deletions,
-//                insertions: let insertions,
-//                modifications: let modifications):
-//                print(deletions, insertions, modifications)
             case .error(let error):
                 print(error)
             }
@@ -197,14 +185,11 @@ class PhotosCollectionVC: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: photoItem = collectionView.dequeueReusableCell(forIndexPath: indexPath)
         guard
-            let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: "photoItem",
-                for: indexPath)
-                as? PhotoItem,
             let url = self.photos?[indexPath.row].url
         else { return UICollectionViewCell() }
-        cell.itemImage.image = UIImage(named: "load")
+        cell.itemImage.backgroundColor = .gray
         let photo =  photoService?.photo(atIndexPath: indexPath, byUrl: url)
         cell.configure(image: photo)
         return cell
@@ -215,7 +200,7 @@ class PhotosCollectionVC: UICollectionViewController {
     @objc
     func onTap(currentIndex: IndexPath) {
         let fullDuration = 0.7
-        let a = collectionView.cellForItem(at: currentIndex) as? PhotoItem
+        let a = collectionView.cellForItem(at: currentIndex) as? photoItem
         let mask = UIView()
         
         mask.frame = self.view.frame
@@ -288,13 +273,7 @@ class PhotosCollectionVC: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
             case UICollectionView.elementKindSectionHeader:
-                guard
-                    let someHeader = collectionView.dequeueReusableSupplementaryView(
-                                    ofKind: kind,
-                                    withReuseIdentifier: "someCollectionReusableView",
-                                    for: indexPath)
-                        as? SomeCollectionReusableView
-                else { return UICollectionReusableView() }
+            let someHeader: someCollectionReusableView = collectionView.dequeueReusableCell(forIndexPath: indexPath, kind: kind)
                 someHeader.configure(personLastname: self.lastname ?? "",
                                  personFirstname: self.firstname ?? "",
                                      personImage: self.avatar)
