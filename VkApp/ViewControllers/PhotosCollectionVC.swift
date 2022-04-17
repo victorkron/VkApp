@@ -34,9 +34,8 @@ class PhotosCollectionVC: UICollectionViewController {
             registerClass: someCollectionReusableView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
         )
-        DispatchQueue.global().async {
-            self.getPhoto()
-        }
+        
+        getPhoto()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

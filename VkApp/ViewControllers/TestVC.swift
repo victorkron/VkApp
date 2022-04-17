@@ -12,8 +12,8 @@ final class TestVC: UIViewController {
     
     var container: UIView! = UIView()
     
-    let width = 0
-    let height = 0
+    private let width = 0
+    private let height = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()

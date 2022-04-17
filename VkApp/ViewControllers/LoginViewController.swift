@@ -1,6 +1,6 @@
 //
-//  ViewController.swift
-//  WeatherApp
+//  LoginViewController.swift
+//  VkApp
 //
 //  Created by Карим Руабхи on 15.12.2021.
 //
@@ -13,15 +13,10 @@ final class LoginViewController: UIViewController {
     @IBOutlet weak var userPasswordTextField: UITextField!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBAction func logInButtonPressed(_ sender: Any) {
-
-    }
-    
     @IBAction func unwindToMain(unwindSegue: UIStoryboardSegue) {
         navigationController?.popToRootViewController(animated: true)
     }
     
-    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         scrollView
@@ -29,15 +24,6 @@ final class LoginViewController: UIViewController {
                 UITapGestureRecognizer(
                     target: self,
                     action: #selector(hideKeyboard)))
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print(#function)
     }
     
     
@@ -69,8 +55,6 @@ final class LoginViewController: UIViewController {
         navigationController?.navigationBar.isHidden = false
     }
     
-    
-    // MARK: Actions
     @objc func keyboardWasShown(notification: Notification) {
         let info = notification.userInfo! as NSDictionary
         let kbSize = (info.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as! NSValue)
@@ -125,7 +109,6 @@ final class LoginViewController: UIViewController {
         
     }
     
-    // MARK: Private methods
     private func checkUser() -> Bool {
         userNameTextField.text == "" && userPasswordTextField.text == ""
     }

@@ -20,27 +20,34 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var userNews = [News]() {
             didSet {
             DispatchQueue.main.async {
-                self.NewsTable.reloadData()
+                self.newsTable.reloadData()
             }
         }
     }
     
     var indexOfCell: NewsCell?
     
-    @IBOutlet var NewsTable: UITableView!
+    @IBOutlet var newsTable: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NewsTable.delegate = self
-        NewsTable.dataSource = self
+        newsTable.delegate = self
+        newsTable.dataSource = self
         
-        NewsTable.register(registerClass: AvatarCell.self)
-        NewsTable.register(registerClass: DescriptionCell.self)
-        NewsTable.register(registerClass: ImageCell.self)
-        NewsTable.register(registerClass: newsActionsCell.self)
-        
-        self.networkService.fetch(type: .feed) { [weak self] result in
+        cellsRegistering()
+        feedRequest()
+    }
+
+    func cellsRegistering() {
+        newsTable.register(registerClass: AvatarCell.self)
+        newsTable.register(registerClass: DescriptionCell.self)
+        newsTable.register(registerClass: ImageCell.self)
+        newsTable.register(registerClass: newsActionsCell.self)
+    }
+
+    func feedRequest() {
+        networkService.fetch(type: .feed) { [weak self] result in
             switch result {
             case .success(let myNews):
                 myNews.forEach() { i in
@@ -64,8 +71,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-
-    // MARK: - Table view data source
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return userNews.count

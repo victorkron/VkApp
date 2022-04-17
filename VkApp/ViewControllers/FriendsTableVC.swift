@@ -58,9 +58,8 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
-
+        // к этому методу привязана анвинд сега, если его убрать, то перехода назад со следующей страницы не будет
     }
-    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,8 +128,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
         destination.id = person?.id ?? 0
         destination.avatar = person?.photo200 ?? ""
     }
-    
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return personSectionTitles.count
@@ -154,14 +151,14 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard
-            let cell = cell as? friendCell,
-            let arr = generateDataForCell(cell: cell, indexPath: indexPath)
+            let friendCell = cell as? friendCell,
+            let friendCellData = generateDataForCell(cell: cell, indexPath: indexPath)
         else { return }
         
-        let image = photoService?.photo(atIndexPath: indexPath, byUrl: arr[0])
-        let name = arr[1]
+        let image = photoService?.photo(atIndexPath: indexPath, byUrl: friendCellData[0])
+        let name = friendCellData[1]
         
-        cell.configure(
+        friendCell.configure(
             image: image,
             name: name
         )
@@ -184,7 +181,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-//        tableView.sectionIndexBackgroundColor = .white
         return personSectionTitles
     }
     
@@ -201,8 +197,8 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
             let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
         else { return nil }
         
-        let arr = [photo, "\(lastName) \(firstName)"]
-        return arr
+        let friendCellData = [photo, "\(lastName) \(firstName)"]
+        return friendCellData
     }
     
 }

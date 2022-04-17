@@ -79,19 +79,11 @@ class PhotoFullScrennVC: UIViewController {
         let scaleForSideImage = 0.7
         let leftImageViewWidth = Container.bounds.width * scaleForSideImage
         let leftImageViewHeight = 1000
-        
         let rightImageViewWidth = Container.bounds.width * scaleForSideImage
         let rightImageViewHeight = 1000
-        
-        
-        
-        
-        
+
         switch gesture.state {
         case .began:
-            
-            
-            
             var previousIndex: Int = 0
             var nextIndex: Int = 0
             
@@ -117,8 +109,6 @@ class PhotoFullScrennVC: UIViewController {
             Container.addSubview(leftImageView)
             Container.addSubview(rightImageView)
             
-            
-            
             // прокрутка вправо
             propertyAnimatorToTheRight = UIViewPropertyAnimator(
                 duration: duration,
@@ -131,9 +121,7 @@ class PhotoFullScrennVC: UIViewController {
                         self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
                         1 / scaleForSideImage,
                         1 / scaleForSideImage)
-                 
                 })
-            
             
             // прокрутка влево
             propertyAnimatorToTheLeft = UIViewPropertyAnimator(
@@ -153,7 +141,6 @@ class PhotoFullScrennVC: UIViewController {
             propertyAnimatorToTheLeft.pauseAnimation()
             
         case .changed:
-            
             let translation = gesture.translation(in: self.imageView)
             propertyAnimatorToTheRight.fractionComplete = translation.x / 1000
             propertyAnimatorToTheLeft.fractionComplete = -translation.x / 1000
@@ -171,8 +158,8 @@ class PhotoFullScrennVC: UIViewController {
                     (-self.Container.bounds.width) + (self.Container.bounds.width - rightImageViewWidth),
                     1 / scaleForSideImage,
                     1 / scaleForSideImage,
-                    duration: 0.5)
-              
+                    duration: 0.5
+                )
                 
                 setCurrentIndex(myIndex: &currentIndex!, nextValue: currentIndex! + 1)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -193,8 +180,8 @@ class PhotoFullScrennVC: UIViewController {
                     self.Container.bounds.width - CGFloat(Int(self.Container.bounds.width - leftImageViewWidth)),
                     1 / scaleForSideImage,
                     1 / scaleForSideImage,
-                    duration: 0.5)
-               
+                    duration: 0.5
+                )
                 
                 setCurrentIndex(myIndex: &currentIndex!, nextValue: currentIndex! - 1)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -226,14 +213,11 @@ class PhotoFullScrennVC: UIViewController {
                     self.rightImageView.image = nil
                     self.leftImageView.image = nil
                 })
-                
             }
             
         default:
             return
-            
         }
-        
     }
     
     func scalingMainView(_ imageV: UIImageView, _ scalingParam: Double) {

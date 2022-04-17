@@ -44,6 +44,14 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
         tableView.reloadData()
     }
     
+    func updateGroups() {
+        do {
+            self.groups = try RealmService.load(typeOf: RealmGroup.self)
+        } catch {
+            print("Load Realm")
+        }
+    }
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -64,15 +72,6 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
             .catch { error in
                 print(error)
             }
-    }
-    
-    func updateGroups() {
-        do {
-            self.groups = try RealmService.load(typeOf: RealmGroup.self)
-        } catch {
-            print("Load Realm")
-        }
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {

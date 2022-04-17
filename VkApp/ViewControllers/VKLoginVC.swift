@@ -8,7 +8,6 @@
 import UIKit
 import WebKit
 import KeychainSwift
-//import Alamofire
 
 
 final class VKLoginVC: UIViewController {
@@ -106,13 +105,10 @@ extension VKLoginVC: WKNavigationDelegate {
             SessionData.data.token = token
             SessionData.data.userId = userID
 
-            
             goToNextPage()
             
             decisionHandler(.cancel)
-            
     }
-    
     
     private func goToNextPage() {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
@@ -120,8 +116,6 @@ extension VKLoginVC: WKNavigationDelegate {
         nextViewController?.modalPresentationStyle = .fullScreen
         self.present(nextViewController ?? UIViewController(), animated: true, completion: nil)
     }
-    
-    
     
 }
 
@@ -142,8 +136,6 @@ extension VKLoginVC {
         
     }
     
-    // MARK: Keychain
-    
     private func saveToKeychain() {
         keychainSwift.set(
             SessionData.data.token,
@@ -162,8 +154,6 @@ extension VKLoginVC {
         keychainSwift.delete(UserDefaults.Keys.token.rawValue)
         keychainSwift.clear()
     }
-    
-    // MARK: File manager
     
     private func saveFile() {
         guard
@@ -200,8 +190,6 @@ extension VKLoginVC {
         
         return image
     }
-    
-    // MARK: CoreData
     
     private func saveToCoreData() {
         guard

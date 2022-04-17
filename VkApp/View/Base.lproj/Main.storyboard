@@ -376,7 +376,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" text="" id="eLA-uf-jPg">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="0.0" width="228" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -503,7 +503,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="716-9L-gOV"/>
                     <connections>
-                        <outlet property="NewsTable" destination="rrn-3H-fJH" id="OMs-CV-aJH"/>
+                        <outlet property="newsTable" destination="rrn-3H-fJH" id="OMs-CV-aJH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fcx-Zc-Mbf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
