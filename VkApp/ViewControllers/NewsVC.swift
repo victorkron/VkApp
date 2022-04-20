@@ -7,8 +7,8 @@
 
 import UIKit
 
-class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UpdateTableView {
+  
     enum NewsCell {
         case header
         case description
@@ -42,6 +42,10 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         cellsRegistering()
         feedRequest()
         setupRefreshControl()
+    }
+    
+    func updateTV(index: IndexPath) {
+        newsTable.reloadRows(at: [[index.section, index.row]], with: .fade)
     }
     
     fileprivate func setupRefreshControl() {
@@ -143,7 +147,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if (userNews[section].text == nil || userNews[section].text == "") {
             rows -= 1
         }
-        
         return rows
     }
 
@@ -182,13 +185,12 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .description:
-            
             let cell: DescriptionCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
             guard
                 let text = news.text
             else { return UITableViewCell() }
             
-            cell.configure(text)
+            cell.configure(text, source: self, indexPath)
             
             return cell
             
@@ -256,7 +258,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private func getCellType(news: News ,for item: IndexPath) -> NewsCell? {
         var type: NewsCell
-        switch item.item {
+        switch item.row {
         case 0:
             type = .header
         case 1:
@@ -325,4 +327,9 @@ extension NewsVC: UITableViewDataSourcePrefetching {
             }
         }
     }
+}
+
+
+protocol UpdateTableView {
+    func updateTV(index: IndexPath)
 }
