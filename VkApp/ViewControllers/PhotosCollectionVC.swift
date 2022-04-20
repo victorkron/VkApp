@@ -61,6 +61,7 @@ class PhotosCollectionVC: UICollectionViewController {
                         i.type == "p"
                     }
                     let elem = RealmPhotoCell(photo: Photo(
+                        width: value?.width ?? 0,
                         height: value?.height ?? 0,
                         url: value?.url ?? "",
                         type: value?.type ?? ""))

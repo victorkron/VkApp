@@ -85,6 +85,7 @@ final class Request<ItemsType: Decodable> {
             constructor.queryItems = [
                 URLQueryItem(name: "filters", value: "post,photo"),
                 URLQueryItem(name: "max_photos", value: "9"),
+                URLQueryItem(name: "count", value: "10"),
                 URLQueryItem(name: "source_ids", value: "friends,groups,pages"),
                 URLQueryItem(name: "v", value: "5.131"),
                 URLQueryItem(name: "access_token", value: SessionData.data.token),
@@ -204,6 +205,107 @@ final class Request<ItemsType: Decodable> {
                 }
             }
         }
+    }
+    
+    // Для паттерна Pull-to-refresh
+    
+    func getNews(timeSince: String, complition: @escaping (Swift.Result<[ItemsType], Error>) -> Void) {
+        var constructor = urlConstructor
+        constructor.path = "/method/newsfeed.get"
+        constructor.queryItems = [
+            URLQueryItem(name: "start_time", value: timeSince),
+            URLQueryItem(name: "filters", value: "post,photo"),
+            URLQueryItem(name: "max_photos", value: "9"),
+            URLQueryItem(name: "source_ids", value: "friends,groups,pages"),
+            URLQueryItem(name: "v", value: "5.131"),
+            URLQueryItem(name: "access_token", value: SessionData.data.token),
+        ]
+        guard let url = constructor.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard
+                error == nil,
+                let data = data
+            else { return }
+            do {
+                let json = try JSONDecoder().decode(Response<ItemsType>.self, from: data)
+                complition(.success(json.response.items))
+            } catch {
+                complition(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    // Для паттерна infinite scrolling
+    
+    func getNews(complition: @escaping (Swift.Result<NewsResponse, Error>) -> Void) {
+        var constructor = urlConstructor
+        constructor.path = "/method/newsfeed.get"
+        constructor.queryItems = [
+            URLQueryItem(name: "count", value: "10"),
+            URLQueryItem(name: "filters", value: "post,photo"),
+            URLQueryItem(name: "max_photos", value: "9"),
+            URLQueryItem(name: "source_ids", value: "friends,groups,pages"),
+            URLQueryItem(name: "v", value: "5.131"),
+            URLQueryItem(name: "access_token", value: SessionData.data.token),
+        ]
+        guard let url = constructor.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard
+                error == nil,
+                let data = data
+            else { return }
+            do {
+                if let jsonT = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                            print(jsonT)
+                         }
+                let json = try JSONDecoder().decode(NewsResponse.self, from: data)
+                complition(.success(json))
+            } catch {
+                complition(.failure(error))
+            }
+        }
+        task.resume()
+    }
+    
+    func getNews(nextFrom: String, complition: @escaping (Swift.Result<NewsResponse, Error>) -> Void) {
+        var constructor = urlConstructor
+        constructor.path = "/method/newsfeed.get"
+        constructor.queryItems = [
+            URLQueryItem(name: "start_from", value: nextFrom),
+            URLQueryItem(name: "count", value: "10"),
+            URLQueryItem(name: "filters", value: "post,photo"),
+            URLQueryItem(name: "max_photos", value: "9"),
+            URLQueryItem(name: "source_ids", value: "friends,groups,pages"),
+            URLQueryItem(name: "v", value: "5.131"),
+            URLQueryItem(name: "access_token", value: SessionData.data.token),
+        ]
+        guard let url = constructor.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        
+        let task = self.session.dataTask(with: request) { (data, response, error) in
+            guard
+                error == nil,
+                let data = data
+            else { return }
+            do {
+                let json = try JSONDecoder().decode(NewsResponse.self, from: data)
+                complition(.success(json))
+            } catch {
+                complition(.failure(error))
+            }
+        }
+        task.resume()
     }
 }
 

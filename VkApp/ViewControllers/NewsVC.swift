@@ -16,6 +16,9 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         case footer
     }
     
+    private var nextFrom = ""
+    var isLoading = false
+    private var lastDateString: String?
     private let networkService = Request<News>()
     var userNews = [News]() {
             didSet {
@@ -34,22 +37,39 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         newsTable.delegate = self
         newsTable.dataSource = self
+        newsTable.prefetchDataSource = self
         
         cellsRegistering()
         feedRequest()
+        setupRefreshControl()
     }
-
-    func cellsRegistering() {
-        newsTable.register(registerClass: AvatarCell.self)
-        newsTable.register(registerClass: DescriptionCell.self)
-        newsTable.register(registerClass: ImageCell.self)
-        newsTable.register(registerClass: newsActionsCell.self)
+    
+    fileprivate func setupRefreshControl() {
+        newsTable.refreshControl = UIRefreshControl()
+        newsTable.refreshControl?.attributedTitle = NSAttributedString(string: "Спокойствие...")
+        newsTable.refreshControl?.tintColor = .black
+        newsTable.refreshControl?.addTarget(
+            self,
+            action: #selector(refreshNews),
+            for: .valueChanged
+        )
     }
-
-    func feedRequest() {
-        networkService.fetch(type: .feed) { [weak self] result in
-            switch result {
+    
+    @objc func refreshNews() {
+        newsTable.refreshControl?.beginRefreshing()
+        lastDateString = String(self.userNews.first?.date.timeIntervalSinceReferenceDate ?? Date().timeIntervalSince1970)
+        guard
+            let getLastDate = lastDateString,
+            let nextMoment = Double(getLastDate)
+        else { return }
+        let timeSince = String(nextMoment + 1)
+        networkService.getNews(timeSince: timeSince) { [weak self] news in
+            DispatchQueue.main.async {
+                self?.newsTable.refreshControl?.endRefreshing()
+            }
+            switch news {
             case .success(let myNews):
+                guard myNews.count > 0 else { return }
                 myNews.forEach() { i in
                     guard let attachment = i.contentImages else { return }
                     attachment.forEach { ii in
@@ -61,11 +81,49 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                             contentImages: attachment,
                             likes: i.likes,
                             reposts: i.reposts,
-                            comments: i.comments)
+                            comments: i.comments
+                        )
                         
+                        guard !self!.userNews.contains(singleNews) else { return }
+                        self?.userNews.insert(singleNews, at: 0)
+                    }
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+
+    func cellsRegistering() {
+        newsTable.register(registerClass: AvatarCell.self)
+        newsTable.register(registerClass: DescriptionCell.self)
+        newsTable.register(imageTVCell.self, forCellReuseIdentifier: imageTVCell.identifier)
+        newsTable.register(registerClass: ImageCell.self)
+        newsTable.register(registerClass: newsActionsCell.self)
+    }
+
+    func feedRequest() {
+        networkService.getNews { [weak self] result in
+            switch result {
+            case .success(let newsData):
+                print(newsData)
+                newsData.response.items.forEach() { i in
+                    guard let attachment = i.contentImages else { return }
+                    attachment.forEach { ii in
+                        guard ii.type == "photo" else { return }
+                        let singleNews = News(
+                            sourceID: i.sourceID,
+                            text: i.text,
+                            date: i.date,
+                            contentImages: attachment,
+                            likes: i.likes,
+                            reposts: i.reposts,
+                            comments: i.comments)
+
                         guard !self!.userNews.contains(singleNews) else { return }
                         self?.userNews.append(singleNews) }
                 }
+                self?.nextFrom = newsData.response.nextFrom
             case .failure(let error):
                 print(error)
             }
@@ -135,20 +193,23 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
             
         case .image:
-            
-            let cell: ImageCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
-            
             var photos = [String]()
             news.contentImages?.forEach { i in
                 guard let photo = i.photo?.sizes.last?.url else { return }
                 photos.append(photo)
             }
             
-            cell.configure(
-                news: news,
-                photos: photos)
-            
-            return cell
+            if photos.count == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: imageTVCell.identifier) as! imageTVCell
+                cell.configure(photos[0])
+                return cell
+            } else if photos.count > 1 {
+                let cell: ImageCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
+                cell.configure(news: news, photos: photos)
+                return cell
+            } else {
+                return UITableViewCell()
+            }
             
         case .footer:
             
@@ -166,6 +227,32 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let news = userNews[indexPath.section]
+        indexOfCell = getCellType(news: news, for: indexPath)
+        switch indexOfCell {
+        case .image:
+            guard
+                let urls = news.contentImages,
+                !urls.isEmpty
+            else { return 0.0 }
+            let count = urls.count
+
+            if  count == 1 {
+                let width = view.frame.width
+                let post = userNews[indexPath.section]
+                let cellHeight = width * post.aspectRatio
+                return cellHeight
+            } else {
+                print("more")
+            }
+            return UITableView.automaticDimension
+        default:
+            return UITableView.automaticDimension
+        }
+    }
+
     
     private func getCellType(news: News ,for item: IndexPath) -> NewsCell? {
         var type: NewsCell
@@ -198,4 +285,44 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+}
+
+
+extension NewsVC: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard
+            let maxSection = indexPaths.map({ $0.section }).max()
+        else { return }
+
+        if maxSection > userNews.count - 3,
+            !isLoading {
+            isLoading = true
+            networkService.getNews(nextFrom: nextFrom) { [weak self] result in
+                switch result {
+                case .success(let newsData):
+                    print(newsData)
+                    newsData.response.items.forEach() { i in
+                        guard let attachment = i.contentImages else { return }
+                        attachment.forEach { ii in
+                            guard ii.type == "photo" else { return }
+                            let singleNews = News(
+                                sourceID: i.sourceID,
+                                text: i.text,
+                                date: i.date,
+                                contentImages: attachment,
+                                likes: i.likes,
+                                reposts: i.reposts,
+                                comments: i.comments)
+
+                            guard !self!.userNews.contains(singleNews) else { return }
+                            self?.userNews.append(singleNews) }
+                    }
+                    self?.nextFrom = newsData.response.nextFrom
+                case .failure(let error):
+                    print(error)
+                }
+                self?.isLoading = false
+            }
+        }
+    }
 }

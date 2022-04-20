@@ -8,6 +8,28 @@
 import Foundation
 import UIKit
 
+struct NewsResponse {
+    let response: NewsData
+}
+
+extension NewsResponse: Codable {
+    enum CodingKeys: String, CodingKey {
+        case response
+    }
+}
+
+struct NewsData {
+    var items: [News]
+    var nextFrom: String
+}
+
+extension NewsData: Codable {
+    enum CodingKeys: String, CodingKey {
+        case items = "items"
+        case nextFrom = "next_from"
+    }
+}
+
 struct News {
     let sourceID: Int
     var text: String?
@@ -16,6 +38,13 @@ struct News {
     let likes: Likes
     let reposts: Reposts
     let comments: Comments
+    
+    var aspectRatio: CGFloat {
+        get {
+            let aspectRatio = contentImages?.compactMap{ $0.photo?.sizes.last?.aspectRatio }.last
+            return aspectRatio ?? 1
+        }
+    }
 }
 
 extension News: Comparable {
@@ -28,7 +57,7 @@ extension News: Comparable {
     }
 }
 
-extension News: Decodable {
+extension News: Codable {
     enum CodingKeys: String, CodingKey {
         case sourceID = "source_id"
         case date
@@ -62,7 +91,7 @@ struct Comments: Codable {
 }
 
 
-struct Attachment: Decodable {
+struct Attachment: Codable {
     let type: String
     let photo: Albums?
 }
