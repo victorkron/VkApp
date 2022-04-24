@@ -7,34 +7,60 @@
 
 import UIKit
 
-fileprivate var isPressed: Bool = false
+//fileprivate var isPressed: Bool = false
 
 class DescriptionCell: UITableViewCell {
 
     @IBOutlet var buttonShowText: UIButton!
     @IBOutlet var myDescription: UILabel!
-//    private var isPressed: Bool = false
+    private var test: Int?
+    private var isPressed = Bool()
+    private var nextValue: Bool = false
     private var source: UpdateTableView?
     private var indexPath: IndexPath?
     
     @IBAction func buttonPressed(_ sender: Any) {
-        isPressed = !isPressed
+        isPressed = !isPressed  // при проверке на следующей строчке,  isPressed принимает ожидаемое значение, но в методе config значение другое... Такое ощущение, что метод конфиг срабатывает раньше, чем меняется значение isPressed, хотя при отслеживании через брейкпоинты все идет последовательно
+        test = 1 // Тут присвоение 1 к свойству test, а далее в следующем методе оно равно nil
         guard let index = indexPath else { return }
-        if isPressed {
-            source?.updateTV(index: index)
-        } else {
-            source?.updateTV(index: index)
-        }
+        self.source?.updateTV(index: index)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+//            self.source?.updateTV(index: index)
+//        })
     }
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    
+    override func prepareForReuse() {
+        
     }
 
+    
+//    @objc
+//    func touchUpInside() {
+//        guard let index = indexPath else { return }
+//        self.source?.updateTV(index: index)
+//    }
+//
+//    @objc
+//    func touchDown() {
+//        isPressed = !isPressed
+//    }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
     func configure(_ text: String, source: UpdateTableView, _ indexPath: IndexPath) {
+//        buttonShowText.addTarget(
+//            self,
+//            action: #selector(touchUpInside),
+//            for: .touchUpInside
+//        )
+//
+//        buttonShowText.addTarget(
+//            self,
+//            action: #selector(touchDown),
+//            for: .touchDown
+//        )
         if isPressed {
             myDescription.numberOfLines = 1000
             buttonShowText.setTitle(
@@ -48,7 +74,7 @@ class DescriptionCell: UITableViewCell {
                 for: .normal
             )
         }
-        
+
         self.source = source
         if text.count > 150 {
             buttonShowText.isHidden = false

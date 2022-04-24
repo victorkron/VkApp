@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UpdateTableView {
+class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
   
     enum NewsCell {
         case header
@@ -28,6 +28,8 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Upda
         }
     }
     
+//    private var descriprionCells: [IndexPath: Bool]?
+    
     var indexOfCell: NewsCell?
     
     @IBOutlet var newsTable: UITableView!
@@ -42,10 +44,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Upda
         cellsRegistering()
         feedRequest()
         setupRefreshControl()
-    }
-    
-    func updateTV(index: IndexPath) {
-        newsTable.reloadRows(at: [[index.section, index.row]], with: .fade)
     }
     
     fileprivate func setupRefreshControl() {
@@ -74,21 +72,21 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Upda
             switch news {
             case .success(let myNews):
                 guard myNews.count > 0 else { return }
-                myNews.forEach() { i in
-                    guard let attachment = i.contentImages else { return }
-                    attachment.forEach { ii in
-                        guard ii.type == "photo" else { return }
+                myNews.forEach() { newsElement in
+                    guard let attachment = newsElement.contentImages else { return }
+                    attachment.forEach { image in
+                        guard image.type == "photo" else { return }
                         let singleNews = News(
-                            sourceID: i.sourceID,
-                            text: i.text,
-                            date: i.date,
+                            sourceID: newsElement.sourceID,
+                            text: newsElement.text,
+                            date: newsElement.date,
                             contentImages: attachment,
-                            likes: i.likes,
-                            reposts: i.reposts,
-                            comments: i.comments
+                            likes: newsElement.likes,
+                            reposts: newsElement.reposts,
+                            comments: newsElement.comments
                         )
                         
-                        guard !self!.userNews.contains(singleNews) else { return }
+                        guard !(self?.userNews.contains(singleNews) ?? true) else { return }
                         self?.userNews.insert(singleNews, at: 0)
                     }
                 }
@@ -190,6 +188,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, Upda
                 let text = news.text
             else { return UITableViewCell() }
             
+//            let bool = descriprionCells?[indexPath] ?? false
             cell.configure(text, source: self, indexPath)
             
             return cell
@@ -329,7 +328,16 @@ extension NewsVC: UITableViewDataSourcePrefetching {
     }
 }
 
+extension NewsVC: UpdateTableView {
+    func updateTV(index: IndexPath/*, bool: Bool*/) {
+        newsTable.beginUpdates()
+//        descriprionCells?[index] = bool
+        newsTable.reloadRows(at: [index], with: .fade)
+        newsTable.endUpdates()
+    }
+}
+
 
 protocol UpdateTableView {
-    func updateTV(index: IndexPath)
+    func updateTV(index: IndexPath/*, bool: Bool*/)
 }
