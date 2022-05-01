@@ -27,9 +27,7 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-    
-//    private var descriprionCells: [IndexPath: Bool]?
-    
+
     var indexOfCell: NewsCell?
     
     @IBOutlet var newsTable: UITableView!
@@ -189,7 +187,9 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             else { return UITableViewCell() }
             
 //            let bool = descriprionCells?[indexPath] ?? false
-            cell.configure(text, source: self, indexPath)
+            cell.configure(text)
+            cell.delegate = self
+            cell.indexPath = indexPath
             
             return cell
             
@@ -288,7 +288,6 @@ class NewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 }
 
-
 extension NewsVC: UITableViewDataSourcePrefetching {
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard
@@ -328,16 +327,11 @@ extension NewsVC: UITableViewDataSourcePrefetching {
     }
 }
 
-extension NewsVC: UpdateTableView {
-    func updateTV(index: IndexPath/*, bool: Bool*/) {
+// MARK: - ShowMoreDelegate
+extension NewsVC: ShowMoreDelegate {
+    func updateTextHeight(indexPath: IndexPath) {
+//                newsTable.reloadRows(at: [indexPath], with: .fade)
         newsTable.beginUpdates()
-//        descriprionCells?[index] = bool
-        newsTable.reloadRows(at: [index], with: .fade)
         newsTable.endUpdates()
     }
-}
-
-
-protocol UpdateTableView {
-    func updateTV(index: IndexPath/*, bool: Bool*/)
 }
