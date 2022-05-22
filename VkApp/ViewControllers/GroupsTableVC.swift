@@ -16,12 +16,23 @@ fileprivate enum GroupsError: Error {
 
 final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
-    private var groupsToken: NotificationToken?
     private var networkService = Request<GroupData>()
+    
+    private var viewModelsFactory: GroupViewModelFactory? = GroupViewModelFactory()
+    fileprivate var groupsViewModels: [GroupViewModel] = [] {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
     
     private var photoService: PhotoService?
     
-    private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) 
+    private var groups: Results<RealmGroup>? = try? RealmService.load(typeOf: RealmGroup.self) {
+        didSet {
+            guard let photoService = photoService else { return }
+            groupsViewModels = viewModelsFactory?.getModels(groups: groups, photoService: photoService) ?? []
+        }
+    }
 
     @IBAction func addGroup(segue: UIStoryboardSegue) {
         guard
@@ -56,6 +67,8 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModelsFactory = GroupViewModelFactory()
+        
         photoService = PhotoService(container: tableView)
         
         tableView.register(registerClass: groupCell.self)
@@ -76,40 +89,21 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        groupsToken = groups?.observe { [weak self] groupsChange in
-            switch groupsChange {
-            case .initial, .update:
-                self?.tableView.reloadData()
-            case .error(let error):
-                print(error)
-            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        groupsToken?.invalidate()
     }
     
     // MARK: - Table view data source
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups?.count ?? 0
+        return groupsViewModels.count
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: groupCell = tableView.dequeueReusableCell(forIndexPath: indexPath)
-        guard
-            let currentName = groups?[indexPath.row].name,
-            let currentPhoto = groups?[indexPath.row].photo
-        else { return UITableViewCell() }
-
-        let photo = photoService?.photo(atIndexPath: indexPath, byUrl: currentPhoto)
-        cell.configure(
-            image: photo,
-            name: currentName
-        )
-        
+        cell.configure(group: groupsViewModels[indexPath.row])
         return cell
     }
     

@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		6C16B030279AC2C200333D39 /* PhotoFullScrennVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C16B02F279AC2C200333D39 /* PhotoFullScrennVC.swift */; };
+		6C26600C283A10A600364ECF /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C26600B283A10A600364ECF /* UIColorExtension.swift */; };
+		6C266012283A477E00364ECF /* FriendViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C266011283A477E00364ECF /* FriendViewModelFactory.swift */; };
+		6C266014283A485900364ECF /* FriendsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C266013283A485900364ECF /* FriendsViewModel.swift */; };
+		6C266019283A66A000364ECF /* PhotoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C266018283A66A000364ECF /* PhotoViewModel.swift */; };
+		6C26601B283A671A00364ECF /* PhotoViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C26601A283A671A00364ECF /* PhotoViewModelFactory.swift */; };
+		6C26601D283A954800364ECF /* GroupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C26601C283A954800364ECF /* GroupViewModel.swift */; };
+		6C26601F283A955500364ECF /* GroupViewModelFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C26601E283A955500364ECF /* GroupViewModelFactory.swift */; };
 		6C42AB702798271F0081ED49 /* StartVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C42AB6F2798271F0081ED49 /* StartVC.swift */; };
 		6C473610276D0B4C0074C7B1 /* FriendsTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C47360F276D0B4C0074C7B1 /* FriendsTableVC.swift */; };
 		6C473612276D0B610074C7B1 /* PhotosCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C473611276D0B610074C7B1 /* PhotosCollectionVC.swift */; };
@@ -88,6 +95,13 @@
 
 /* Begin PBXFileReference section */
 		6C16B02F279AC2C200333D39 /* PhotoFullScrennVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFullScrennVC.swift; sourceTree = "<group>"; };
+		6C26600B283A10A600364ECF /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
+		6C266011283A477E00364ECF /* FriendViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewModelFactory.swift; sourceTree = "<group>"; };
+		6C266013283A485900364ECF /* FriendsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewModel.swift; sourceTree = "<group>"; };
+		6C266018283A66A000364ECF /* PhotoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModel.swift; sourceTree = "<group>"; };
+		6C26601A283A671A00364ECF /* PhotoViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewModelFactory.swift; sourceTree = "<group>"; };
+		6C26601C283A954800364ECF /* GroupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModel.swift; sourceTree = "<group>"; };
+		6C26601E283A955500364ECF /* GroupViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupViewModelFactory.swift; sourceTree = "<group>"; };
 		6C42AB6F2798271F0081ED49 /* StartVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartVC.swift; sourceTree = "<group>"; };
 		6C47360F276D0B4C0074C7B1 /* FriendsTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableVC.swift; sourceTree = "<group>"; };
 		6C473611276D0B610074C7B1 /* PhotosCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCollectionVC.swift; sourceTree = "<group>"; };
@@ -176,6 +190,43 @@
 				E1C30224CD53FC5DE0C4EAA8 /* Pods-VkApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		6C266010283A475200364ECF /* Factories */ = {
+			isa = PBXGroup;
+			children = (
+				6C266017283A666A00364ECF /* Photos */,
+				6C266016283A665F00364ECF /* Groups */,
+				6C266015283A665800364ECF /* Friends */,
+			);
+			path = Factories;
+			sourceTree = "<group>";
+		};
+		6C266015283A665800364ECF /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				6C266011283A477E00364ECF /* FriendViewModelFactory.swift */,
+				6C266013283A485900364ECF /* FriendsViewModel.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		6C266016283A665F00364ECF /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				6C26601C283A954800364ECF /* GroupViewModel.swift */,
+				6C26601E283A955500364ECF /* GroupViewModelFactory.swift */,
+			);
+			path = Groups;
+			sourceTree = "<group>";
+		};
+		6C266017283A666A00364ECF /* Photos */ = {
+			isa = PBXGroup;
+			children = (
+				6C266018283A66A000364ECF /* PhotoViewModel.swift */,
+				6C26601A283A671A00364ECF /* PhotoViewModelFactory.swift */,
+			);
+			path = Photos;
 			sourceTree = "<group>";
 		};
 		6C5DDA682784781900D831C6 /* Views */ = {
@@ -276,6 +327,7 @@
 				6C58A6CE27F86FCC00D42DFF /* Date.swift */,
 				6C58A6D427F9DD0300D42DFF /* TableView+RegisterCell.swift */,
 				6CF2B88D2805FDAD001F48FC /* CollectionView+RegisterCell.swift */,
+				6C26600B283A10A600364ECF /* UIColorExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -374,6 +426,7 @@
 		6CC9FC82276A546C00728F63 /* VkApp */ = {
 			isa = PBXGroup;
 			children = (
+				6C266010283A475200364ECF /* Factories */,
 				6CF2B88C2805FD66001F48FC /* General */,
 				6C91B79027BB90C60085E731 /* Requests */,
 				6C5DDA682784781900D831C6 /* Views */,
@@ -572,9 +625,11 @@
 				6CF2EBFB27B7818900F2BABD /* Requests.swift in Sources */,
 				6C91B79B27C0E2270085E731 /* UserDefaults + Keys.swift in Sources */,
 				6C91B7AB27CA19DD0085E731 /* ImageDownloads.swift in Sources */,
+				6C26601B283A671A00364ECF /* PhotoViewModelFactory.swift in Sources */,
 				6C91B7A627C122430085E731 /* UserData+CoreDataClass.swift in Sources */,
 				6C58A6D527F9DD0300D42DFF /* TableView+RegisterCell.swift in Sources */,
 				6C91B79627BD40E80085E731 /* Groups.swift in Sources */,
+				6C266012283A477E00364ECF /* FriendViewModelFactory.swift in Sources */,
 				6C91B7B427CBCF380085E731 /* RealmPhotoCells.swift in Sources */,
 				6C58A6D227F87AD100D42DFF /* newsImageCell.swift in Sources */,
 				6C74FEC92774F505006E1694 /* groupCell.swift in Sources */,
@@ -587,24 +642,29 @@
 				6C5D331D27B25CD900FDC112 /* Singleton.swift in Sources */,
 				6CC9FC84276A546C00728F63 /* AppDelegate.swift in Sources */,
 				6C91B79827BE4C290085E731 /* Photos.swift in Sources */,
+				6C26600C283A10A600364ECF /* UIColorExtension.swift in Sources */,
 				6C5DDA6A2784783F00D831C6 /* GradientView.swift in Sources */,
 				6C74FEC42773CAC2006E1694 /* friendCell.swift in Sources */,
 				6C87B30128100C620029BA62 /* imageTVCell.swift in Sources */,
 				6CC9FC86276A546C00728F63 /* SceneDelegate.swift in Sources */,
 				6C91B7A127C11D330085E731 /* Model.xcdatamodeld in Sources */,
+				6C266014283A485900364ECF /* FriendsViewModel.swift in Sources */,
 				6C952287279343B100B11FF8 /* NewsVC.swift in Sources */,
+				6C26601D283A954800364ECF /* GroupViewModel.swift in Sources */,
 				6C74FEDE277A49A8006E1694 /* AvatarView.swift in Sources */,
 				6C58A6CF27F86FCC00D42DFF /* Date.swift in Sources */,
 				6C91B7AD27CB7D6B0085E731 /* RealmService.swift in Sources */,
 				6C74FEDB2778AD61006E1694 /* TestVC.swift in Sources */,
 				6C9522992794191D00B11FF8 /* newsActionsCell.swift in Sources */,
 				6C95228B279349EA00B11FF8 /* AvatarCell.swift in Sources */,
+				6C266019283A66A000364ECF /* PhotoViewModel.swift in Sources */,
 				6C9522952793641C00B11FF8 /* ImageCell.swift in Sources */,
 				6C91B7B227CBB8D50085E731 /* RealmGroups.swift in Sources */,
 				6C91B7A527C122430085E731 /* UserData+CoreDataProperties.swift in Sources */,
 				6C952285279303B200B11FF8 /* CustomLayout.swift in Sources */,
 				6C58A6CD27F633C100D42DFF /* Items.swift in Sources */,
 				6C74FED42775A1B3006E1694 /* User.swift in Sources */,
+				6C26601F283A955500364ECF /* GroupViewModelFactory.swift in Sources */,
 				6C9522812792D3BB00B11FF8 /* someCollectionReusableView.swift in Sources */,
 				6CA868912781DA8900E23E86 /* photoItem.swift in Sources */,
 				6C473610276D0B4C0074C7B1 /* FriendsTableVC.swift in Sources */,

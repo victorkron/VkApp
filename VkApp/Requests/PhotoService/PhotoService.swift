@@ -49,6 +49,21 @@ class PhotoService {
         return image
     }
     
+    func photo(byUrl url: String) -> UIImage? {
+        var image: UIImage?
+        
+        if let photo = images[url] {
+            image = photo
+        } else if let photo = getImageFromCache(url: url) {
+            image = photo
+        } else {
+            loadPhoto(byUrl: url)
+        }
+        
+        return image
+    }
+    
+    
     private func getImageFromCache(url: String) -> UIImage? {
         guard let fileName = getFilePath(url: url),
               let info = try? FileManager.default.attributesOfItem(atPath: fileName),
@@ -74,7 +89,6 @@ class PhotoService {
     }
     
     private func loadPhoto(atIndexPath indexPath: IndexPath, byUrl url: String) {
-        
         guard
             let requestUrl = URL(string: url)
         else { return }
@@ -96,8 +110,26 @@ class PhotoService {
                 self.container.reloadRow(atIndexPath: indexPath)
             }
         }.resume()
+    }
+    
+    private func loadPhoto(byUrl url: String) {
+        guard
+            let requestUrl = URL(string: url)
+        else { return }
         
-
+        URLSession.shared.dataTask(with: requestUrl) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+            else { return }
+            DispatchQueue.main.async() { [weak self] in
+                self?.images[url] = image
+            }
+            
+            self.saveImageToCache(url: url, image: image)
+        }.resume()
     }
     
     private func saveImageToCache(url: String, image: UIImage) {

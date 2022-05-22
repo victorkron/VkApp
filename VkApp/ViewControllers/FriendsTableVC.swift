@@ -15,7 +15,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     private var friendsToken: NotificationToken?
     private var netwokService = Request<User>()
     
-    
     private let queue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 5
@@ -24,37 +23,15 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     }()
     
     private var photoService: PhotoService?
-    
-    fileprivate var friends: Results<RealmFriend>? = try? RealmService.load(typeOf: RealmFriend.self) {
+    private var viewModelsFactory: FriendViewModelFactory?
+    fileprivate var friendsViewModels: [FriendsViewModel] = [] {
         didSet {
-            guard
-                let friends = friends
-            else { return }
-
-            for friend in friends where friend.firstName != "DELETED" {
-                let personKey = String(friend.lastName.prefix(1))
-                if var personsValue = personsDictionary[personKey] {
-                    if personsValue.contains(friend.lastName) {
-
-                    } else {
-                        personsValue.append(friend.lastName)
-                        personsDictionary[personKey] = personsValue
-                    }
-                } else {
-                    personsDictionary[personKey] = [friend.lastName]
-                }
-            }
-            personSectionTitles = [String](personsDictionary.keys)
-            personSectionTitles = personSectionTitles.sorted(by: { $0 < $1 })
-            for eachFriendsFirstChar in personsDictionary {
-                personsDictionary[eachFriendsFirstChar.key] = eachFriendsFirstChar.value.sorted(by: { $0 < $1 })
-            }
-            
+            self.tableView.reloadData()
         }
     }
-    
+ 
     func refresh(friends: Results<RealmFriend>?) {
-        self.friends = friends
+        viewModelsFactory?.friends = friends
     }
 
     @IBAction func celarPhoto(segue: UIStoryboardSegue) {
@@ -64,40 +41,31 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.photoService = PhotoService(container: self.tableView)
+        viewModelsFactory = FriendViewModelFactory(tableView: tableView, source: self)
         
         tableView.register(registerClass: friendCell.self)
         
         setupOperation()
     }
     
-    func setupOperation() {
-        let getFriends = RequestBlock(nts: self.netwokService)
-        let parseFriendsData = ParseFriendsBlock(block: getFriends)
-        let saveToFriendsDatabase = SaveToFriendsDatabase(block: parseFriendsData, delegate: self)
-
-        parseFriendsData.addDependency(getFriends)
-        saveToFriendsDatabase.addDependency(parseFriendsData)
-
-        queue.addOperations([getFriends, parseFriendsData, saveToFriendsDatabase], waitUntilFinished: false)
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        friendsToken = friends?.observe { [weak self] citiesChanges in
-            switch citiesChanges {
-            case .initial, .update:
-                self?.tableView.reloadData()
-            case .error(let error):
-                print(error)
-            }
-        }
+//        friendsToken = viewModelsFactory?.friends?.observe { [weak self] citiesChanges in
+//            switch citiesChanges {
+//            case .initial, .update:
+//                self?.tableView.reloadData()
+//            case .error(let error):
+//                print(error)
+//            }
+//        }
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard
             let sender = storyBoard.instantiateViewController(withIdentifier: "personCollection") as? PhotosCollectionVC
         else { return }
         DispatchQueue.main.async {
             do {
-                try RealmService.delete(object: sender.photos!)
+                guard let photos = sender.photos else { return }
+                try RealmService.delete(object: photos)
             } catch {
                 print(error)
             }
@@ -117,9 +85,10 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
         else { return }
     
         let letter = personSectionTitles[indexPath.section]
-        let name = personsDictionary[letter]![indexPath.row]
+        let name = personsDictionary[letter]![indexPath.row].components(separatedBy: " ").first
 
-        let person = friends?.first(where: { (i) -> Bool in
+        
+        let person = viewModelsFactory?.friends?.first(where: { (i) -> Bool in
             i.lastName == name
         })
 
@@ -129,6 +98,17 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
         destination.avatar = person?.photo200 ?? ""
     }
 
+    func setupOperation() {
+        let getFriends = RequestBlock(nts: self.netwokService)
+        let parseFriendsData = ParseFriendsBlock(block: getFriends)
+        let saveToFriendsDatabase = SaveToFriendsDatabase(block: parseFriendsData, delegate: self)
+
+        parseFriendsData.addDependency(getFriends)
+        saveToFriendsDatabase.addDependency(parseFriendsData)
+
+        queue.addOperations([getFriends, parseFriendsData, saveToFriendsDatabase], waitUntilFinished: false)
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return personSectionTitles.count
     }
@@ -152,16 +132,10 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard
             let friendCell = cell as? friendCell,
-            let friendCellData = generateDataForCell(cell: cell, indexPath: indexPath)
+            let viewModel = generateDataForCell(cell: cell, indexPath: indexPath)
         else { return }
-        
-        let image = photoService?.photo(atIndexPath: indexPath, byUrl: friendCellData[0])
-        let name = friendCellData[1]
-        
-        friendCell.configure(
-            image: image,
-            name: name
-        )
+
+        friendCell.configure(friendsModel: viewModel)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -189,16 +163,14 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
         header?.tintColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1)
     }
     
-    func generateDataForCell(cell: UITableViewCell, indexPath: IndexPath) -> [String]? {
+    func generateDataForCell(cell: UITableViewCell, indexPath: IndexPath) -> FriendsViewModel? {
         guard
             let letter = Optional(personSectionTitles[indexPath.section]) ?? nil,
-            let lastName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil,
-            let firstName = Optional(friends?.first(where: {$0.lastName == lastName})?.firstName) ?? nil,
-            let photo = Optional(friends?.first(where: {$0.lastName == lastName})?.photo) ?? nil
+            let personName = Optional(personsDictionary[letter]![indexPath.row]) ?? nil
         else { return nil }
         
-        let friendCellData = [photo, "\(lastName) \(firstName)"]
-        return friendCellData
+        let viewModel = friendsViewModels.first(where: {$0.name == personName})
+        return viewModel
     }
     
 }
@@ -232,6 +204,9 @@ class ParseFriendsBlock: Operation {
         guard let data = block.responseData else { return }
         do {
             jsonData = try JSONDecoder().decode(Response<User>.self, from: data)
+            jsonData?.response.items.forEach { user in
+            
+            }
             print("second")
         } catch {
             print("error")
@@ -277,8 +252,22 @@ protocol ChangeFriendsDatabase {
     func refresh(friends: Results<RealmFriend>?)
 }
 
+protocol UpdateViewModels: AnyObject {
+    func updateViewModels()
+}
 
-
-
+extension FriendsTableVC: UpdateViewModels {
+    func updateViewModels () {
+        guard
+            let viewModels = viewModelsFactory?.viewModels,
+            let personsDictionary = viewModelsFactory?.personsDictionary,
+            let personSectionTitles = viewModelsFactory?.personSectionTitles
+        else { return }
+        self.personsDictionary = personsDictionary
+        self.personSectionTitles = personSectionTitles
+        self.friendsViewModels = viewModels
+    }
+    
+}
 
 

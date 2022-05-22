@@ -35,24 +35,30 @@ final class friendCell: UITableViewCell {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                     super.touchesEnded(touches, with: event)
         })
-
     }
     
     func configure(
         emblem: String,
-        name: String) {
-            self.friendName.text = name
-            self.friendEmblem.downloaded(from: emblem)
-        }
+        name: String
+    ) {
+        self.friendName.text = name
+        self.friendEmblem.downloaded(from: emblem)
+    }
 
     func configure(
         image: UIImage?,
-        name: String) {
+        name: String
+    ) {
             self.friendName.text = name
             self.friendEmblem.image = image
-        }
+    }
  
-
+    func configure(
+        friendsModel: FriendsViewModel
+    ) {
+        self.friendName.text = friendsModel.name
+        self.friendEmblem.image = friendsModel.image
+    }
     
     func animateTapForImage() {
         UIView.animate(

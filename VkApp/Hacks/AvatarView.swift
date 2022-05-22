@@ -8,8 +8,8 @@
 import UIKit
 
 class AvatarImage: UIImageView {
-    @IBInspectable var borderColor: UIColor = .gray
-    @IBInspectable var borderWidth: CGFloat = 1.5
+    /*@IBInspectable*/ var borderColor: UIColor = UIColor.brandGreen
+    /*@IBInspectable*/ var borderWidth: CGFloat = 1.5
     
     override func awakeFromNib() {
         self.layer.cornerRadius = self.frame.width / 2
@@ -22,7 +22,7 @@ class AvatarImage: UIImageView {
 
 
 class AvatarBackShadow: UIView {
-    @IBInspectable var shadowColor: UIColor = .lightGray
+    /*@IBInspectable*/ var shadowColor: UIColor = UIColor.brandGray
     @IBInspectable var shadowOffset: CGSize = CGSize(width: 0.0, height: -3)
     @IBInspectable var shadowOpacity: Float = 0.8
     @IBInspectable var shadowRadius: CGFloat = 3

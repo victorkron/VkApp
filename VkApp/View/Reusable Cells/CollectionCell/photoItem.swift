@@ -51,6 +51,12 @@ final class photoItem: UICollectionViewCell {
         self.likes.text = "\(self.amountOfLike)"
     }
     
+    func configure(image: PhotoViewModel) {
+        self.itemImage.image = image.image
+        self.itemImage.contentMode = .scaleAspectFill
+        self.likes.text = "\(self.amountOfLike)"
+    }
+    
     func changeState() {
         pressed = !pressed
         if pressed {

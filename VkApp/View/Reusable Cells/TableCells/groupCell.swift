@@ -44,6 +44,12 @@ final class groupCell: UITableViewCell {
             self.groupName.text = name
             self.groupEmblem.image = image
         }
+    func configure(
+        group: GroupViewModel
+    ) {
+        self.groupName.text = group.name
+        self.groupEmblem.image = group.image
+    }
     
     func animateTapForImage() {
         UIView.animate(

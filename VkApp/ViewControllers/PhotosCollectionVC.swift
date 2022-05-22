@@ -14,30 +14,21 @@ class PhotosCollectionVC: UICollectionViewController {
     var lastname: String? = nil
     var id: Int = 0
     var avatar: String = ""
-    private var photosToken: NotificationToken?
-    private var networkService = Request<Albums>()
-    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self)
     var photosBigSize: [String]? = []
-    
+    var photos: Results<RealmPhotoCell>? = try? RealmService.load(typeOf: RealmPhotoCell.self)
     private var photoService: PhotoService?
+    
+    var viewModelsFactory: PhotoViewModelFactory?
+    fileprivate var photoViewModels: [PhotoViewModel] = [] {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     
     static var curretnIndex: Int? = nil
     static var fromFullScrenn: Bool? = false
+  
     
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        photoService = PhotoService(container: collectionView)
-        
-        collectionView.register(registerClass: photoItem.self)
-        collectionView.register(
-            registerClass: someCollectionReusableView.self,
-            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
-        )
-        
-        getPhoto()
-    }
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard
             segue.identifier == "photoFullScreen"
@@ -51,34 +42,25 @@ class PhotosCollectionVC: UICollectionViewController {
         destination.currentIndex = PhotosCollectionVC.curretnIndex
     }
     
-    private func getPhoto() {
-        networkService.fetch(type: .photos, id: id) { [weak self] result in
-            switch result {
-            case .success(let photos):
-                let items = photos.map { i -> RealmPhotoCell in
-                    self?.photosBigSize?.append(i.sizes.last?.url ?? "")
-                    let value = i.sizes.first { i in
-                        i.type == "p"
-                    }
-                    let elem = RealmPhotoCell(photo: Photo(
-                        width: value?.width ?? 0,
-                        height: value?.height ?? 0,
-                        url: value?.url ?? "",
-                        type: value?.type ?? ""))
-                    return elem
-                }
-                DispatchQueue.main.async {
-                    do {
-                        try RealmService.save(items: items)
-                        self?.photos = try RealmService.load(typeOf: RealmPhotoCell.self)
-                    } catch {
-                        print(error)
-                    }
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        photoService = PhotoService(container: collectionView)
+        
+        collectionView.register(registerClass: photoItem.self)
+        collectionView.register(
+            registerClass: someCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader
+        )
+        
+        viewModelsFactory = PhotoViewModelFactory(
+            collectionView: self.collectionView,
+            source: self,
+            id: id,
+            photosBigSize: photosBigSize ?? [],
+            photos: photos
+        )
+        
+        viewModelsFactory?.loadPhotos()
     }
     
     
@@ -154,19 +136,10 @@ class PhotosCollectionVC: UICollectionViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        photosToken = photos?.observe { [weak self] photosChange in
-            switch photosChange {
-            case .initial, .update:
-                self?.collectionView.reloadData()
-            case .error(let error):
-                print(error)
-            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        photosToken?.invalidate()
     }
     
     
@@ -178,20 +151,13 @@ class PhotosCollectionVC: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard
-            let photos = photos
-        else { return 0 }
-        return photos.count
+        return photoViewModels.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: photoItem = collectionView.dequeueReusableCell(forIndexPath: indexPath)
-        guard
-            let url = self.photos?[indexPath.row].url
-        else { return UICollectionViewCell() }
-        cell.itemImage.backgroundColor = .gray
-        let photo =  photoService?.photo(atIndexPath: indexPath, byUrl: url)
-        cell.configure(image: photo)
+        cell.configure(image: photoViewModels[indexPath.row])
+        
         return cell
     }
     
@@ -303,4 +269,14 @@ extension PhotosCollectionVC: UICollectionViewDelegateFlowLayout {
     }
     
   
+}
+
+extension PhotosCollectionVC: UpdateViewModels {
+    func updateViewModels() {
+        guard
+            let viewModels = viewModelsFactory?.viewModels,
+            let photos = viewModelsFactory?.photos
+        else { return }
+        self.photoViewModels = viewModels
+    }    
 }
