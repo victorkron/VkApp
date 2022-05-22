@@ -38,7 +38,7 @@ class PhotosCollectionVC: UICollectionViewController {
             let destination = segue.destination as? PhotoFullScrennVC
         else { return }
         
-        destination.photos = self.photosBigSize ?? []
+        destination.photos = viewModelsFactory?.photosBigSize ?? []
         destination.currentIndex = PhotosCollectionVC.curretnIndex
     }
     

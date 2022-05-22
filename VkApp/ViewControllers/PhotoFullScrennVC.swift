@@ -229,7 +229,7 @@ class PhotoFullScrennVC: UIViewController {
     }
     
     func setImage(_ index: Int?) {
-        let name: String = photos[self.currentIndex!]
+        let name: String = photos[self.currentIndex ?? 0]
         imageView.downloaded(from: name)
     }
     

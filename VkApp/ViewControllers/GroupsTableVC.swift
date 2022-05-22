@@ -72,19 +72,27 @@ final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
         photoService = PhotoService(container: tableView)
         
         tableView.register(registerClass: groupCell.self)
-        
-        networkService.getGroupsUrl()
-            .then(on: .global(), networkService.getGroups(url:))
-            .then(networkService.getParsedData(data:))
-            .then({ groupsArray in
-                self.networkService.saveToGroupsDatabse(groups: groupsArray, desination: self)
-            })
-            .done(on: .main) { result in
-                print(result)
-            }
-            .catch { error in
+    
+        networkService.fetch(type: .groups){ [weak self] result in
+            switch result {
+            case .success(let myGroups):
+                let items = myGroups.map { i in
+                    RealmGroup(group: i)
+                }
+                DispatchQueue.main.async {
+                    do {
+                        try RealmService.save(items: items)
+                        self?.groups = try RealmService.load(typeOf: RealmGroup.self)
+                    } catch {
+                        print(error)
+                    }
+                }
+                
+            case .failure(let error):
                 print(error)
             }
+            
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -12,7 +12,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     var personsDictionary = [String: [String]]()
     var personSectionTitles = [String]()
-    private var friendsToken: NotificationToken?
     private var netwokService = Request<User>()
     
     private let queue: OperationQueue = {
@@ -50,14 +49,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-//        friendsToken = viewModelsFactory?.friends?.observe { [weak self] citiesChanges in
-//            switch citiesChanges {
-//            case .initial, .update:
-//                self?.tableView.reloadData()
-//            case .error(let error):
-//                print(error)
-//            }
-//        }
         let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         guard
             let sender = storyBoard.instantiateViewController(withIdentifier: "personCollection") as? PhotosCollectionVC
@@ -74,7 +65,6 @@ final class FriendsTableVC: UITableViewController, ChangeFriendsDatabase{
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        friendsToken?.invalidate()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
