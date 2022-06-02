@@ -8,15 +8,7 @@
 import Foundation
 import PromiseKit
 
-final class Request<ItemsType: Decodable> {
-    
-    enum requestType {
-        case friends
-        case groups
-        case photos
-        case searchGroups
-        case feed
-    }
+final class Request<ItemsType: Decodable>: RequestService {
     
     enum AppError: Error {
         case notCorrectURL

@@ -11,7 +11,7 @@ class GroupSearcherTableVC: UITableViewController {
 
     var addedGroup: [GroupData] = []
     var baseGroups: [GroupData] = []
-    private var networkService = Request<GroupData>()
+    private var networkService = RequestProxy(request: Request<GroupData>())
     
     var allGroups: [GroupData] = [] {
         didSet {

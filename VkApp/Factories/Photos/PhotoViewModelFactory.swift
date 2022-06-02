@@ -15,7 +15,7 @@ class PhotoViewModelFactory {
     var photos: Results<RealmPhotoCell>?
     var id: Int
     var photosBigSize: [String]
-    private var networkService = Request<Albums>()
+    private var networkService = RequestProxy(request: Request<Albums>())
     
     init(collectionView: UICollectionView, source: UpdateViewModels, id: Int, photosBigSize: [String], photos: Results<RealmPhotoCell>?) {
         self.source = source

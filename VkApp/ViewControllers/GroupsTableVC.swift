@@ -16,7 +16,8 @@ fileprivate enum GroupsError: Error {
 
 final class GroupsTableVC: UITableViewController, UpdateGroupsFromRealm {
     
-    private var networkService = Request<GroupData>()
+//    private var basedNetworkService = Request<GroupData>()
+    private var networkService = RequestProxy(request: Request<GroupData>())
     
     private var viewModelsFactory: GroupViewModelFactory? = GroupViewModelFactory()
     fileprivate var groupsViewModels: [GroupViewModel] = [] {

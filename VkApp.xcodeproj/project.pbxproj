@@ -38,6 +38,8 @@
 		6C74FED42775A1B3006E1694 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FED32775A1B3006E1694 /* User.swift */; };
 		6C74FEDB2778AD61006E1694 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FEDA2778AD60006E1694 /* TestVC.swift */; };
 		6C74FEDE277A49A8006E1694 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C74FEDD277A49A8006E1694 /* AvatarView.swift */; };
+		6C75E6E12848AD7100A3CD84 /* RequestInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C75E6E02848AD7100A3CD84 /* RequestInterface.swift */; };
+		6C75E6E32848AF7500A3CD84 /* RequestProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C75E6E22848AF7500A3CD84 /* RequestProxy.swift */; };
 		6C87B30128100C620029BA62 /* imageTVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C87B30028100C620029BA62 /* imageTVCell.swift */; };
 		6C91B79627BD40E80085E731 /* Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C91B79527BD40E80085E731 /* Groups.swift */; };
 		6C91B79827BE4C290085E731 /* Photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C91B79727BE4C290085E731 /* Photos.swift */; };
@@ -76,7 +78,7 @@
 		6CC9FC90276A546D00728F63 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CC9FC8E276A546D00728F63 /* LaunchScreen.storyboard */; };
 		6CF2B88E2805FDAD001F48FC /* CollectionView+RegisterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF2B88D2805FDAD001F48FC /* CollectionView+RegisterCell.swift */; };
 		6CF2EBF927B669D800F2BABD /* VKLoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF2EBF827B669D800F2BABD /* VKLoginVC.swift */; };
-		6CF2EBFB27B7818900F2BABD /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF2EBFA27B7818900F2BABD /* Requests.swift */; };
+		6CF2EBFB27B7818900F2BABD /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF2EBFA27B7818900F2BABD /* Request.swift */; };
 		CF06C3BB514E22C6BDAFEB66 /* Pods_VkApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E55A7CB9D9DB6902A9C40973 /* Pods_VkApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -125,6 +127,8 @@
 		6C74FED32775A1B3006E1694 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6C74FEDA2778AD60006E1694 /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		6C74FEDD277A49A8006E1694 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		6C75E6E02848AD7100A3CD84 /* RequestInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestInterface.swift; sourceTree = "<group>"; };
+		6C75E6E22848AF7500A3CD84 /* RequestProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestProxy.swift; sourceTree = "<group>"; };
 		6C87B30028100C620029BA62 /* imageTVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageTVCell.swift; sourceTree = "<group>"; };
 		6C91B79527BD40E80085E731 /* Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Groups.swift; sourceTree = "<group>"; };
 		6C91B79727BE4C290085E731 /* Photos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photos.swift; sourceTree = "<group>"; };
@@ -165,7 +169,7 @@
 		6CC9FC91276A546D00728F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6CF2B88D2805FDAD001F48FC /* CollectionView+RegisterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionView+RegisterCell.swift"; sourceTree = "<group>"; };
 		6CF2EBF827B669D800F2BABD /* VKLoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKLoginVC.swift; sourceTree = "<group>"; };
-		6CF2EBFA27B7818900F2BABD /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		6CF2EBFA27B7818900F2BABD /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		E1C30224CD53FC5DE0C4EAA8 /* Pods-VkApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkApp.release.xcconfig"; path = "Target Support Files/Pods-VkApp/Pods-VkApp.release.xcconfig"; sourceTree = "<group>"; };
 		E55A7CB9D9DB6902A9C40973 /* Pods_VkApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VkApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E984BE300159A40541AA6F82 /* Pods-VkApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VkApp.debug.xcconfig"; path = "Target Support Files/Pods-VkApp/Pods-VkApp.debug.xcconfig"; sourceTree = "<group>"; };
@@ -291,6 +295,14 @@
 			path = Hacks;
 			sourceTree = "<group>";
 		};
+		6C75E6DF2848AD1C00A3CD84 /* Proxy */ = {
+			isa = PBXGroup;
+			children = (
+				6C75E6E22848AF7500A3CD84 /* RequestProxy.swift */,
+			);
+			path = Proxy;
+			sourceTree = "<group>";
+		};
 		6C91B79027BB90C60085E731 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -303,6 +315,7 @@
 		6C91B79127BB90DA0085E731 /* NetworkService */ = {
 			isa = PBXGroup;
 			children = (
+				6C75E6DF2848AD1C00A3CD84 /* Proxy */,
 				6C91B79227BB90E90085E731 /* Service */,
 			);
 			path = NetworkService;
@@ -311,10 +324,11 @@
 		6C91B79227BB90E90085E731 /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				6CF2EBFA27B7818900F2BABD /* Requests.swift */,
+				6CF2EBFA27B7818900F2BABD /* Request.swift */,
 				6C91B7AC27CB7D6B0085E731 /* RealmService.swift */,
 				6C58A6CA27F6307200D42DFF /* Response.swift */,
 				6C58A6CC27F633C100D42DFF /* Items.swift */,
+				6C75E6E02848AD7100A3CD84 /* RequestInterface.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -622,7 +636,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C74FED22775A1A9006E1694 /* Group.swift in Sources */,
-				6CF2EBFB27B7818900F2BABD /* Requests.swift in Sources */,
+				6CF2EBFB27B7818900F2BABD /* Request.swift in Sources */,
 				6C91B79B27C0E2270085E731 /* UserDefaults + Keys.swift in Sources */,
 				6C91B7AB27CA19DD0085E731 /* ImageDownloads.swift in Sources */,
 				6C26601B283A671A00364ECF /* PhotoViewModelFactory.swift in Sources */,
@@ -646,7 +660,9 @@
 				6C5DDA6A2784783F00D831C6 /* GradientView.swift in Sources */,
 				6C74FEC42773CAC2006E1694 /* friendCell.swift in Sources */,
 				6C87B30128100C620029BA62 /* imageTVCell.swift in Sources */,
+				6C75E6E32848AF7500A3CD84 /* RequestProxy.swift in Sources */,
 				6CC9FC86276A546C00728F63 /* SceneDelegate.swift in Sources */,
+				6C75E6E12848AD7100A3CD84 /* RequestInterface.swift in Sources */,
 				6C91B7A127C11D330085E731 /* Model.xcdatamodeld in Sources */,
 				6C266014283A485900364ECF /* FriendsViewModel.swift in Sources */,
 				6C952287279343B100B11FF8 /* NewsVC.swift in Sources */,
